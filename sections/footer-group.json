@@ -79,11 +79,11 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                "text": "<p><em>Invest well, look better</em></p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "h16",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -105,11 +105,11 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                "text": "<p>Questions about gold, investing or your order?<br/><a href=\"https://0973c370-bce2-4c0f-942c-f2e8f1f1e9b8.frame.claudeusercontent.com/appifact/Portfolio.dc.html#\">helloauracapital@gmail.com</a></p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "h21",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -276,7 +276,7 @@
         "gap": 0,
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 64,
-        "padding-block-end": 0
+        "padding-block-end": 36
       }
     },
     "utilities": {
