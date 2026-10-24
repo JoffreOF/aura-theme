@@ -75,7 +75,7 @@
         {% endif %}
       >
       <button
-        class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}"
+        class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}{% if block_settings.style_class == 'button-unstyled' %} button-link{% endif %}"
         {% if block_settings.display_type != 'text' %}
           aria-label="{{ 'actions.sign_up' | t }}"
         {% endif %}
@@ -491,6 +491,86 @@
         {
           "value": "h6",
           "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
         }
       ],
       "default": "h3",
@@ -616,6 +696,86 @@
         {
           "value": "h6",
           "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
         }
       ],
       "default": "paragraph",
@@ -753,6 +913,86 @@
         {
           "value": "h6",
           "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
         }
       ],
       "default": "paragraph",
