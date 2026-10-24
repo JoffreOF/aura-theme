@@ -315,6 +315,7 @@
       endfor
 
       assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign mobile_font_sizes = ''
 
       for preset_name in type_presets
         assign preset_size = '--font-size--[preset_name]' | replace: '[preset_name]', preset_name
@@ -344,6 +345,16 @@
         echo '--font-[preset_name]--style: var([preset_style]);' | replace: '[preset_name]', preset_name | replace: '[preset_style]', preset_style
         echo '--font-[preset_name]--case: [preset_case];' | replace: '[preset_name]', preset_name | replace: '[preset_case]', settings[preset_case]
         echo '--font-[preset_name]--line-height: var(--line-height--[preset_line_height]);' | replace: '[preset_name]', preset_name | replace: '[preset_line_height]', settings[preset_line_height]
+
+        comment
+          Optional mobile size per preset. Empty means "automatic": the size above keeps its built-in behavior on mobile.
+        endcomment
+        assign mobile_size_id = 'type_size_mobile_[preset_name]' | replace: '[preset_name]', preset_name
+        assign mobile_size_value = settings[mobile_size_id]
+        if mobile_size_value != blank
+          assign mobile_size_rem = mobile_size_value | times: 1 | divided_by: 16.0
+          assign mobile_font_sizes = mobile_font_sizes | append: '--font-size--[preset_name]: [mobile_size_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[mobile_size_rem]', mobile_size_rem
+        endif
       endfor
     %}
 
@@ -648,6 +659,12 @@
     --cart-secondary-font-family: var(--font-{{ settings.cart_price_font }}--family);
     --cart-secondary-font-style: var(--font-{{ settings.cart_price_font }}--style);
     --cart-secondary-font-weight: var(--font-{{ settings.cart_price_font }}--weight);
+
+    {% if mobile_font_sizes != blank %}
+      @media screen and (max-width: 749px) {
+        {{ mobile_font_sizes }}
+      }
+    {% endif %}
   }
 
   .custom-color-quick-add {
