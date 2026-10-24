@@ -181,6 +181,21 @@
     --font-h4--spacing: var(--font-heading--spacing);
     --font-h5--spacing: var(--font-heading--spacing);
     --font-h6--spacing: var(--font-heading--spacing);
+    --font-h7--spacing: var(--font-heading--spacing);
+    --font-h8--spacing: var(--font-heading--spacing);
+    --font-h9--spacing: var(--font-heading--spacing);
+    --font-h10--spacing: var(--font-heading--spacing);
+    --font-h11--spacing: var(--font-heading--spacing);
+    --font-h12--spacing: var(--font-heading--spacing);
+    --font-h13--spacing: var(--font-heading--spacing);
+    --font-h14--spacing: var(--font-heading--spacing);
+    --font-h15--spacing: var(--font-heading--spacing);
+    --font-h16--spacing: var(--font-heading--spacing);
+    --font-h17--spacing: var(--font-heading--spacing);
+    --font-h18--spacing: var(--font-heading--spacing);
+    --font-h19--spacing: var(--font-heading--spacing);
+    --font-h20--spacing: var(--font-heading--spacing);
+    --font-h21--spacing: var(--font-heading--spacing);
     --font-paragraph--spacing: 0.5em;
 
     /** Z-Index / Layering */
@@ -238,7 +253,7 @@
 
     /* Typography presets */
     {% liquid
-      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, text_button, h18, h19, h20, text_strong, text_caption, text_label, h21, text_link" | split: ", "
       assign fluid_size_cutoff = 48
       assign absolute_font_size_min = 10
 
@@ -314,7 +329,7 @@
         endif
       endfor
 
-      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, text_button, h18, h19, h20, text_strong, text_caption, text_label, h21, text_link" | split: ", "
       assign mobile_font_sizes = ''
 
       for preset_name in type_presets
