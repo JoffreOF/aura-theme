@@ -409,9 +409,9 @@
             "group_JHtHYm": {
               "type": "_product-card-group",
               "settings": {
-                "content_direction": "row",
+                "content_direction": "column",
                 "vertical_on_mobile": true,
-                "horizontal_alignment": "space-between",
+                "horizontal_alignment": "flex-start",
                 "vertical_alignment": "flex-start",
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
@@ -483,6 +483,32 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
+                    "text_jRHeLW": {
+                      "type": "text",
+                      "name": "t:names.text",
+                      "settings": {
+                        "text": "<p>{{ closest.product.vendor }}</p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "text_link",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
                     "product_title_iRxawi": {
                       "type": "product-title",
                       "name": "t:names.product_title",
@@ -532,6 +558,7 @@
                     }
                   },
                   "block_order": [
+                    "text_jRHeLW",
                     "product_title_iRxawi",
                     "price_4XkbjB"
                   ]
