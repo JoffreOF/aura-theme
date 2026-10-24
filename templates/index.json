@@ -608,7 +608,7 @@
       },
       "name": "t:names.product_list",
       "settings": {
-        "collection": "all",
+        "collection": "best-sellers",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
