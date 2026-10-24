@@ -1393,6 +1393,10 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   font-size: var(--button-font-size-link);
   letter-spacing: var(--button-letter-spacing-link);
   text-transform: var(--button-text-case-link);
+  text-decoration-line: var(--button-underline-link);
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.125em;
 }
 
 /* Default hover dim for link-style buttons, scoped via :where() so component-specific

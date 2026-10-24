@@ -15161,6 +15161,12 @@
         "default": "body-normal"
       },
       {
+        "type": "checkbox",
+        "id": "button_underline_link",
+        "label": "Underline",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "t:names.pills"
       },

@@ -610,6 +610,7 @@
     --button-text-case-link: {% if settings.button_text_case_link == 'uppercase' %}uppercase{% else %}inherit{% endif %};
     --button-font-size-link: {% if settings.button_size_link != blank %}{{ settings.button_size_link | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
     --button-letter-spacing-link: var(--letter-spacing--{{ settings.button_letter_spacing_link | default: 'body-normal' }});
+    --button-underline-link: {% if settings.button_underline_link %}underline{% else %}none{% endif %};
 
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
