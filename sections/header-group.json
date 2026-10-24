@@ -11,6 +11,38 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
+    "header_announcements_3j6FTt": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_kKKmDb": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Today's Gold price 18k • $104.57 / g",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "text_color": "{{ settings.color_palette.color2 }}"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_kKKmDb"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.background }}",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -19,8 +51,8 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0
+            "padding-block-start": 8,
+            "padding-block-end": 8
           },
           "blocks": {}
         },
@@ -96,6 +128,7 @@
     }
   },
   "order": [
+    "header_announcements_3j6FTt",
     "header_section"
   ]
 }

@@ -58,12 +58,12 @@
               "type": "logo",
               "name": "t:names.logo",
               "settings": {
-                "inverse": false,
+                "inverse": true,
                 "font": "heading",
                 "text_color": "",
                 "unit": "pixel",
                 "percent_width": 100,
-                "pixel_height": 48,
+                "pixel_height": 32,
                 "custom_mobile_size": false,
                 "unit_mobile": "percent",
                 "percent_width_mobile": 100,
@@ -74,10 +74,64 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "text_GCadyT": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_AGDjaz": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "logo_QUwVjV"
+            "logo_QUwVjV",
+            "text_GCadyT",
+            "text_AGDjaz"
           ]
         },
         "group_acXtYY": {
