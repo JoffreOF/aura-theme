@@ -1387,6 +1387,14 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   background-color: inherit;
 }
 
+/* Link style of the button block. Scoped class so the many other .button-unstyled controls are untouched. */
+.button-link {
+  font-family: var(--button-font-family-link);
+  font-size: var(--button-font-size-link);
+  letter-spacing: var(--button-letter-spacing-link);
+  text-transform: var(--button-text-case-link);
+}
+
 /* Default hover dim for link-style buttons, scoped via :where() so component-specific
    hover rules (.facets__clear-all-link, .header-actions__action, etc.) still win. */
 :where(.button-unstyled):hover {

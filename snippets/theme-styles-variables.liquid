@@ -605,6 +605,12 @@
     --button-letter-spacing-primary: var(--letter-spacing--{{ settings.button_letter_spacing_primary | default: 'body-normal' }});
     --button-letter-spacing-secondary: var(--letter-spacing--{{ settings.button_letter_spacing_secondary | default: 'body-normal' }});
 
+    /* Link button (the Link style of the button block) */
+    --button-font-family-link: var(--font-{{ settings.type_font_button_link | default: 'body' }}--family);
+    --button-text-case-link: {% if settings.button_text_case_link == 'uppercase' %}uppercase{% else %}inherit{% endif %};
+    --button-font-size-link: {% if settings.button_size_link != blank %}{{ settings.button_size_link | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-letter-spacing-link: var(--letter-spacing--{{ settings.button_letter_spacing_link | default: 'body-normal' }});
+
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
     --border-width-sm: 1px;
@@ -689,6 +695,10 @@
       if settings.button_size_mobile_secondary != blank
         assign button_mobile_rem = settings.button_size_mobile_secondary | times: 1 | divided_by: 16.0
         assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-secondary: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+      if settings.button_size_mobile_link != blank
+        assign button_mobile_rem = settings.button_size_mobile_link | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-link: ' | append: button_mobile_rem | append: 'rem;'
       endif
     %}
 
