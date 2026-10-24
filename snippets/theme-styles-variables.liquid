@@ -599,6 +599,12 @@
     --button-text-case-primary: {{ settings.button_text_case_primary }};
     --button-text-case-secondary: {{ settings.button_text_case_secondary }};
 
+    /* Button font size (Automatic uses the Paragraph size) and letter spacing */
+    --button-font-size-primary: {% if settings.button_size_primary != blank %}{{ settings.button_size_primary | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-font-size-secondary: {% if settings.button_size_secondary != blank %}{{ settings.button_size_secondary | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-letter-spacing-primary: var(--letter-spacing--{{ settings.button_letter_spacing_primary | default: 'body-normal' }});
+    --button-letter-spacing-secondary: var(--letter-spacing--{{ settings.button_letter_spacing_secondary | default: 'body-normal' }});
+
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
     --border-width-sm: 1px;
@@ -674,6 +680,17 @@
     --cart-secondary-font-family: var(--font-{{ settings.cart_price_font }}--family);
     --cart-secondary-font-style: var(--font-{{ settings.cart_price_font }}--style);
     --cart-secondary-font-weight: var(--font-{{ settings.cart_price_font }}--weight);
+
+    {% liquid
+      if settings.button_size_mobile_primary != blank
+        assign button_mobile_rem = settings.button_size_mobile_primary | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-primary: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+      if settings.button_size_mobile_secondary != blank
+        assign button_mobile_rem = settings.button_size_mobile_secondary | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-secondary: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+    %}
 
     {% if mobile_font_sizes != blank %}
       @media screen and (max-width: 749px) {
