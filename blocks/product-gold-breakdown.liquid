@@ -1,0 +1,367 @@
+{%- doc -%}
+  Gold value / craftsmanship split of the selected variant's price, with a bar.
+  Gold value = gold.weight_g x shop gold.price_18k_per_g; craftsmanship = price - gold value.
+  Needs a product in context (closest.product). Renders nothing when the data is missing.
+{%- enddoc -%}
+
+{%- liquid
+  assign variant = closest.product.selected_or_first_available_variant
+  assign weight = variant.metafields.gold.weight_g.value
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value
+
+  assign show = false
+  if variant != blank and weight != blank and gram_price != blank and variant.price > 0
+    assign gold_cents = weight | times: gram_price | times: 100 | round
+    assign craft_cents = variant.price | minus: gold_cents
+    if gold_cents > 0 and craft_cents >= 0
+      assign show = true
+      assign share = gold_cents | times: 100.0 | divided_by: variant.price | round: 1
+
+      comment
+        Weight with a fixed number of decimals (4.0, 4.1, 0.50) built from integers,
+        so a whole-gram weight never loses its ".0".
+      endcomment
+      assign factor = 10
+      if block.settings.weight_decimals == '2'
+        assign factor = 100
+      endif
+      assign scaled = weight | times: factor | round
+      assign fraction = scaled | modulo: factor
+      assign whole = scaled | minus: fraction | divided_by: factor
+      if factor == 100 and fraction < 10
+        assign fraction = '0' | append: fraction
+      endif
+      assign grams = whole | append: '.' | append: fraction
+    endif
+  endif
+-%}
+
+{%- if show -%}
+  <div
+    class="gold-breakdown spacing-style {{ block.settings.type_preset }}"
+    style="
+      {% render 'spacing-padding', settings: block.settings %}
+      --gold-color: {{ block.settings.gold_color }};
+      --gold-share: {{ share }}%;
+      --gold-bar-height: {{ block.settings.bar_height }}px;
+      --gold-row-gap: {{ block.settings.row_gap }}px;
+      {% if block.settings.track_color != blank %}--gold-track: {{ block.settings.track_color }};{% endif %}
+      {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    <div class="gold-breakdown__bar" aria-hidden="true"><span></span></div>
+    <div class="gold-breakdown__row">
+      <span class="gold-breakdown__label">
+        <i class="gold-breakdown__dot"></i>{{ 'blocks.gold_breakdown.gold_value' | t }}
+      </span>
+      <span class="gold-breakdown__amount">
+        {{- gold_cents | money -}}
+        {%- if block.settings.show_weight %} · {{ 'blocks.gold_breakdown.weight' | t: grams: grams }}{% endif -%}
+      </span>
+    </div>
+    <div class="gold-breakdown__row">
+      <span class="gold-breakdown__label">
+        <i class="gold-breakdown__dot gold-breakdown__dot--craft"></i>{{ 'blocks.gold_breakdown.craftsmanship' | t }}
+      </span>
+      <span class="gold-breakdown__amount">{{ craft_cents | money }}</span>
+    </div>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="gold-breakdown gold-breakdown--hint" {{ block.shopify_attributes }}>
+    Gold breakdown hidden: the variant needs gold.weight_g and the shop needs gold.price_18k_per_g
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .gold-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gold-row-gap, 6px);
+    width: 100%;
+    color: var(--color, var(--color-foreground));
+  }
+
+  .gold-breakdown__bar {
+    height: var(--gold-bar-height, 4px);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--gold-track, rgb(var(--color-foreground-rgb) / var(--opacity-15)));
+  }
+
+  .gold-breakdown__bar > span {
+    display: block;
+    height: 100%;
+    width: var(--gold-share, 0%);
+    background: var(--gold-color);
+  }
+
+  .gold-breakdown__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-sm);
+  }
+
+  .gold-breakdown__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+  }
+
+  .gold-breakdown__dot {
+    flex: none;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--gold-color);
+  }
+
+  .gold-breakdown__dot--craft {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--gold-color);
+  }
+
+  .gold-breakdown__amount {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .gold-breakdown--hint {
+    opacity: 0.5;
+    font-size: 0.75rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold breakdown",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Gold value = weight (gold.weight_g) x today's gram price (gold.price_18k_per_g). Craftsmanship = price minus gold value. Hidden when a product has no weight. Labels are in the theme language files (blocks.gold_breakdown)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_weight",
+      "label": "Show weight",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "weight_decimals",
+      "label": "Weight decimals",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 (4.1 g)"
+        },
+        {
+          "value": "2",
+          "label": "2 (4.10 g)"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ block.settings.show_weight }}"
+    },
+    {
+      "type": "header",
+      "content": "Bar"
+    },
+    {
+      "type": "color",
+      "id": "gold_color",
+      "label": "Gold color",
+      "default": "#C4A35A"
+    },
+    {
+      "type": "color",
+      "id": "track_color",
+      "label": "Track color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar thickness",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Space between rows",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "text_caption",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold breakdown",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
