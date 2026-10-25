@@ -24,34 +24,18 @@
             "hide_note_on_mobile": true,
             "note_opacity": 80,
             "part_gap": 24,
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
+            "font": "var(--font-body--family)",
+            "font_size": "0.8125rem",
             "weight": "",
             "letter_spacing": "normal",
             "case": "none",
             "text_color": ""
           },
           "blocks": {}
-        },
-        "announcement_kKKmDb": {
-          "type": "_announcement",
-          "disabled": true,
-          "settings": {
-            "text": "Today's Gold price 18k • $104.57 / g",
-            "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "text_color": "{{ settings.color_palette.color2 }}"
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "gold_price_announcement_CtmXeQ",
-        "announcement_kKKmDb"
+        "gold_price_announcement_CtmXeQ"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
