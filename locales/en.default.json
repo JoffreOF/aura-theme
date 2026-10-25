@@ -124,7 +124,7 @@
   },
   "blocks": {
     "gold_price_bar": {
-      "label": "Today's gold price",
+      "label": "TODAY'S GOLD PRICE",
       "price": "18k · {{ price }} / g",
       "note": "Updated daily at 10:00 AM PET · Based on the international 18k gold equivalent"
     },
