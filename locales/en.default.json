@@ -123,6 +123,14 @@
     "sort": "Sort"
   },
   "blocks": {
+    "gold_breakdown": {
+      "gold_value": "Gold value",
+      "craftsmanship": "Craftsmanship",
+      "weight": "{{ grams }} g"
+    },
+    "installments": {
+      "label": "or {{ count }} × {{ amount }} interest-free"
+    },
     "contact_form": {
       "name": "Name",
       "email": "Email",
