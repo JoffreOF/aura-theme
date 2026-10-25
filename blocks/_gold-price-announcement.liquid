@@ -1,0 +1,553 @@
+{%- doc -%}
+  Live gold price for the announcement bar: label, 18k gram price, change since the previous price, update note.
+  The change is hidden unless the two latest history entries are at most 5 days apart.
+{%- enddoc -%}
+
+{% render 'text-block-styles' %}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign block_index = section.blocks | find_index: 'id', block.id
+
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value
+  assign has_price = false
+  if gram_price != blank and gram_price > 0
+    assign has_price = true
+    assign price_cents = gram_price | times: 100 | round
+    assign price_text = price_cents | money
+  endif
+
+  comment
+    Change since the previous price: only when the two latest history entries are 5 days apart or less
+    (a weekend or a holiday). Older entries are monthly backfill points and would give a false change.
+  endcomment
+  assign show_change = false
+  if has_price and block_settings.show_change
+    assign history = shop.metafields.gold.price_history.value
+    if history.size >= 2
+      assign newest_first = history | reverse
+      assign latest = newest_first[0]
+      assign previous = newest_first[1]
+      assign latest_day = latest[0] | date: '%s' | plus: 0
+      assign previous_day = previous[0] | date: '%s' | plus: 0
+      assign gap_days = latest_day | minus: previous_day | divided_by: 86400.0
+      if gap_days >= 0 and gap_days <= 5 and previous[1] > 0
+        assign show_change = true
+        assign change_percent = latest[1] | minus: previous[1] | times: 100.0 | divided_by: previous[1]
+        assign change_abs = change_percent
+        if change_percent < 0
+          assign change_abs = change_percent | times: -1
+        endif
+
+        comment
+          One decimal built from whole tenths, so 1.0 never prints as 1 and a zero change is detected
+          by a number comparison, not by comparing text.
+        endcomment
+        assign tenths = change_abs | times: 10 | round
+        assign tenth_digit = tenths | modulo: 10
+        assign whole_percent = tenths | minus: tenth_digit | divided_by: 10
+        assign change_text = whole_percent | append: '.' | append: tenth_digit
+        assign direction = 'flat'
+        if tenths > 0
+          if change_percent > 0
+            assign direction = 'up'
+          else
+            assign direction = 'down'
+          endif
+        endif
+      endif
+    endif
+  endif
+-%}
+
+{%- if has_price -%}
+  <slideshow-slide
+    ref="slides[]"
+    class="
+      announcement-bar__slide
+      text-block
+      text-block--{{ block.id }}
+      text-block--align-center
+      text-block--full-width
+      custom-typography
+      {% if block_settings.font_size != "" %}custom-font-size{% endif %}
+      {% if block_settings.weight != "" %}custom-font-weight{% endif %}
+    "
+    style="
+      {% render 'typography-style', settings: block_settings, preset: 'custom' %}
+      {% if block_settings.text_color != blank %}--color: {{ block_settings.text_color }}; --color-rgb: {{ block_settings.text_color.rgb }};{% endif %}
+      --width: 100%;
+      --text-align: center;
+      --line-height: 1;
+      --gold-bar-gap: {{ block_settings.part_gap }}px;
+      --gold-bar-note-opacity: {{ block_settings.note_opacity | divided_by: 100.0 }};
+    "
+    {{ block.shopify_attributes }}
+    aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
+  >
+    <div class="announcement-bar__text gold-announcement">
+      <span class="gold-announcement__label">{{ 'blocks.gold_price_bar.label' | t }}</span>
+      <span class="gold-announcement__price">
+        <span{% if block_settings.bold_price %} class="gold-announcement__price-value"{% endif %}>
+          {{- 'blocks.gold_price_bar.price' | t: price: price_text -}}
+        </span>
+        {%- if show_change -%}
+          <span class="gold-announcement__change gold-announcement__change--{{ direction }}">
+            {%- if direction == 'up' -%}
+              <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 2l4 6H1z" fill="currentColor"/></svg>
+            {%- elsif direction == 'down' -%}
+              <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 8L1 2h8z" fill="currentColor"/></svg>
+            {%- endif -%}
+            {{ change_text }}%
+          </span>
+        {%- endif -%}
+      </span>
+      {%- if block_settings.show_note -%}
+        <span class="gold-announcement__note{% if block_settings.hide_note_on_mobile %} gold-announcement__note--hide-mobile{% endif %}">
+          {{- 'blocks.gold_price_bar.note' | t -}}
+        </span>
+      {%- endif -%}
+    </div>
+  </slideshow-slide>
+{%- elsif request.design_mode -%}
+  <slideshow-slide ref="slides[]" class="announcement-bar__slide" {{ block.shopify_attributes }} aria-hidden="false">
+    <p class="announcement-bar__text">Gold price hidden: the shop metafield gold.price_18k_per_g is missing</p>
+  </slideshow-slide>
+{%- endif -%}
+
+{% stylesheet %}
+  /* The bar normally caps its width at 680px; the gold line is longer than that. */
+  .announcement-bar__slides:has(.gold-announcement) {
+    max-width: none;
+  }
+
+  .gold-announcement {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: var(--gold-bar-gap, 24px);
+    row-gap: 4px;
+  }
+
+  .gold-announcement__price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5em;
+  }
+
+  .gold-announcement__price-value {
+    font-weight: 700;
+  }
+
+  .gold-announcement__change {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+
+  .gold-announcement__change svg {
+    width: 0.7em;
+    height: 0.7em;
+  }
+
+  .gold-announcement__note {
+    opacity: var(--gold-bar-note-opacity, 0.8);
+  }
+
+  @media screen and (max-width: 749px) {
+    .gold-announcement__note--hide-mobile {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold price",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Live gold price from the shop metafield gold.price_18k_per_g. The change compares the two latest entries of gold.price_history and only shows when they are 5 days apart or less. Wording is in the theme language files (blocks.gold_price_bar)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_change",
+      "label": "Show the change since the previous price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "bold_price",
+      "label": "Bold price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show the update note",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_note_on_mobile",
+      "label": "Hide the note on mobile",
+      "default": true,
+      "visible_if": "{{ block.settings.show_note }}"
+    },
+    {
+      "type": "range",
+      "id": "note_opacity",
+      "label": "Note opacity",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80,
+      "visible_if": "{{ block.settings.show_note }}"
+    },
+    {
+      "type": "range",
+      "id": "part_gap",
+      "label": "Space between the parts",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem"
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "t:settings.weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "100",
+          "label": "t:options.thin"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        },
+        {
+          "value": "900",
+          "label": "t:options.black"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold price",
+      "settings": {
+        "font": "var(--font-subheading--family)",
+        "font_size": "0.75rem"
+      }
+    }
+  ]
+}
+{% endschema %}
