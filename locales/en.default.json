@@ -123,6 +123,11 @@
     "sort": "Sort"
   },
   "blocks": {
+    "gold_price_bar": {
+      "label": "Today's gold price",
+      "price": "18k · {{ price }} / g",
+      "note": "Updated daily at 10:00 AM PET · Based on the international 18k gold equivalent"
+    },
     "gold_breakdown": {
       "gold_value": "Gold value",
       "craftsmanship": "Craftsmanship",
