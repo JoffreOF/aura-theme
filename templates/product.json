@@ -374,11 +374,34 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "product_pricing_panel_k8Wm3x": {
+              "type": "product-pricing-panel",
+              "settings": {
+                "how_we_price_link": "",
+                "show_markup": true,
+                "show_portfolio_note": true,
+                "weight_decimals": "1",
+                "gold_color": "#4A253D",
+                "craft_color": "#CCC3CF",
+                "bar_height": 6,
+                "heading_preset": "text_label",
+                "body_preset": "text_caption",
+                "text_color": "",
+                "background_color": "#F2EAE6",
+                "corner_radius": 0,
+                "padding-block-start": 16,
+                "padding-block-end": 16,
+                "padding-inline-start": 16,
+                "padding-inline-end": 16
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "text_9WaLn7",
             "price_a7krng",
+            "product_pricing_panel_k8Wm3x",
             "divider_HrJgFt",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
