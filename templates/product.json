@@ -68,43 +68,15 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_9WaLn7": {
+            "text_kRE69b": {
               "type": "text",
-              "name": "t:names.title",
+              "name": "t:names.text",
               "settings": {
-                "text": "<h1>{{ closest.product.title }}</h1>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h8",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 50,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_eyebrow_iQ3qCb": {
-              "type": "product-eyebrow",
-              "name": "Product eyebrow",
-              "settings": {
-                "show_category": true,
-                "show_stone": true,
-                "separator": "·",
+                "text": "<p>Home /&nbsp;</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "text_label",
+                "type_preset": "rte",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
                 "line_height": "normal",
@@ -122,11 +94,65 @@
               },
               "blocks": {}
             },
+            "text_9WaLn7": {
+              "type": "text",
+              "name": "t:names.title",
+              "settings": {
+                "text": "<h1>{{ closest.product.title }}</h1>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.875rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "product_eyebrow_iQ3qCb": {
+              "type": "product-eyebrow",
+              "name": "Product eyebrow",
+              "settings": {
+                "show_category": true,
+                "show_stone": true,
+                "separator": "·",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.875rem",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "text_EgNtLy": {
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+                "text": "<p>{{ closest.product.metafields.specs.gold_type.value }} •&nbsp;{{ closest.product.metafields.specs.stone_type.value }}</p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -454,6 +480,7 @@
             }
           },
           "block_order": [
+            "text_kRE69b",
             "text_9WaLn7",
             "product_eyebrow_iQ3qCb",
             "text_EgNtLy",
@@ -474,7 +501,7 @@
         "limit_details_width": true,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
-        "background_color": "{{ settings.color_palette.background }}",
+        "background_color": "{{ settings.color_palette.color10 }}",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
