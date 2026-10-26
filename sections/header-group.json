@@ -11,6 +11,43 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
+    "header_announcements_Yii4ka": {
+      "type": "header-announcements",
+      "blocks": {
+        "gold_price_announcement_dCWqzB": {
+          "type": "_gold-price-announcement",
+          "name": "Gold price",
+          "settings": {
+            "show_change": true,
+            "bold_price": true,
+            "show_note": true,
+            "hide_note_on_mobile": true,
+            "note_opacity": 80,
+            "part_gap": 24,
+            "font": "var(--font-body--family)",
+            "font_size": "0.8125rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none",
+            "text_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "gold_price_announcement_dCWqzB"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "background_color": "",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -96,6 +133,7 @@
     }
   },
   "order": [
+    "header_announcements_Yii4ka",
     "header_section"
   ]
 }
