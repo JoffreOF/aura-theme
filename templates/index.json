@@ -396,10 +396,10 @@
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
-        "gap": 16,
+        "gap": 24,
         "background_color": "{{ settings.color_palette.color10 }}",
-        "padding-block-start": 82,
-        "padding-block-end": 48
+        "padding-block-start": 56,
+        "padding-block-end": 56
       }
     },
     "product_list_UwRqN4": {
@@ -870,10 +870,10 @@
         "icons_shape": "none",
         "section_width": "page-width",
         "horizontal_alignment": "flex-start",
-        "gap": 28,
+        "gap": 24,
         "background_color": "{{ settings.color_palette.color10 }}",
-        "padding-block-start": 84,
-        "padding-block-end": 100
+        "padding-block-start": 56,
+        "padding-block-end": 56
       }
     }
   },
