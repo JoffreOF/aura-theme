@@ -257,7 +257,7 @@
                 "product_pricing_panel_NiD478": {
                   "type": "product-pricing-panel",
                   "settings": {
-                    "how_we_price_link": "",
+                    "how_we_price_link": "/",
                     "show_markup": false,
                     "show_portfolio_note": true,
                     "weight_decimals": "1",
