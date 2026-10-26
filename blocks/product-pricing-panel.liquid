@@ -1,0 +1,611 @@
+{%- doc -%}
+  "What you're paying for": splits the selected variant's price into gold value and craftsmanship,
+  shows the markup, and what the piece adds to the buyer's portfolio. Refreshes when a size is picked
+  (see assets/variant-live.js). Needs a product in context (closest.product).
+{%- enddoc -%}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign weight = variant.metafields.gold.weight_g.value
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value
+  assign markup = shop.metafields.gold.markup.value
+
+  assign show = false
+  if variant != blank and weight != blank and gram_price != blank and variant.price > 0
+    assign gold_cents = weight | times: gram_price | times: 100 | round
+    assign craft_cents = variant.price | minus: gold_cents
+    if gold_cents > 0 and craft_cents >= 0
+      assign show = true
+      assign gold_share = gold_cents | times: 100.0 | divided_by: variant.price | round: 2
+      assign gold_text = gold_cents | money
+      assign craft_text = craft_cents | money
+      assign gram_price_text = gram_price | times: 100 | round | money
+
+      comment
+        Weight with a fixed number of decimals, built from integers (see the gold breakdown block).
+      endcomment
+      assign factor = 10
+      if block.settings.weight_decimals == '2'
+        assign factor = 100
+      endif
+      assign scaled = weight | times: factor | round
+      assign fraction = scaled | modulo: factor
+      assign whole = scaled | minus: fraction | divided_by: factor
+      if factor == 100 and fraction < 10
+        assign fraction = '0' | append: fraction
+      endif
+      assign grams = whole | append: '.' | append: fraction
+
+      comment
+        Markup as 1.75 or 1.8: two decimals, or one when the second is zero. Left empty when the
+        metafield is not readable by the storefront.
+      endcomment
+      assign markup_text = ''
+      if markup != blank and markup > 0
+        assign hundredths = markup | times: 100 | round
+        assign second_decimal = hundredths | modulo: 10
+        if second_decimal == 0
+          assign tenths = hundredths | divided_by: 10
+          assign tenth_digit = tenths | modulo: 10
+          assign markup_whole = tenths | minus: tenth_digit | divided_by: 10
+          assign markup_text = markup_whole | append: '.' | append: tenth_digit
+        else
+          assign cents_digits = hundredths | modulo: 100
+          assign markup_whole = hundredths | minus: cents_digits | divided_by: 100
+          if cents_digits < 10
+            assign cents_digits = '0' | append: cents_digits
+          endif
+          assign markup_text = markup_whole | append: '.' | append: cents_digits
+        endif
+      endif
+    endif
+  endif
+-%}
+
+<variant-live
+  class="pricing-panel spacing-style"
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product.id }}"
+  style="
+    {% render 'spacing-padding', settings: block.settings %}
+    --panel-gold: {{ block.settings.gold_color }};
+    --panel-craft: {{ block.settings.craft_color }};
+    --panel-bar-height: {{ block.settings.bar_height }}px;
+    --panel-radius: {{ block.settings.corner_radius }}px;
+    {% if block.settings.background_color != blank %}--panel-background: {{ block.settings.background_color }};{% endif %}
+    {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <div class="pricing-panel__header">
+      <span class="pricing-panel__heading {{ block.settings.heading_preset }}">{{ 'blocks.pricing_panel.heading' | t }}</span>
+      {%- if block.settings.how_we_price_link != blank -%}
+        <a class="pricing-panel__link {{ block.settings.body_preset }}" href="{{ block.settings.how_we_price_link }}">
+          {{- 'blocks.pricing_panel.how_we_price' | t -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="pricing-panel__bar" aria-hidden="true">
+      <span class="pricing-panel__bar-gold" style="width: {{ gold_share }}%"></span>
+      <span class="pricing-panel__bar-craft"></span>
+    </div>
+
+    <div class="pricing-panel__columns {{ block.settings.body_preset }}">
+      <div class="pricing-panel__column">
+        <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--gold"></i>{{ 'blocks.pricing_panel.gold_value' | t }}</span>
+        <span class="pricing-panel__amount">{{ gold_text }}</span>
+        <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.gold_detail' | t: grams: grams, price: gram_price_text }}</span>
+      </div>
+      <div class="pricing-panel__column">
+        <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--craft"></i>{{ 'blocks.pricing_panel.craftsmanship' | t }}</span>
+        <span class="pricing-panel__amount">{{ craft_text }}</span>
+        {%- if block.settings.show_markup and markup_text != blank -%}
+          <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.markup' | t: markup: markup_text }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if block.settings.show_portfolio_note -%}
+      <p class="pricing-panel__note {{ block.settings.body_preset }}">
+        {{- 'blocks.pricing_panel.portfolio_note_html' | t: amount: gold_text -}}
+      </p>
+    {%- endif -%}
+
+    {%- if request.design_mode and block.settings.show_markup and markup_text == blank -%}
+      <p class="pricing-panel__hint">Markup line hidden: gold.markup is empty or not readable by the storefront (Settings, Custom data, Shop, markup, Storefront access).</p>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="pricing-panel__hint">Pricing panel hidden: the variant needs gold.weight_g and the shop needs gold.price_18k_per_g.</p>
+  {%- endif -%}
+</variant-live>
+
+{% stylesheet %}
+  .pricing-panel {
+    display: block;
+    color: var(--color, var(--color-foreground));
+    background: var(--panel-background, transparent);
+    border-radius: var(--panel-radius, 0);
+  }
+
+  .pricing-panel:not(:has(.pricing-panel__header)) {
+    padding: 0;
+  }
+
+  .pricing-panel__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-md);
+    margin-block-end: var(--margin-sm);
+  }
+
+  .pricing-panel__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .pricing-panel__bar {
+    display: flex;
+    height: var(--panel-bar-height, 6px);
+    margin-block-end: var(--margin-md);
+    background: var(--panel-craft);
+  }
+
+  .pricing-panel__bar-gold {
+    display: block;
+    height: 100%;
+    background: var(--panel-gold);
+  }
+
+  .pricing-panel__bar-craft {
+    flex: 1;
+    background: var(--panel-craft);
+  }
+
+  .pricing-panel__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-lg);
+  }
+
+  .pricing-panel__column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+  }
+
+  .pricing-panel__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+  }
+
+  .pricing-panel__square {
+    flex: none;
+    width: 0.6em;
+    height: 0.6em;
+  }
+
+  .pricing-panel__square--gold {
+    background: var(--panel-gold);
+  }
+
+  .pricing-panel__square--craft {
+    background: var(--panel-craft);
+  }
+
+  .pricing-panel__amount {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pricing-panel__detail {
+    opacity: 0.7;
+  }
+
+  .pricing-panel__note {
+    margin: var(--margin-lg) 0 0;
+    padding-block-start: var(--padding-md);
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-15));
+  }
+
+  .pricing-panel__note strong {
+    font-weight: 600;
+  }
+
+  .pricing-panel__hint {
+    margin: var(--margin-sm) 0 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pricing panel",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Gold value = weight (gold.weight_g) x today's gram price (gold.price_18k_per_g). Craftsmanship = price minus gold value. The markup line reads gold.markup, which must allow storefront access. Refreshes when a size is picked. Wording is in the theme language files (blocks.pricing_panel)."
+    },
+    {
+      "type": "url",
+      "id": "how_we_price_link",
+      "label": "\"How we price\" link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_markup",
+      "label": "Show the markup line",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_portfolio_note",
+      "label": "Show the portfolio note",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "weight_decimals",
+      "label": "Weight decimals",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 (4.1 g)"
+        },
+        {
+          "value": "2",
+          "label": "2 (4.10 g)"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "Bar"
+    },
+    {
+      "type": "color",
+      "id": "gold_color",
+      "label": "Gold value color",
+      "default": "#4B2340"
+    },
+    {
+      "type": "color",
+      "id": "craft_color",
+      "label": "Craftsmanship color",
+      "default": "#CBBFD0"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar thickness",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_preset",
+      "label": "Heading preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "text_label",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "body_preset",
+      "label": "Text preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "text_caption",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pricing panel",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
