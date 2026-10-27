@@ -100,6 +100,7 @@
     --panel-bar-height: {{ block.settings.bar_height }}px;
     --panel-detail-reduction: {{ block.settings.detail_reduction }}px;
     --panel-radius: {{ block.settings.corner_radius }}px;
+    --panel-width: {{ block.settings.width }};
     {% if block.settings.background_color != blank %}--panel-background: {{ block.settings.background_color }};{% endif %}
     {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
   "
@@ -152,6 +153,9 @@
 {% stylesheet %}
   .pricing-panel {
     display: block;
+    box-sizing: border-box;
+    width: var(--panel-width, 100%);
+    max-width: 100%;
     color: var(--color, var(--color-foreground));
     background: var(--panel-background, transparent);
     border-radius: var(--panel-radius, 0);
@@ -261,6 +265,22 @@
     {
       "type": "paragraph",
       "content": "Gold value = weight (gold.weight_g) x today's gram price (gold.price_18k_per_g). Craftsmanship = price minus gold value. The markup line reads gold.markup, which must allow storefront access. Refreshes when a size is picked. Wording is in the theme language files (blocks.pricing_panel)."
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "t:options.fill"
+        },
+        {
+          "value": "fit-content",
+          "label": "t:options.fit"
+        }
+      ],
+      "default": "100%"
     },
     {
       "type": "url",
