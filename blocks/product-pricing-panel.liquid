@@ -63,6 +63,32 @@
   endif
 -%}
 
+{%- liquid
+  assign heading_class = block.settings.heading_preset
+  assign heading_style = ''
+  if block.settings.heading_preset == 'custom'
+    assign heading_class = 'custom-typography'
+    if block.settings.heading_font_size != blank
+      assign heading_class = heading_class | append: ' custom-font-size'
+    endif
+    capture heading_style
+      render 'custom-typography-style', settings: block.settings, prefix: 'heading_'
+    endcapture
+  endif
+
+  assign body_class = block.settings.body_preset
+  assign body_style = ''
+  if block.settings.body_preset == 'custom'
+    assign body_class = 'custom-typography'
+    if block.settings.body_font_size != blank
+      assign body_class = body_class | append: ' custom-font-size'
+    endif
+    capture body_style
+      render 'custom-typography-style', settings: block.settings, prefix: 'body_'
+    endcapture
+  endif
+-%}
+
 <variant-live
   class="pricing-panel spacing-style"
   data-block-id="{{ block.id }}"
@@ -80,9 +106,9 @@
 >
   {%- if show -%}
     <div class="pricing-panel__header">
-      <span class="pricing-panel__heading {{ block.settings.heading_preset }}">{{ 'blocks.pricing_panel.heading' | t }}</span>
+      <span class="pricing-panel__heading {{ heading_class }}"{% if heading_style != blank %} style="{{ heading_style }}"{% endif %}>{{ 'blocks.pricing_panel.heading' | t }}</span>
       {%- if block.settings.how_we_price_link != blank -%}
-        <a class="pricing-panel__link {{ block.settings.body_preset }}" href="{{ block.settings.how_we_price_link }}">
+        <a class="pricing-panel__link {{ body_class }}"{% if body_style != blank %} style="{{ body_style }}"{% endif %} href="{{ block.settings.how_we_price_link }}">
           {{- 'blocks.pricing_panel.how_we_price' | t -}}
         </a>
       {%- endif -%}
@@ -93,7 +119,7 @@
       <span class="pricing-panel__bar-craft"></span>
     </div>
 
-    <div class="pricing-panel__columns {{ block.settings.body_preset }}">
+    <div class="pricing-panel__columns {{ body_class }}"{% if body_style != blank %} style="{{ body_style }}"{% endif %}>
       <div class="pricing-panel__column">
         <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--gold"></i>{{ 'blocks.pricing_panel.gold_value' | t }}</span>
         <span class="pricing-panel__amount">{{ gold_text }}</span>
@@ -109,7 +135,7 @@
     </div>
 
     {%- if block.settings.show_portfolio_note -%}
-      <p class="pricing-panel__note {{ block.settings.body_preset }}">
+      <p class="pricing-panel__note {{ body_class }}"{% if body_style != blank %} style="{{ body_style }}"{% endif %}>
         {{- 'blocks.pricing_panel.portfolio_note_html' | t: amount: gold_text -}}
       </p>
     {%- endif -%}
@@ -199,7 +225,7 @@
   }
 
   .pricing-panel__amount {
-    font-weight: 500;
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
 
@@ -214,7 +240,7 @@
   }
 
   .pricing-panel__note strong {
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .pricing-panel__hint {
@@ -408,10 +434,340 @@
         {
           "value": "text_link",
           "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
         }
       ],
       "default": "text_label",
       "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Heading font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_font_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_letter_spacing",
+      "label": "Heading letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "heading_case",
+      "label": "Heading case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
     },
     {
       "type": "select",
@@ -525,10 +881,340 @@
         {
           "value": "text_link",
           "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
         }
       ],
       "default": "text_caption",
       "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "body_font",
+      "label": "Text font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_font_size",
+      "label": "Text size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Text line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_letter_spacing",
+      "label": "Text letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_case",
+      "label": "Text case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
     },
     {
       "type": "header",
