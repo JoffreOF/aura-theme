@@ -37,6 +37,7 @@
     {% render 'spacing-padding', settings: block.settings %}
     --box-border-width: {{ block.settings.border_width }}px;
     --box-radius: {{ block.settings.corner_radius }}px;
+    --box-width: {{ block.settings.width }};
     --box-note-reduction: {{ block.settings.note_reduction }}px;
     {% if block.settings.border_color != blank %}--box-border-color: {{ block.settings.border_color }};{% endif %}
     {% if block.settings.background_color != blank %}--box-background: {{ block.settings.background_color }};{% endif %}
@@ -71,6 +72,9 @@
 {% stylesheet %}
   .installments-box {
     display: block;
+    box-sizing: border-box;
+    width: var(--box-width, 100%);
+    max-width: 100%;
     color: var(--color, var(--color-foreground));
     background: var(--box-background, transparent);
     border: var(--box-border-width, 1px) solid var(--box-border-color, currentColor);
@@ -109,6 +113,7 @@
   /* The note follows the main line's size, a few pixels smaller, never below 10px. */
   .installments-box__note {
     opacity: 0.7;
+    font-weight: 400; /* always Regular, whatever weight the main line has */
     font-size: max(10px, calc(1em - var(--box-note-reduction, 2px)));
   }
 
@@ -127,6 +132,22 @@
     {
       "type": "paragraph",
       "content": "The selected variant's price split into equal payments, with a note line under it. Wording is in the theme language files (blocks.installments_box). Refreshes when a size is picked."
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "t:options.fill"
+        },
+        {
+          "value": "fit-content",
+          "label": "t:options.fit"
+        }
+      ],
+      "default": "100%"
     },
     {
       "type": "range",
