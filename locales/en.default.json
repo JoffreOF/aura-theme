@@ -142,7 +142,8 @@
     "note_signed_in": "Signed in as {{ email }}. Prices include IGV and are charged in {{ currency }}.",
     "note_guest": "Prices include IGV and are charged in {{ currency }}.",
     "note_drawer": "Shipping at next step · IGV included",
-    "view_full_bag": "View full bag"
+    "view_full_bag": "View full bag",
+    "installments_html": "or <strong>{{ count }} × {{ amount }}</strong> interest-free"
   },
   "blocks": {
     "installments_box": {
