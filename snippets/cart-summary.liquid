@@ -41,6 +41,8 @@
     {%- endif -%}
   </div>
 
+  {% render 'cart-aura-summary', part: 'head', context: context %}
+
   {% if settings.show_cart_note or settings.show_add_discount_code %}
     <div class="cart-actions">
       {% if settings.show_cart_note %}
@@ -227,7 +229,13 @@
       class="cart-totals__item cart-totals__total"
       role="status"
     >
-      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      <span class="cart-totals__total-label cart-primary-typography">
+        {%- if context == 'drawer' -%}
+          {{ 'cart_aura.subtotal' | t }}
+        {%- else -%}
+          {{ 'content.cart_estimated_total' | t }}
+        {%- endif -%}
+      </span>
       <text-component
         ref="cartTotal"
         value="{{ total_price | strip_html }}"
@@ -246,10 +254,9 @@
         {% endform %}
       </span>
     {% endif %}
-    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
-    </div>
   </div>
+
+  {% render 'cart-aura-summary', part: 'extras', context: context %}
 </div>
 
 <div class="cart__ctas">
@@ -278,6 +285,8 @@
       {{ content_for_additional_checkout_buttons }}
     </div>
   {% endif %}
+
+  {% render 'cart-aura-summary', part: 'notes', context: context %}
 </div>
 
 {% stylesheet %}
