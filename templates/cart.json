@@ -16,7 +16,7 @@
           "type": "_cart-title",
           "static": true,
           "settings": {
-            "title": "Cart",
+            "title": "Your Bag",
             "show_count": true,
             "show_subtitle": true,
             "type_preset": "custom",
@@ -76,8 +76,8 @@
         "section_width": "page-width",
         "background_color": "{{ settings.color_palette.color10 }}",
         "text_color": "",
-        "padding-block-start": 32,
-        "padding-block-end": 0
+        "padding-block-start": 48,
+        "padding-block-end": 48
       }
     },
     "product_list_MxPXQq": {
