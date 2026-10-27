@@ -277,7 +277,7 @@
                     "heading_case": "uppercase",
                     "body_preset": "custom",
                     "body_font": "var(--font-body--family)",
-                    "body_font_size": "0.75rem",
+                    "body_font_size": "0.875rem",
                     "body_weight": "",
                     "body_line_height": "normal",
                     "body_letter_spacing": "normal",
