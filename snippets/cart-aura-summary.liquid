@@ -79,7 +79,7 @@
             <path d="M2.5 8h15" stroke="currentColor" stroke-width="1.2"/>
           </svg>
         </span>
-        <span>{{ 'blocks.installments.label' | t: count: payments, amount: installment_amount }}</span>
+        <span>{{ 'cart_aura.installments_html' | t: count: payments, amount: installment_amount }}</span>
       </p>
     {%- else -%}
       <div class="cart-aura__installments-box">
@@ -251,8 +251,17 @@
 
   .cart-aura-line {
     margin: 0;
-    font-size: var(--font-size--xs);
+    font-size: 13px;
     line-height: 1.4;
+  }
+
+  .cart-aura-line--installments {
+    font-size: 12px;
+  }
+
+  .cart-aura-line strong,
+  .cart-aura__installments-line strong {
+    font-weight: 500;
   }
 
   .cart-aura-line--weight {

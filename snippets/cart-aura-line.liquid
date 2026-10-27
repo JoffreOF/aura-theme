@@ -23,7 +23,7 @@
   elsif part == 'installments' and item.final_line_price > 0 and payments >= 2
     assign per_payment = item.final_line_price | times: 1.0 | divided_by: payments | round
     assign installment_amount = per_payment | money
-    assign installments_text = 'blocks.installments.label' | t: count: payments, amount: installment_amount
+    assign installments_text = 'cart_aura.installments_html' | t: count: payments, amount: installment_amount
   elsif part == 'gold' and weight != blank and gram_price != blank
     assign unit_gold_cents = weight | times: gram_price | times: 100 | round
     assign line_gold_cents = unit_gold_cents | times: item.quantity
