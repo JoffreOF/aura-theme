@@ -313,6 +313,9 @@
 
   .cart-totals:not(:has(.cart-actions)) {
     margin-block-start: var(--margin-3xs);
+  }
+
+  .cart-drawer__summary .cart-totals:not(:has(.cart-actions)) {
     border-block-start: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
     padding-block-start: var(--margin-xl);
   }
@@ -404,6 +407,15 @@
 
   .cart-totals__total-label {
     font-size: 15px;
+  }
+
+  /* Bag page summary panel */
+  .cart-summary__inner .cart-totals__total-label {
+    font-size: 18px;
+
+    @media screen and (min-width: 750px) {
+      color: #ccc3cf;
+    }
   }
 
   .cart-totals__total-value {
