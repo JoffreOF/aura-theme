@@ -1,0 +1,58 @@
+{%- doc -%}
+  Inline CSS variables for a "Custom" typography choice whose settings carry a prefix, for blocks that
+  need two independent typography groups (for example heading_font, heading_font_size, heading_weight,
+  heading_line_height, heading_letter_spacing, heading_case). Same output as typography-style, which can
+  only read un-prefixed settings. Use it with the classes custom-typography and custom-font-size.
+
+  @param {object} settings - the block settings
+  @param {string} prefix - for example 'heading_'
+{%- enddoc -%}
+
+{%- liquid
+  assign key_font = prefix | append: 'font'
+  assign key_size = prefix | append: 'font_size'
+  assign key_weight = prefix | append: 'weight'
+  assign key_line = prefix | append: 'line_height'
+  assign key_spacing = prefix | append: 'letter_spacing'
+  assign key_case = prefix | append: 'case'
+
+  assign custom_font = settings[key_font] | default: 'var(--font-body--family)'
+  assign custom_size = settings[key_size]
+  assign custom_weight = settings[key_weight]
+  assign custom_line = settings[key_line] | default: 'normal'
+  assign custom_spacing = settings[key_spacing] | default: 'normal'
+  assign custom_case = settings[key_case] | default: 'none'
+
+  assign type = 'body'
+  assign fluid = false
+  if custom_size != blank
+    assign size_rem = custom_size | split: 'rem' | first | times: 1.0
+    if size_rem > 4.5
+      assign type = 'display'
+    elsif size_rem > 3.5
+      assign type = 'heading'
+    endif
+    if size_rem >= 3.0
+      assign fluid = true
+      assign vw_value = size_rem | times: 16 | divided_by: 1400 | times: 100
+      assign dynamic_min_rem = size_rem | divided_by: 3.0 | minus: 1 | times: 0.25 | plus: 3.0
+    endif
+  endif
+-%}
+
+{%- capture variables -%}
+  {%- if custom_size != blank -%}
+    {%- if fluid -%}
+      --font-size: clamp({{ dynamic_min_rem }}rem, {{ vw_value }}vw, {{ custom_size }});
+    {%- else -%}
+      --font-size: {{ custom_size }};
+    {%- endif -%}
+  {%- endif -%}
+  --font-weight: {% if custom_weight != blank %}{{ custom_weight }}{% else %}{{ custom_font | replace: 'family', 'weight' }}{% endif %};
+  --font-family: {{ custom_font }};
+  --text-transform: {{ custom_case }};
+  --text-wrap: pretty;
+  --line-height: var(--line-height--{{ type }}-{{ custom_line }});
+  --letter-spacing: var(--letter-spacing--{{ type }}-{{ custom_spacing }});
+{%- endcapture -%}
+{{- variables | strip | strip_newlines -}}
