@@ -199,7 +199,7 @@
                     <div class="cart-items__title-row">
                       <a
                         href="{{ item.url }}"
-                        class="cart-items__title"
+                        class="cart-items__title{% if settings.cart_title_preset != blank %} {{ settings.cart_title_preset }}{% endif %}"
                         {% if item.parent_relationship.parent != null %}
                           aria-label="{{ 'accessibility.nested_product' | t: product_title: item.product.title, parent_title: item.parent_relationship.parent.title | escape }}"
                         {% endif %}
@@ -650,8 +650,12 @@
     font-size: var(--font-size--md);
   }
 
-  .cart-items__title {
+  /* :where() keeps this default easy to beat, so a chosen text preset wins */
+  :where(.cart-items__title) {
     font-size: var(--font-size--md);
+  }
+
+  .cart-items__title {
     color: var(--color-foreground);
     text-transform: var(--product-title-case);
     display: inline;
@@ -707,6 +711,10 @@
     flex-direction: column;
     gap: 2px;
     margin-block-start: var(--gap-xs);
+  }
+
+  .cart-drawer__items .cart-items__unit-price-wrapper {
+    display: none;
   }
 
   .cart-items__aura-lines:empty {

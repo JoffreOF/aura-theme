@@ -265,6 +265,14 @@
     id="checkout"
     class="cart__checkout-button button"
     name="checkout"
+    style="
+      --color-primary-button-background: {{ settings.cart_checkout_background }};
+      --color-primary-button-text: {{ settings.cart_checkout_text }};
+      --color-primary-button-border: {{ settings.cart_checkout_border }};
+      --color-primary-button-hover-background: color-mix(in srgb, {{ settings.cart_checkout_background }} 88%, #000);
+      --color-primary-button-hover-text: {{ settings.cart_checkout_text }};
+      --color-primary-button-hover-border: {{ settings.cart_checkout_border }};
+    "
     {% if cart == empty %}
       disabled
     {% endif %}
