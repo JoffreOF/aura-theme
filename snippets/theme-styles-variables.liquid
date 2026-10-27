@@ -145,6 +145,16 @@
     endfor
   %}
 
+  /* The $ sign always comes from the body font (a single stroke), whatever font the text uses */
+  @font-face {
+    font-family: 'Aura Currency';
+    src: url('{{ settings.type_body_font | font_url: 'woff2' }}') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0024;
+  }
+
   :root {
     /* Safe area insets — non-zero on notched devices because meta-tags.liquid sets viewport-fit=cover */
     --safe-area-inset-top: env(safe-area-inset-top, 0px);
@@ -185,13 +195,13 @@
     --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
     --font-body--style: {{ settings.type_body_font.style }};
     --font-body--weight: {{ settings.type_body_font.weight }};
-    --font-subheading--family: {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
+    --font-subheading--family: 'Aura Currency', {{ settings.type_subheading_font.family }}, {{ settings.type_subheading_font.fallback_families }};
     --font-subheading--style: {{ settings.type_subheading_font.style }};
     --font-subheading--weight: {{ settings.type_subheading_font.weight }};
-    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading--family: 'Aura Currency', {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
     --font-heading--style: {{ settings.type_heading_font.style }};
     --font-heading--weight: {{ settings.type_heading_font.weight }};
-    --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
+    --font-accent--family: 'Aura Currency', {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
     --font-accent--style: {{ settings.type_accent_font.style }};
     --font-accent--weight: {{ settings.type_accent_font.weight }};
 
