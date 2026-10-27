@@ -713,7 +713,7 @@
     margin-block-start: var(--gap-xs);
   }
 
-  .cart-drawer__items .cart-items__unit-price-wrapper {
+  .cart-items__unit-price-wrapper {
     display: none;
   }
 
@@ -835,24 +835,11 @@
   }
 
   @container cart-items (min-width: 720px) {
-    /* Cart page: original layout */
+    /* Cart page: two columns (details with the quantity and Remove underneath, then the price) */
     .cart-items__table-row {
       --cart-item-price-width: 6rem;
 
-      grid-template-columns: 7.5rem 1fr 1fr minmax(var(--cart-item-price-width), auto);
-      grid-template-rows: min-content 1fr;
-      grid-template-areas:
-        'media details quantity price'
-        'media details error error';
-    }
-
-    .cart-items__quantity,
-    .cart-items__price {
-      grid-area: initial;
-    }
-
-    .cart-items__quantity {
-      margin-top: 0;
+      grid-template-columns: 7.5rem minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
     }
 
     .cart-items__price {
