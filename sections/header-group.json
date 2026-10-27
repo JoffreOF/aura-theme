@@ -19,7 +19,7 @@
           "name": "Gold price",
           "settings": {
             "show_change": true,
-            "bold_price": true,
+            "bold_price": false,
             "show_note": true,
             "hide_note_on_mobile": true,
             "note_opacity": 80,
