@@ -732,6 +732,30 @@
     padding: 0;
   }
 
+  /* Quantity selector: transparent, divider-coloured border, product-title coloured controls */
+  .cart-items__quantity .quantity-selector {
+    --color-input-text: var(--color-foreground);
+
+    background-color: transparent;
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+    color: var(--color-foreground);
+  }
+
+  /* Drawer: Remove sits at the far right, under the price */
+  .cart-drawer__items .cart-items__quantity,
+  .cart-drawer__items .cart-items__quantity-controls {
+    width: 100%;
+  }
+
+  .cart-drawer__items .cart-items__quantity-controls {
+    justify-content: space-between;
+  }
+
+  .cart-items__remove {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
   .cart-items__media {
     grid-area: media;
     padding: 0;
@@ -743,7 +767,7 @@
     min-width: var(--cart-item-price-width);
     text-align: end;
     display: block;
-    font-size: var(--font-size--sm);
+    font-size: var(--font-size--xl);
     line-height: var(--line-height);
   }
 
