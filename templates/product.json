@@ -447,7 +447,7 @@
                 "accordion_row_iJM37V": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Care",
+                    "heading": "Specifications",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -487,7 +487,7 @@
                 "accordion_row_pLFDcD": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Design",
+                    "heading": "Care",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -523,12 +523,94 @@
                   "block_order": [
                     "text_qLGEN9"
                   ]
+                },
+                "accordion_row_9cbCRJ": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Shipping & Returns",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_GGfjjN": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our dedication to excellence extends beyond materials; it encompasses the artistry and craftsmanship illustrated in every piece we create.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-subheading--family)",
+                        "font_size": "1.125rem",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 12,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_GGfjjN"
+                  ]
+                },
+                "accordion_row_9TqrTh": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Buyback",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_aYL6n6": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our dedication to excellence extends beyond materials; it encompasses the artistry and craftsmanship illustrated in every piece we create.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-subheading--family)",
+                        "font_size": "1.125rem",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 12,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_aYL6n6"
+                  ]
                 }
               },
               "block_order": [
                 "accordion_row_NdBezV",
                 "accordion_row_iJM37V",
-                "accordion_row_pLFDcD"
+                "accordion_row_pLFDcD",
+                "accordion_row_9cbCRJ",
+                "accordion_row_9TqrTh"
               ]
             },
             "disclosures_hFEnPD": {
@@ -571,7 +653,7 @@
         "enable_sticky_add_to_cart": true,
         "background_color": "{{ settings.color_palette.color10 }}",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 100
       }
     },
     "product_recommendations_qnzPkn": {
