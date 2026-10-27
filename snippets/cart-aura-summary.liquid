@@ -14,7 +14,7 @@
 -%}
 
 {%- if part == 'head' and is_drawer == false -%}
-  <p class="cart-aura__label">{{ 'cart_aura.order_summary' | t }}</p>
+  <p class="cart-aura__label cart-aura__label--head">{{ 'cart_aura.order_summary' | t }}</p>
   {%- if cart.cart_level_discount_applications.size == 0 -%}
     <div class="cart-aura__row">
       <span>{{ 'cart_aura.subtotal' | t }}</span>
@@ -82,7 +82,10 @@
         <span>{{ 'cart_aura.installments_html' | t: count: payments, amount: installment_amount }}</span>
       </p>
     {%- else -%}
-      <div class="cart-aura__installments-box">
+      <div
+        class="cart-aura__installments-box"
+        style="background: {{ settings.cart_installments_background }}; border-color: {{ settings.cart_installments_border }}; color: {{ settings.cart_installments_text }};"
+      >
         <span class="cart-aura__icon" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
             <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
@@ -135,10 +138,17 @@
 {% stylesheet %}
   .cart-aura__label {
     margin: 0;
-    font-size: var(--font-size--xs);
+    font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     opacity: 0.8;
+  }
+
+  .cart-aura__label--head {
+    @media screen and (min-width: 750px) {
+      color: #ccc3cf;
+      opacity: 1;
+    }
   }
 
   .cart-aura__row {
@@ -146,6 +156,15 @@
     justify-content: space-between;
     align-items: baseline;
     gap: var(--gap-sm);
+    font-size: 15px;
+  }
+
+  .cart-aura__row > span:last-child {
+    font-weight: 500;
+  }
+
+  .cart-aura__row--muted > span:last-child {
+    font-weight: 400;
   }
 
   .cart-aura__row--muted {
@@ -172,24 +191,32 @@
     font-size: var(--font-size--sm);
   }
 
+  /* Same look as the product page installments box */
   .cart-aura__installments-box {
     display: flex;
     align-items: center;
-    gap: var(--gap-sm);
+    gap: var(--gap-md);
     padding: var(--padding-md) var(--padding-lg);
-    border: 1px solid var(--color-foreground);
-    background: var(--color-background);
+    border: 1px solid;
+    font-size: 15px;
+  }
+
+  .cart-aura__installments-box .cart-aura__icon {
+    width: 1.5em;
+    height: 1.5em;
   }
 
   .cart-aura__installments-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: var(--gap-3xs);
   }
 
+  /* The note follows the main line, 2px smaller, never below 10px, always Regular */
   .cart-aura__installments-text small {
     opacity: 0.7;
-    font-size: var(--font-size--xs);
+    font-weight: 400;
+    font-size: max(10px, calc(1em - 2px));
   }
 
   .cart-aura__portfolio {
@@ -215,6 +242,10 @@
     font-family: var(--font-heading--family);
     font-size: var(--font-size--2xl);
     line-height: 1.1;
+  }
+
+  .cart-aura__portfolio:not(.cart-aura__portfolio--strip) .cart-aura__portfolio-amount {
+    font-size: 34px;
   }
 
   .cart-aura__portfolio--strip {

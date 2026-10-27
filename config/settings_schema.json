@@ -16974,6 +16974,28 @@
         "id": "cart_checkout_border",
         "label": "Border",
         "default": "{{ settings.color_palette.background }}"
+      },
+      {
+        "type": "header",
+        "content": "Interest-free box (bag page)"
+      },
+      {
+        "type": "color",
+        "id": "cart_installments_background",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cart_installments_border",
+        "label": "Border",
+        "default": "{{ settings.color_palette.background }}"
+      },
+      {
+        "type": "color",
+        "id": "cart_installments_text",
+        "label": "Text",
+        "default": "{{ settings.color_palette.background }}"
       }
     ]
   }
