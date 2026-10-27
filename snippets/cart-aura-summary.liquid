@@ -233,6 +233,10 @@
   .cart-aura__notes {
     margin: 0;
     font-size: var(--font-size--xs);
+  }
+
+  .cart-aura__notes:not(.cart-aura__notes--drawer),
+  .cart-aura__notes--drawer > span {
     opacity: 0.75;
   }
 
@@ -244,13 +248,14 @@
   }
 
   .cart-aura__notes--drawer a {
-    color: inherit;
+    color: var(--color-foreground);
     text-decoration: underline;
     white-space: nowrap;
   }
 
   .cart-aura-line {
     margin: 0;
+    font-weight: 400;
     font-size: 13px;
     line-height: 1.4;
   }
