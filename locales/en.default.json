@@ -122,6 +122,28 @@
     "view_store_information": "View store information",
     "sort": "Sort"
   },
+  "cart_aura": {
+    "pieces": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    },
+    "subtitle": "{{ pieces }} · Prices locked when you pay",
+    "order_summary": "Order summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shipping_next_step": "Next step",
+    "installments_box": "{{ count }} interest-free payments of {{ amount }}",
+    "installments_note": "All cards via Mercado Pago",
+    "portfolio_label": "Added to your portfolio",
+    "portfolio_text": "This is the gold value of your pieces ({{ grams }} g of 18k gold). The difference with your total is our disclosed craftsmanship markup.",
+    "portfolio_strip": "Gold value of {{ grams }} g of 18k gold",
+    "line_weight": "{{ grams }} g of 18k gold",
+    "line_gold": "Gold value {{ amount }} → your portfolio",
+    "note_signed_in": "Signed in as {{ email }}. Prices include IGV and are charged in {{ currency }}.",
+    "note_guest": "Prices include IGV and are charged in {{ currency }}.",
+    "note_drawer": "Shipping at next step · IGV included",
+    "view_full_bag": "View full bag"
+  },
   "blocks": {
     "installments_box": {
       "label": "{{ count }} interest-free payments of {{ amount }}",
@@ -200,11 +222,11 @@
     "account_orders": "Orders",
     "account_profile": "Profile",
     "blog_details_separator": "|",
-    "cart_estimated_total": "Estimated total",
-    "cart_title": "Bag",
+    "cart_estimated_total": "Total",
+    "cart_title": "Your bag",
     "cart_subtotal": "Subtotal",
     "cart_total": "Bag total",
-    "checkout": "Check out",
+    "checkout": "Continue",
     "collection_placeholder": "Collection title",
     "discount_code": "Discount code",
     "shipping_discount_error": "Shipping discounts are shown at checkout after adding an address",
