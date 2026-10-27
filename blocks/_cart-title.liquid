@@ -31,9 +31,19 @@
       {%- if block_settings.show_count -%}{% render 'cart-bubble' %}{%- endif -%}
     {%- endif -%}
   </h1>
+  {%- if block_settings.show_subtitle and cart.empty? == false and force_empty != true -%}
+    {%- assign pieces_text = 'cart_aura.pieces' | t: count: cart.item_count -%}
+    <p class="cart-title__subtitle">{{ 'cart_aura.subtitle' | t: pieces: pieces_text }}</p>
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
+  .cart-title__subtitle {
+    margin: var(--gap-xs) 0 0;
+    font-size: var(--font-size--sm);
+    opacity: 0.75;
+  }
+
   .cart-title h1 {
     margin-block-end: 0;
     display: inline-flex;
@@ -82,6 +92,12 @@
       "type": "checkbox",
       "id": "show_count",
       "label": "t:settings.cart_count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle",
+      "label": "Show pieces and price-lock line",
       "default": true
     },
     {

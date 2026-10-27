@@ -300,6 +300,14 @@
                     {%- endif -%}
                   </div>
 
+                  <div class="cart-items__aura-lines">
+                    {%- render 'cart-aura-line', item: item, part: 'weight' -%}
+                    {%- if context == 'drawer' -%}
+                      {%- render 'cart-aura-line', item: item, part: 'installments' -%}
+                    {%- endif -%}
+                    {%- render 'cart-aura-line', item: item, part: 'gold' -%}
+                  </div>
+
                   <div class="cart-items__unit-price-wrapper">
                     <div>
                       {% if item.original_price != item.final_price %}
@@ -371,8 +379,7 @@
                         hidden
                       {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
-                      <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                      <span class="cart-items__remove-text">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>
                 </td>
@@ -412,6 +419,9 @@
                   <text-component value="{{ price | strip_html }}"
                     ><bdi>{{ price }}</bdi></text-component
                   >
+                  {%- if context != 'drawer' -%}
+                    {%- render 'cart-aura-line', item: item, part: 'installments' -%}
+                  {%- endif -%}
                   {%- if item.unit_price_measurement -%}
                     <div class="cart-items__price-unit cart-secondary-typography">
                       {% render 'unit-price', price: unit_price, measurement: item.unit_price_measurement %}
@@ -692,10 +702,22 @@
     height: auto;
   }
 
+  .cart-items__aura-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-block-start: var(--gap-xs);
+  }
+
+  .cart-items__aura-lines:empty {
+    display: none;
+  }
+
   .cart-items__remove {
     background-color: transparent;
     color: var(--color-foreground);
-    width: var(--minimum-touch-target);
+    width: auto;
+    min-width: var(--minimum-touch-target);
     height: var(--minimum-touch-target);
     justify-content: center;
     box-shadow: none;
