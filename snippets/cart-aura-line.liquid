@@ -41,5 +41,5 @@
   <p class="cart-aura-line cart-aura-line--installments">{{ installments_text }}</p>
 {%- endif -%}
 {%- if gold_text != blank -%}
-  <p class="cart-aura-line cart-aura-line--gold">{{ gold_text }}</p>
+  <p class="cart-aura-line cart-aura-line--gold" style="color: {{ settings.cart_gold_line_color }};">{{ gold_text }}</p>
 {%- endif -%}

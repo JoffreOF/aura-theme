@@ -98,7 +98,10 @@
   {%- endif -%}
 
   {%- if portfolio_ok -%}
-    <div class="cart-aura__portfolio{% if is_drawer %} cart-aura__portfolio--strip{% endif %}">
+    <div
+      class="cart-aura__portfolio{% if is_drawer %} cart-aura__portfolio--strip{% endif %}"
+      style="background: {{ settings.cart_portfolio_background }}; color: {{ settings.cart_portfolio_text }};"
+    >
       {%- if is_drawer -%}
         <span class="cart-aura__portfolio-text">
           <span class="cart-aura__label">{{ 'cart_aura.portfolio_label' | t }}</span>
@@ -194,8 +197,8 @@
     flex-direction: column;
     gap: var(--gap-xs);
     padding: var(--padding-lg);
-    background: var(--color-primary-button-background, var(--color-foreground));
-    color: var(--color-primary-button-text, var(--color-background));
+    background: var(--color-foreground);
+    color: var(--color-background);
   }
 
   .cart-aura__portfolio .cart-aura__label {
@@ -256,9 +259,6 @@
     opacity: 0.7;
   }
 
-  .cart-aura-line--gold {
-    color: var(--color-primary-button-background, inherit);
-  }
 
   .cart-items__price .cart-aura-line {
     margin-block-start: var(--gap-3xs, 2px);
