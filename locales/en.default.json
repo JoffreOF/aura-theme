@@ -138,7 +138,7 @@
     "portfolio_text": "This is the gold value of your pieces ({{ grams }} g of 18k gold). The difference with your total is our disclosed craftsmanship markup.",
     "portfolio_strip": "Gold value of {{ grams }} g of 18k gold",
     "line_weight": "{{ grams }} g of 18k gold",
-    "line_gold": "Gold value {{ amount }} → your portfolio",
+    "line_gold": "Adds {{ amount }} to your portfolio",
     "note_signed_in": "Signed in as {{ email }}. Prices include IGV and are charged in {{ currency }}.",
     "note_guest": "Prices include IGV and are charged in {{ currency }}.",
     "note_drawer": "Shipping at next step · IGV included",
