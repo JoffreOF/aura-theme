@@ -1,0 +1,709 @@
+{%- doc -%}
+  Boxed installments for the product page: "6 interest-free payments of $133.33" and a note line
+  ("All cards via Mercado Pago"). The amount is the selected variant's price divided by the number of
+  payments, rounded to the cent. Refreshes when a size is picked (see assets/variant-live.js).
+{%- enddoc -%}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign payments = block.settings.payments | plus: 0
+
+  assign show = false
+  if variant != blank and variant.price > 0 and payments >= 2
+    assign show = true
+    assign per_payment = variant.price | times: 1.0 | divided_by: payments | round
+    assign amount = per_payment | money
+  endif
+
+  assign main_class = block.settings.main_preset
+  assign main_style = ''
+  if block.settings.main_preset == 'custom'
+    assign main_class = 'custom-typography'
+    if block.settings.main_font_size != blank
+      assign main_class = main_class | append: ' custom-font-size'
+    endif
+    capture main_style
+      render 'custom-typography-style', settings: block.settings, prefix: 'main_'
+    endcapture
+  endif
+-%}
+
+<variant-live
+  class="installments-box spacing-style"
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product.id }}"
+  style="
+    {% render 'spacing-padding', settings: block.settings %}
+    --box-border-width: {{ block.settings.border_width }}px;
+    --box-radius: {{ block.settings.corner_radius }}px;
+    --box-note-reduction: {{ block.settings.note_reduction }}px;
+    {% if block.settings.border_color != blank %}--box-border-color: {{ block.settings.border_color }};{% endif %}
+    {% if block.settings.background_color != blank %}--box-background: {{ block.settings.background_color }};{% endif %}
+    {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <div class="installments-box__inner">
+      {%- if block.settings.show_icon -%}
+        <span class="installments-box__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M2.5 8h15" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </span>
+      {%- endif -%}
+      <div class="installments-box__text {{ main_class }}"{% if main_style != blank %} style="{{ main_style }}"{% endif %}>
+        <div class="installments-box__lines">
+          <span class="installments-box__line">{{ 'blocks.installments_box.label' | t: count: payments, amount: amount }}</span>
+          {%- if block.settings.show_note -%}
+            <span class="installments-box__note">{{ 'blocks.installments_box.note' | t }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class="installments-box__hint">Installments box hidden: the product needs a price.</p>
+  {%- endif -%}
+</variant-live>
+
+{% stylesheet %}
+  .installments-box {
+    display: block;
+    color: var(--color, var(--color-foreground));
+    background: var(--box-background, transparent);
+    border: var(--box-border-width, 1px) solid var(--box-border-color, currentColor);
+    border-radius: var(--box-radius, 0);
+  }
+
+  .installments-box:not(:has(.installments-box__inner)) {
+    padding: 0;
+    border: 0;
+  }
+
+  .installments-box__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+  }
+
+  .installments-box__icon {
+    display: inline-flex;
+    flex: none;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .installments-box__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .installments-box__lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+  }
+
+  /* The note follows the main line's size, a few pixels smaller, never below 10px. */
+  .installments-box__note {
+    opacity: 0.7;
+    font-size: max(10px, calc(1em - var(--box-note-reduction, 2px)));
+  }
+
+  .installments-box__hint {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Installments box",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The selected variant's price split into equal payments, with a note line under it. Wording is in the theme language files (blocks.installments_box). Refreshes when a size is picked."
+    },
+    {
+      "type": "range",
+      "id": "payments",
+      "label": "Number of payments",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show card icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Show the note line",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "note_reduction",
+      "label": "Note: smaller by",
+      "info": "The note is this many pixels smaller than the main line (14px with 2px gives 12px). Never below 10px.",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 2,
+      "visible_if": "{{ block.settings.show_note }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "main_preset",
+      "label": "Text preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "text_caption",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "main_font",
+      "label": "Text font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "main_font_size",
+      "label": "Text size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "main_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "main_line_height",
+      "label": "Text line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "main_letter_spacing",
+      "label": "Text letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "main_case",
+      "label": "Text case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.main_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "t:settings.borders",
+      "default": "#4A253D"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "t:settings.border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installments box",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
