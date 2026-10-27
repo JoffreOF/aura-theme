@@ -98,6 +98,7 @@
     --panel-gold: {{ block.settings.gold_color }};
     --panel-craft: {{ block.settings.craft_color }};
     --panel-bar-height: {{ block.settings.bar_height }}px;
+    --panel-detail-reduction: {{ block.settings.detail_reduction }}px;
     --panel-radius: {{ block.settings.corner_radius }}px;
     {% if block.settings.background_color != blank %}--panel-background: {{ block.settings.background_color }};{% endif %}
     {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
@@ -229,8 +230,10 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* A few pixels smaller than the text around it (14px text gives 12px), never below 10px. */
   .pricing-panel__detail {
     opacity: 0.7;
+    font-size: max(10px, calc(1em - var(--panel-detail-reduction, 2px)));
   }
 
   .pricing-panel__note {
@@ -1215,6 +1218,17 @@
       ],
       "default": "none",
       "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "detail_reduction",
+      "label": "Small lines: smaller by",
+      "info": "The lines under each amount (weight and gram price, markup) are this many pixels smaller than the text size: 14px text with 2px gives 12px. Never below 10px.",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 2
     },
     {
       "type": "header",
