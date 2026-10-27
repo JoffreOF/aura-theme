@@ -121,6 +121,28 @@
       echo accent_font_bold_italic | font_face: font_display: 'swap'
       assign rendered_fonts = rendered_fonts | append: accent_font_bold_italic_face_id
     endunless
+
+    comment
+      Extra weights (Light 300 to Bold 700) for every font slot, so presets and custom CSS can use them.
+      font_modify returns nothing when the family has no such variant, so those are skipped.
+      Declaring a face costs nothing until text on the page actually uses it.
+    endcomment
+    assign extra_weights = '300,400,500,600,700' | split: ','
+    assign font_slots = 'body,subheading,heading,accent' | split: ','
+    for slot in font_slots
+      assign slot_setting_id = 'type_[slot]_font' | replace: '[slot]', slot
+      assign slot_font = settings[slot_setting_id]
+      for extra_weight in extra_weights
+        assign weight_font = slot_font | font_modify: 'weight', extra_weight
+        if weight_font != blank
+          assign weight_face_id = '[family]-[weight]-[style]|' | replace: '[family]', weight_font.family | replace: '[weight]', weight_font.weight | replace: '[style]', weight_font.style
+          unless rendered_fonts contains weight_face_id
+            echo weight_font | font_face: font_display: 'swap'
+            assign rendered_fonts = rendered_fonts | append: weight_face_id
+          endunless
+        endif
+      endfor
+    endfor
   %}
 
   :root {
@@ -335,6 +357,8 @@
       for preset_name in type_presets
         assign preset_size = '--font-size--[preset_name]' | replace: '[preset_name]', preset_name
         assign preset_line_height = 'type_line_height_[preset_name]' | replace: '[preset_name]', preset_name
+        assign weight_setting_id = 'type_weight_[preset_name]' | replace: '[preset_name]', preset_name
+        assign chosen_weight = settings[weight_setting_id]
 
         if preset_name == 'paragraph'
           assign preset_font = '--font-body--family'
@@ -342,6 +366,9 @@
           assign preset_weight = '400'
           assign preset_case = '--font-body--case'
 
+          if chosen_weight != blank
+            assign preset_weight = chosen_weight
+          endif
           echo '--font-[preset_name]--weight: [preset_weight];' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
         else
           assign preset_font_id = 'type_font_[preset_name]' | replace: '[preset_name]', preset_name
@@ -351,7 +378,11 @@
           assign preset_case = 'type_case_[preset_name]' | replace: '[preset_name]', preset_name
           assign preset_letter_spacing = 'type_letter_spacing_[preset_name]' | replace: '[preset_name]', preset_name
 
-          echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
+          if chosen_weight != blank
+            echo '--font-[preset_name]--weight: [chosen_weight];' | replace: '[preset_name]', preset_name | replace: '[chosen_weight]', chosen_weight
+          else
+            echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
+          endif
           echo '--font-[preset_name]--letter-spacing: var(--letter-spacing--[preset_letter_spacing]);' | replace: '[preset_name]', preset_name | replace: '[preset_letter_spacing]', settings[preset_letter_spacing]
         endif
 
