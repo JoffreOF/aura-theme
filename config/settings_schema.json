@@ -16788,5 +16788,20 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Aura cart",
+    "settings": [
+      {
+        "type": "range",
+        "id": "cart_installments_payments",
+        "label": "Interest-free payments shown in the bag",
+        "info": "Used for each line and for the bag total (bag page and drawer).",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "default": 6
+      }
+    ]
   }
 ]
