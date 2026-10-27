@@ -123,6 +123,13 @@
     "sort": "Sort"
   },
   "blocks": {
+    "installments_box": {
+      "label": "{{ count }} interest-free payments of {{ amount }}",
+      "note": "All cards via Mercado Pago"
+    },
+    "price_note": {
+      "updated": "Price updated daily at 10:00 AM PET with the gold price."
+    },
     "pricing_panel": {
       "heading": "What you're paying for",
       "how_we_price": "How we price",
