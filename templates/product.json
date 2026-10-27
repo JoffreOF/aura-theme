@@ -705,7 +705,8 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": true,
+        "equal_columns": false,
+        "column_ratio": "3-2",
         "limit_details_width": false,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
