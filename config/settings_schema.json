@@ -561,6 +561,39 @@
         "default": "body-normal"
       },
       {
+        "type": "select",
+        "id": "type_weight_paragraph",
+        "label": "Weight",
+        "info": "Font default keeps today's weight. Other weights use the font's own Light to Bold files; a weight the font does not have falls back to the nearest one.",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "t:options.h1"
       },
@@ -1050,6 +1083,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h1",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "t:options.h2"
       },
@@ -1537,6 +1602,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h2",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -2036,6 +2133,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h3",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "t:options.h4"
       },
@@ -2531,6 +2660,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h4",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -3030,6 +3191,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h5",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "t:options.h6"
       },
@@ -3525,6 +3718,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h6",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -4024,6 +4249,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h7",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 8"
       },
@@ -4519,6 +4776,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h8",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -5018,6 +5307,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h9",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 10"
       },
@@ -5513,6 +5834,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h10",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -6012,6 +6365,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h11",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 12"
       },
@@ -6507,6 +6892,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h12",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -7006,6 +7423,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h13",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 14"
       },
@@ -7501,6 +7950,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h14",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -8000,6 +8481,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h15",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 16"
       },
@@ -8495,6 +9008,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h16",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -8994,6 +9539,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h17",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Button"
       },
@@ -9489,6 +10066,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_text_button",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -9988,6 +10597,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h18",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Heading 19"
       },
@@ -10483,6 +11124,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_h19",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -10982,6 +11655,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h20",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Strong"
       },
@@ -11477,6 +12182,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_text_strong",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -11976,6 +12713,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_text_caption",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Label"
       },
@@ -12471,6 +13240,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_text_label",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       },
       {
         "type": "header",
@@ -12970,6 +13771,38 @@
         "default": "none"
       },
       {
+        "type": "select",
+        "id": "type_weight_h21",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
+      },
+      {
         "type": "header",
         "content": "Link"
       },
@@ -13465,6 +14298,38 @@
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "type_weight_text_link",
+        "label": "Weight",
+        "options": [
+          {
+            "value": "",
+            "label": "Font default"
+          },
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          },
+          {
+            "value": "600",
+            "label": "Semi bold (600)"
+          },
+          {
+            "value": "700",
+            "label": "Bold (700)"
+          }
+        ],
+        "default": ""
       }
     ]
   },
