@@ -260,6 +260,23 @@
 </div>
 
 <div class="cart__ctas">
+  {%- if settings.cart_precheckout_url != blank and cart != empty -%}
+    <a
+      href="{{ settings.cart_precheckout_url }}"
+      id="checkout"
+      class="cart__checkout-button button"
+      style="
+        --color-primary-button-background: {{ settings.cart_checkout_background }};
+        --color-primary-button-text: {{ settings.cart_checkout_text }};
+        --color-primary-button-border: {{ settings.cart_checkout_border }};
+        --color-primary-button-hover-background: color-mix(in srgb, {{ settings.cart_checkout_background }} 88%, #000);
+        --color-primary-button-hover-text: {{ settings.cart_checkout_text }};
+        --color-primary-button-hover-border: {{ settings.cart_checkout_border }};
+      "
+    >
+      <span class="button-text">{{ 'content.checkout' | t }}</span>
+    </a>
+  {%- else -%}
   <button
     type="submit"
     id="checkout"
@@ -282,6 +299,7 @@
       {{ 'content.checkout' | t }}
     </span>
   </button>
+  {%- endif -%}
 
   {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
     <div
@@ -414,7 +432,7 @@
     font-size: 18px;
 
     @media screen and (min-width: 750px) {
-      color: var(--color, var(--color-foreground));
+      color: #ccc3cf;
     }
   }
 
