@@ -145,6 +145,58 @@
     "view_full_bag": "View full bag",
     "installments_html": "or <strong>{{ count }} × {{ amount }}</strong> interest-free"
   },
+  "pre_checkout": {
+    "title": "Your details",
+    "document_type": "Document type",
+    "types": {
+      "ce": "Carnet de extranjería",
+      "passport": "Passport",
+      "other": "Other"
+    },
+    "document_number": "Document number",
+    "eight_digits": "8 digits",
+    "look_up": "Look up",
+    "looking": "Looking up your DNI…",
+    "verifying": "Checking that you are a person…",
+    "found": "Found:",
+    "not_you": "Not you? Edit",
+    "enter_manually": "Enter my details manually",
+    "first_name": "First name",
+    "last_names": "Last names",
+    "phone": "Phone",
+    "email": "Email",
+    "shipping_address": "Shipping address",
+    "country": "Country",
+    "department": "Department",
+    "choose": "Choose…",
+    "province": "Province",
+    "district": "District",
+    "address": "Address",
+    "address_hint": "Street, number, apartment",
+    "reference": "Reference (optional)",
+    "reference_hint": "Near…",
+    "district_note": "You will confirm your district at payment.",
+    "other_note": "You will enter your name, address and document number at the next step.",
+    "continue": "Continue to payment",
+    "carried_over": "Your details are carried over, so you won't type them twice.",
+    "privacy": "We use your DNI only to fill in your delivery details and record your purchase. We never share it.",
+    "summary": "Order summary",
+    "steps": {
+      "label": "Checkout steps",
+      "bag": "Bag",
+      "details": "Your details",
+      "payment": "Payment"
+    },
+    "errors": {
+      "invalid_dni": "Enter the 8 digits of your DNI.",
+      "unavailable": "We couldn't look up that DNI right now. Please enter your details manually.",
+      "no_address": "We found your name but no address. Please enter your address.",
+      "required": "Please complete your name, address, province and district.",
+      "email": "Enter a valid email address.",
+      "region": "Choose your department.",
+      "submit_failed": "We couldn't continue. Please try again in a moment."
+    }
+  },
   "blocks": {
     "installments_box": {
       "label": "{{ count }} interest-free payments of {{ amount }}",
