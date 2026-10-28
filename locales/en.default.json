@@ -175,7 +175,7 @@
     "address_hint": "Street, number, apartment",
     "reference": "Reference (optional)",
     "reference_hint": "Near…",
-    "district_note": "You will confirm your district at payment.",
+    "district_note": "You will enter your district at the next step.",
     "other_note": "You will enter your name, address and document number at the next step.",
     "continue": "Continue to payment",
     "carried_over": "Your details are carried over, so you won't type them twice.",
