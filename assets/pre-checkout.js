@@ -42,7 +42,16 @@ function init(root) {
   const names = ['firstName', 'lastName', 'phone', 'email', 'address', 'region', 'province', 'district', 'reference'];
 
   // Kept in memory only.
-  const state = { ticket: null, proof: null, proofDni: null, token: null, widgetId: null, scriptLoading: null, busy: false };
+  const state = {
+    ticket: null,
+    proof: null,
+    proofDni: null,
+    token: null,
+    widgetId: null,
+    scriptLoading: null,
+    busy: false,
+    waiting: false, // the customer clicked Look up before the Turnstile check finished
+  };
 
   const setStatus = (text) => {
     el.status.textContent = text || '';
@@ -95,37 +104,58 @@ function init(root) {
     return state.scriptLoading;
   }
 
-  async function ensureToken() {
-    if (!config.guest || state.ticket || state.token) return true;
-    if (!config.siteKey) return false;
-    setStatus(config.messages.verifying);
+  // The check starts as soon as the page opens, so a token is ready by the time the customer clicks Look up.
+  // 'interaction-only' keeps the widget invisible unless Cloudflare needs the person to do something.
+  async function startTurnstile() {
+    if (!config.guest || !config.siteKey || state.ticket || state.widgetId !== null) return;
     try {
       await loadTurnstile();
     } catch (error) {
-      return false;
+      return; // the click then falls back to manual entry
     }
-    el.turnstile.hidden = false;
-    const options = {
+    if (state.widgetId !== null) return;
+    state.widgetId = window.turnstile.render(el.turnstile, {
       sitekey: config.siteKey,
+      appearance: 'interaction-only',
       callback: (token) => {
         state.token = token;
-        el.turnstile.hidden = true;
-        lookup();
+        if (state.waiting) {
+          state.waiting = false;
+          lookup();
+        }
       },
       'error-callback': (code) => {
         // The code is not personal data. 110200 means this hostname is not on the widget's list in Cloudflare.
         console.warn('[pre-checkout] Turnstile error', code, '| host:', window.location.hostname);
-        el.turnstile.hidden = true;
-        setStatus(config.messages.unavailable);
-        showFields(true);
+        const wasWaiting = state.waiting;
+        state.waiting = false;
+        if (wasWaiting) {
+          setStatus(config.messages.unavailable);
+          showFields(true);
+        }
       },
       'expired-callback': () => {
+        // Unused tokens expire after a few minutes: ask for a fresh one.
         state.token = null;
+        if (state.widgetId !== null) window.turnstile.reset(state.widgetId);
       },
-    };
-    if (state.widgetId === null) state.widgetId = window.turnstile.render(el.turnstile, options);
+    });
+  }
+
+  // True when a lookup may be sent now. Otherwise the lookup restarts itself once the check finishes.
+  async function ensureToken() {
+    if (!config.guest || state.ticket || state.token) return true;
+    if (!config.siteKey) return false;
+    setStatus(config.messages.verifying);
+    state.waiting = true;
+    if (state.widgetId === null) await startTurnstile();
     else window.turnstile.reset(state.widgetId);
-    return false; // the callback restarts the lookup
+    if (state.widgetId === null) {
+      state.waiting = false;
+      setStatus(config.messages.unavailable);
+      showFields(true);
+    }
+    return false;
   }
 
   // ---- DNI lookup ----
@@ -151,7 +181,13 @@ function init(root) {
     el.lookup.disabled = false;
 
     if (result.ok) {
-      if (result.ticket) state.ticket = result.ticket;
+      if (result.ticket) {
+        state.ticket = result.ticket;
+        if (state.widgetId !== null) {
+          window.turnstile.remove(state.widgetId);
+          state.widgetId = null;
+        }
+      }
       state.proof = result.proof || null;
       state.proofDni = dni;
       applyPerson(result.person);
@@ -280,6 +316,8 @@ function init(root) {
     el.submit.disabled = locked;
     el.lookup.disabled = locked;
   }
+
+  startTurnstile();
 }
 
 document.querySelectorAll('[data-pre-checkout]').forEach(init);
