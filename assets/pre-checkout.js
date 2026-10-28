@@ -10,6 +10,13 @@ const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?ren
 
 function init(root) {
   const config = JSON.parse(root.querySelector('script[data-config]').textContent);
+  // The messages come through Liquid's json filter, which turns an apostrophe into &#39;. Turn it back into text.
+  const decode = (text) => {
+    const area = document.createElement('textarea');
+    area.innerHTML = text;
+    return area.value;
+  };
+  for (const key of Object.keys(config.messages)) config.messages[key] = decode(config.messages[key]);
   const $ = (selector) => root.querySelector(selector);
   const form = $('[data-form]');
   if (!form) return; // empty bag
@@ -105,7 +112,9 @@ function init(root) {
         el.turnstile.hidden = true;
         lookup();
       },
-      'error-callback': () => {
+      'error-callback': (code) => {
+        // The code is not personal data. 110200 means this hostname is not on the widget's list in Cloudflare.
+        console.warn('[pre-checkout] Turnstile error', code, '| host:', window.location.hostname);
         el.turnstile.hidden = true;
         setStatus(config.messages.unavailable);
         showFields(true);
