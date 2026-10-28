@@ -106,6 +106,7 @@
     "cart_title_preset": "h17",
     "cart_portfolio_background": "{{ settings.color_palette.background }}",
     "cart_gold_line_color": "{{ settings.color_palette.background }}",
+    "cart_precheckout_url": "shopify://pages/pre-checkout",
     "content_for_index": [],
     "color_palette": {
       "background": "#4A253D",
