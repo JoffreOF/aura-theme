@@ -16958,6 +16958,12 @@
         "content": "Continue button (bag page and drawer)"
       },
       {
+        "type": "url",
+        "id": "cart_precheckout_url",
+        "label": "Send the Continue button to this page",
+        "info": "Pick the pre-checkout page (Your details). Leave empty to keep going straight to Shopify's checkout."
+      },
+      {
         "type": "color",
         "id": "cart_checkout_background",
         "label": "Background",
