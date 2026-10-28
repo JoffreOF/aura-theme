@@ -762,11 +762,433 @@ h6,
   }
 }
 
-:first-child:is(.h1, .h2, .h3, .h4, .h5, .h6) {
+/* Extra typography presets: Heading 7-21, Button, Strong, Caption, Label, Link */
+
+.h7.h7,
+.text-block.h7 > *,
+.text-block.h7 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h7--family);
+  font-style: var(--font-h7--style);
+  font-weight: var(--font-h7--weight);
+  font-size: var(--font-h7--size);
+  line-height: var(--font-h7--line-height);
+  letter-spacing: var(--font-h7--letter-spacing);
+  text-transform: var(--font-h7--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h7.h7,
+  textarea.h7.h7,
+  select.h7.h7 {
+    font-size: max(1rem, var(--font-h7--size));
+  }
+}
+
+.h8.h8,
+.text-block.h8 > *,
+.text-block.h8 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h8--family);
+  font-style: var(--font-h8--style);
+  font-weight: var(--font-h8--weight);
+  font-size: var(--font-h8--size);
+  line-height: var(--font-h8--line-height);
+  letter-spacing: var(--font-h8--letter-spacing);
+  text-transform: var(--font-h8--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h8.h8,
+  textarea.h8.h8,
+  select.h8.h8 {
+    font-size: max(1rem, var(--font-h8--size));
+  }
+}
+
+.h9.h9,
+.text-block.h9 > *,
+.text-block.h9 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h9--family);
+  font-style: var(--font-h9--style);
+  font-weight: var(--font-h9--weight);
+  font-size: var(--font-h9--size);
+  line-height: var(--font-h9--line-height);
+  letter-spacing: var(--font-h9--letter-spacing);
+  text-transform: var(--font-h9--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h9.h9,
+  textarea.h9.h9,
+  select.h9.h9 {
+    font-size: max(1rem, var(--font-h9--size));
+  }
+}
+
+.h10.h10,
+.text-block.h10 > *,
+.text-block.h10 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h10--family);
+  font-style: var(--font-h10--style);
+  font-weight: var(--font-h10--weight);
+  font-size: var(--font-h10--size);
+  line-height: var(--font-h10--line-height);
+  letter-spacing: var(--font-h10--letter-spacing);
+  text-transform: var(--font-h10--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h10.h10,
+  textarea.h10.h10,
+  select.h10.h10 {
+    font-size: max(1rem, var(--font-h10--size));
+  }
+}
+
+.h11.h11,
+.text-block.h11 > *,
+.text-block.h11 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h11--family);
+  font-style: var(--font-h11--style);
+  font-weight: var(--font-h11--weight);
+  font-size: var(--font-h11--size);
+  line-height: var(--font-h11--line-height);
+  letter-spacing: var(--font-h11--letter-spacing);
+  text-transform: var(--font-h11--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h11.h11,
+  textarea.h11.h11,
+  select.h11.h11 {
+    font-size: max(1rem, var(--font-h11--size));
+  }
+}
+
+.h12.h12,
+.text-block.h12 > *,
+.text-block.h12 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h12--family);
+  font-style: var(--font-h12--style);
+  font-weight: var(--font-h12--weight);
+  font-size: var(--font-h12--size);
+  line-height: var(--font-h12--line-height);
+  letter-spacing: var(--font-h12--letter-spacing);
+  text-transform: var(--font-h12--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h12.h12,
+  textarea.h12.h12,
+  select.h12.h12 {
+    font-size: max(1rem, var(--font-h12--size));
+  }
+}
+
+.h13.h13,
+.text-block.h13 > *,
+.text-block.h13 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h13--family);
+  font-style: var(--font-h13--style);
+  font-weight: var(--font-h13--weight);
+  font-size: var(--font-h13--size);
+  line-height: var(--font-h13--line-height);
+  letter-spacing: var(--font-h13--letter-spacing);
+  text-transform: var(--font-h13--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h13.h13,
+  textarea.h13.h13,
+  select.h13.h13 {
+    font-size: max(1rem, var(--font-h13--size));
+  }
+}
+
+.h14.h14,
+.text-block.h14 > *,
+.text-block.h14 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h14--family);
+  font-style: var(--font-h14--style);
+  font-weight: var(--font-h14--weight);
+  font-size: var(--font-h14--size);
+  line-height: var(--font-h14--line-height);
+  letter-spacing: var(--font-h14--letter-spacing);
+  text-transform: var(--font-h14--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h14.h14,
+  textarea.h14.h14,
+  select.h14.h14 {
+    font-size: max(1rem, var(--font-h14--size));
+  }
+}
+
+.h15.h15,
+.text-block.h15 > *,
+.text-block.h15 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h15--family);
+  font-style: var(--font-h15--style);
+  font-weight: var(--font-h15--weight);
+  font-size: var(--font-h15--size);
+  line-height: var(--font-h15--line-height);
+  letter-spacing: var(--font-h15--letter-spacing);
+  text-transform: var(--font-h15--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h15.h15,
+  textarea.h15.h15,
+  select.h15.h15 {
+    font-size: max(1rem, var(--font-h15--size));
+  }
+}
+
+.h16.h16,
+.text-block.h16 > *,
+.text-block.h16 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h16--family);
+  font-style: var(--font-h16--style);
+  font-weight: var(--font-h16--weight);
+  font-size: var(--font-h16--size);
+  line-height: var(--font-h16--line-height);
+  letter-spacing: var(--font-h16--letter-spacing);
+  text-transform: var(--font-h16--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h16.h16,
+  textarea.h16.h16,
+  select.h16.h16 {
+    font-size: max(1rem, var(--font-h16--size));
+  }
+}
+
+.h17.h17,
+.text-block.h17 > *,
+.text-block.h17 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h17--family);
+  font-style: var(--font-h17--style);
+  font-weight: var(--font-h17--weight);
+  font-size: var(--font-h17--size);
+  line-height: var(--font-h17--line-height);
+  letter-spacing: var(--font-h17--letter-spacing);
+  text-transform: var(--font-h17--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h17.h17,
+  textarea.h17.h17,
+  select.h17.h17 {
+    font-size: max(1rem, var(--font-h17--size));
+  }
+}
+
+.text_button.text_button,
+.text-block.text_button > *,
+.text-block.text_button :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text_button--family);
+  font-style: var(--font-text_button--style);
+  font-weight: var(--font-text_button--weight);
+  font-size: var(--font-text_button--size);
+  line-height: var(--font-text_button--line-height);
+  letter-spacing: var(--font-text_button--letter-spacing);
+  text-transform: var(--font-text_button--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.text_button.text_button,
+  textarea.text_button.text_button,
+  select.text_button.text_button {
+    font-size: max(1rem, var(--font-text_button--size));
+  }
+}
+
+.h18.h18,
+.text-block.h18 > *,
+.text-block.h18 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h18--family);
+  font-style: var(--font-h18--style);
+  font-weight: var(--font-h18--weight);
+  font-size: var(--font-h18--size);
+  line-height: var(--font-h18--line-height);
+  letter-spacing: var(--font-h18--letter-spacing);
+  text-transform: var(--font-h18--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h18.h18,
+  textarea.h18.h18,
+  select.h18.h18 {
+    font-size: max(1rem, var(--font-h18--size));
+  }
+}
+
+.h19.h19,
+.text-block.h19 > *,
+.text-block.h19 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h19--family);
+  font-style: var(--font-h19--style);
+  font-weight: var(--font-h19--weight);
+  font-size: var(--font-h19--size);
+  line-height: var(--font-h19--line-height);
+  letter-spacing: var(--font-h19--letter-spacing);
+  text-transform: var(--font-h19--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h19.h19,
+  textarea.h19.h19,
+  select.h19.h19 {
+    font-size: max(1rem, var(--font-h19--size));
+  }
+}
+
+.h20.h20,
+.text-block.h20 > *,
+.text-block.h20 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h20--family);
+  font-style: var(--font-h20--style);
+  font-weight: var(--font-h20--weight);
+  font-size: var(--font-h20--size);
+  line-height: var(--font-h20--line-height);
+  letter-spacing: var(--font-h20--letter-spacing);
+  text-transform: var(--font-h20--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h20.h20,
+  textarea.h20.h20,
+  select.h20.h20 {
+    font-size: max(1rem, var(--font-h20--size));
+  }
+}
+
+.text_strong.text_strong,
+.text-block.text_strong > *,
+.text-block.text_strong :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text_strong--family);
+  font-style: var(--font-text_strong--style);
+  font-weight: var(--font-text_strong--weight);
+  font-size: var(--font-text_strong--size);
+  line-height: var(--font-text_strong--line-height);
+  letter-spacing: var(--font-text_strong--letter-spacing);
+  text-transform: var(--font-text_strong--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.text_strong.text_strong,
+  textarea.text_strong.text_strong,
+  select.text_strong.text_strong {
+    font-size: max(1rem, var(--font-text_strong--size));
+  }
+}
+
+.text_caption.text_caption,
+.text-block.text_caption > *,
+.text-block.text_caption :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text_caption--family);
+  font-style: var(--font-text_caption--style);
+  font-weight: var(--font-text_caption--weight);
+  font-size: var(--font-text_caption--size);
+  line-height: var(--font-text_caption--line-height);
+  letter-spacing: var(--font-text_caption--letter-spacing);
+  text-transform: var(--font-text_caption--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.text_caption.text_caption,
+  textarea.text_caption.text_caption,
+  select.text_caption.text_caption {
+    font-size: max(1rem, var(--font-text_caption--size));
+  }
+}
+
+.text_label.text_label,
+.text-block.text_label > *,
+.text-block.text_label :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text_label--family);
+  font-style: var(--font-text_label--style);
+  font-weight: var(--font-text_label--weight);
+  font-size: var(--font-text_label--size);
+  line-height: var(--font-text_label--line-height);
+  letter-spacing: var(--font-text_label--letter-spacing);
+  text-transform: var(--font-text_label--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.text_label.text_label,
+  textarea.text_label.text_label,
+  select.text_label.text_label {
+    font-size: max(1rem, var(--font-text_label--size));
+  }
+}
+
+.h21.h21,
+.text-block.h21 > *,
+.text-block.h21 :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-h21--family);
+  font-style: var(--font-h21--style);
+  font-weight: var(--font-h21--weight);
+  font-size: var(--font-h21--size);
+  line-height: var(--font-h21--line-height);
+  letter-spacing: var(--font-h21--letter-spacing);
+  text-transform: var(--font-h21--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.h21.h21,
+  textarea.h21.h21,
+  select.h21.h21 {
+    font-size: max(1rem, var(--font-h21--size));
+  }
+}
+
+.text_link.text_link,
+.text-block.text_link > *,
+.text-block.text_link :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-text_link--family);
+  font-style: var(--font-text_link--style);
+  font-weight: var(--font-text_link--weight);
+  font-size: var(--font-text_link--size);
+  line-height: var(--font-text_link--line-height);
+  letter-spacing: var(--font-text_link--letter-spacing);
+  text-transform: var(--font-text_link--case);
+  color: var(--color);
+}
+
+@media screen and (max-width: 1200px) {
+  input.text_link.text_link,
+  textarea.text_link.text_link,
+  select.text_link.text_link {
+    font-size: max(1rem, var(--font-text_link--size));
+  }
+}
+
+:first-child:is(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .text_button, .h18, .h19, .h20, .text_strong, .text_caption, .text_label, .h21, .text_link) {
   margin-block-start: 0;
 }
 
-:last-child:is(.h1, .h2, .h3, .h4, .h5, .h6) {
+:last-child:is(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .text_button, .h18, .h19, .h20, .text_strong, .text_caption, .text_label, .h21, .text_link) {
   margin-block-end: 0;
 }
 
@@ -785,8 +1207,8 @@ a {
 }
 
 /* Add underline to text using our paragraph styles only. */
-p:not(.h1, .h2, .h3, .h4, .h5, .h6) a:where(:not(.button, .button-secondary)),
-.rte :is(p, ul, ol, table):not(.h1, .h2, .h3, .h4, .h5, .h6) a:where(:not(.button, .button-secondary)) {
+p:not(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .h18, .h19, .h20, .h21) a:where(:not(.button, .button-secondary)),
+.rte :is(p, ul, ol, table):not(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .h18, .h19, .h20, .h21) a:where(:not(.button, .button-secondary)) {
   text-decoration-color: currentcolor;
 
   &:hover {
@@ -839,6 +1261,8 @@ button.shopify-payment-button__button--unbranded {
 
 .button {
   font-family: var(--button-font-family-primary);
+  font-size: var(--button-font-size-primary);
+  letter-spacing: var(--button-letter-spacing-primary);
   text-transform: var(--button-text-case-primary);
   border-radius: var(--style-border-radius-buttons-primary);
 }
@@ -849,12 +1273,16 @@ button.shopify-payment-button__button--unbranded {
 
 .button-secondary {
   font-family: var(--button-font-family-secondary);
+  font-size: var(--button-font-size-secondary);
+  letter-spacing: var(--button-letter-spacing-secondary);
   text-transform: var(--button-text-case-secondary);
   border-radius: var(--style-border-radius-buttons-secondary);
 }
 
 button.shopify-payment-button__button--unbranded {
   font-family: var(--button-font-family-primary);
+  font-size: var(--button-font-size-primary);
+  letter-spacing: var(--button-letter-spacing-primary);
   text-transform: var(--button-text-case-primary);
 }
 
@@ -923,6 +1351,8 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
   --button-focus-outline-color: var(--color-primary-button-focus-outline);
 
   font-family: var(--button-font-family-primary);
+  font-size: var(--button-font-size-primary);
+  letter-spacing: var(--button-letter-spacing-primary);
   text-transform: var(--button-text-case-primary);
   border-radius: var(--style-border-radius-buttons-primary);
   outline-color: var(--button-focus-outline-color, var(--button-background-color));
@@ -955,6 +1385,18 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
 
 .button-unstyled:hover {
   background-color: inherit;
+}
+
+/* Link style of the button block. Scoped class so the many other .button-unstyled controls are untouched. */
+.button-link {
+  font-family: var(--button-font-family-link);
+  font-size: var(--button-font-size-link);
+  letter-spacing: var(--button-letter-spacing-link);
+  text-transform: var(--button-text-case-link);
+  text-decoration-line: var(--button-underline-link);
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.125em;
 }
 
 /* Default hover dim for link-style buttons, scoped via :where() so component-specific
@@ -1833,7 +2275,67 @@ slideshow-component:focus-within > slideshow-container[animate-arrows] > slidesh
   .h5.h5 select,
   .h6.h6 input,
   .h6.h6 textarea,
-  .h6.h6 select {
+  .h6.h6 select,
+  .h7.h7 input,
+  .h7.h7 textarea,
+  .h7.h7 select,
+  .h8.h8 input,
+  .h8.h8 textarea,
+  .h8.h8 select,
+  .h9.h9 input,
+  .h9.h9 textarea,
+  .h9.h9 select,
+  .h10.h10 input,
+  .h10.h10 textarea,
+  .h10.h10 select,
+  .h11.h11 input,
+  .h11.h11 textarea,
+  .h11.h11 select,
+  .h12.h12 input,
+  .h12.h12 textarea,
+  .h12.h12 select,
+  .h13.h13 input,
+  .h13.h13 textarea,
+  .h13.h13 select,
+  .h14.h14 input,
+  .h14.h14 textarea,
+  .h14.h14 select,
+  .h15.h15 input,
+  .h15.h15 textarea,
+  .h15.h15 select,
+  .h16.h16 input,
+  .h16.h16 textarea,
+  .h16.h16 select,
+  .h17.h17 input,
+  .h17.h17 textarea,
+  .h17.h17 select,
+  .text_button.text_button input,
+  .text_button.text_button textarea,
+  .text_button.text_button select,
+  .h18.h18 input,
+  .h18.h18 textarea,
+  .h18.h18 select,
+  .h19.h19 input,
+  .h19.h19 textarea,
+  .h19.h19 select,
+  .h20.h20 input,
+  .h20.h20 textarea,
+  .h20.h20 select,
+  .text_strong.text_strong input,
+  .text_strong.text_strong textarea,
+  .text_strong.text_strong select,
+  .text_caption.text_caption input,
+  .text_caption.text_caption textarea,
+  .text_caption.text_caption select,
+  .text_label.text_label input,
+  .text_label.text_label textarea,
+  .text_label.text_label select,
+  .h21.h21 input,
+  .h21.h21 textarea,
+  .h21.h21 select,
+  .text_link.text_link input,
+  .text_link.text_link textarea,
+  .text_link.text_link select {
     font-size: max(1rem, 100%);
   }
 }

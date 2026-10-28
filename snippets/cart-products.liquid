@@ -199,7 +199,7 @@
                     <div class="cart-items__title-row">
                       <a
                         href="{{ item.url }}"
-                        class="cart-items__title"
+                        class="cart-items__title{% if settings.cart_title_preset != blank %} {{ settings.cart_title_preset }}{% endif %}"
                         {% if item.parent_relationship.parent != null %}
                           aria-label="{{ 'accessibility.nested_product' | t: product_title: item.product.title, parent_title: item.parent_relationship.parent.title | escape }}"
                         {% endif %}
@@ -300,6 +300,14 @@
                     {%- endif -%}
                   </div>
 
+                  <div class="cart-items__aura-lines">
+                    {%- render 'cart-aura-line', item: item, part: 'weight' -%}
+                    {%- if context == 'drawer' -%}
+                      {%- render 'cart-aura-line', item: item, part: 'installments' -%}
+                    {%- endif -%}
+                    {%- render 'cart-aura-line', item: item, part: 'gold' -%}
+                  </div>
+
                   <div class="cart-items__unit-price-wrapper">
                     <div>
                       {% if item.original_price != item.final_price %}
@@ -371,8 +379,7 @@
                         hidden
                       {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
-                      <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
+                      <span class="cart-items__remove-text">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>
                 </td>
@@ -412,6 +419,9 @@
                   <text-component value="{{ price | strip_html }}"
                     ><bdi>{{ price }}</bdi></text-component
                   >
+                  {%- if context != 'drawer' -%}
+                    {%- render 'cart-aura-line', item: item, part: 'installments' -%}
+                  {%- endif -%}
                   {%- if item.unit_price_measurement -%}
                     <div class="cart-items__price-unit cart-secondary-typography">
                       {% render 'unit-price', price: unit_price, measurement: item.unit_price_measurement %}
@@ -640,8 +650,12 @@
     font-size: var(--font-size--md);
   }
 
-  .cart-items__title {
+  /* :where() keeps this default easy to beat, so a chosen text preset wins */
+  :where(.cart-items__title) {
     font-size: var(--font-size--md);
+  }
+
+  .cart-items__title {
     color: var(--color-foreground);
     text-transform: var(--product-title-case);
     display: inline;
@@ -692,14 +706,54 @@
     height: auto;
   }
 
+  .cart-items__aura-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-block-start: var(--gap-xs);
+  }
+
+  .cart-items__unit-price-wrapper {
+    display: none;
+  }
+
+  .cart-items__aura-lines:empty {
+    display: none;
+  }
+
   .cart-items__remove {
     background-color: transparent;
     color: var(--color-foreground);
-    width: var(--minimum-touch-target);
+    width: auto;
+    min-width: var(--minimum-touch-target);
     height: var(--minimum-touch-target);
     justify-content: center;
     box-shadow: none;
     padding: 0;
+  }
+
+  /* Quantity selector: transparent, divider-coloured border, product-title coloured controls */
+  .cart-items__quantity .quantity-selector {
+    --color-input-text: var(--color-foreground);
+
+    background-color: transparent;
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+    color: var(--color-foreground);
+  }
+
+  /* Drawer: Remove sits at the far right, under the price */
+  .cart-drawer__items .cart-items__quantity,
+  .cart-drawer__items .cart-items__quantity-controls {
+    width: 100%;
+  }
+
+  .cart-drawer__items .cart-items__quantity-controls {
+    justify-content: space-between;
+  }
+
+  .cart-items__remove {
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .cart-items__media {
@@ -713,7 +767,7 @@
     min-width: var(--cart-item-price-width);
     text-align: end;
     display: block;
-    font-size: var(--font-size--sm);
+    font-size: var(--font-size--xl);
     line-height: var(--line-height);
   }
 
@@ -781,24 +835,11 @@
   }
 
   @container cart-items (min-width: 720px) {
-    /* Cart page: original layout */
+    /* Cart page: two columns (details with the quantity and Remove underneath, then the price) */
     .cart-items__table-row {
       --cart-item-price-width: 6rem;
 
-      grid-template-columns: 7.5rem 1fr 1fr minmax(var(--cart-item-price-width), auto);
-      grid-template-rows: min-content 1fr;
-      grid-template-areas:
-        'media details quantity price'
-        'media details error error';
-    }
-
-    .cart-items__quantity,
-    .cart-items__price {
-      grid-area: initial;
-    }
-
-    .cart-items__quantity {
-      margin-top: 0;
+      grid-template-columns: 7.5rem minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
     }
 
     .cart-items__price {

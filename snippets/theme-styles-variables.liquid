@@ -121,6 +121,28 @@
       echo accent_font_bold_italic | font_face: font_display: 'swap'
       assign rendered_fonts = rendered_fonts | append: accent_font_bold_italic_face_id
     endunless
+
+    comment
+      Extra weights (Light 300 to Bold 700) for every font slot, so presets and custom CSS can use them.
+      font_modify returns nothing when the family has no such variant, so those are skipped.
+      Declaring a face costs nothing until text on the page actually uses it.
+    endcomment
+    assign extra_weights = '300,400,500,600,700' | split: ','
+    assign font_slots = 'body,subheading,heading,accent' | split: ','
+    for slot in font_slots
+      assign slot_setting_id = 'type_[slot]_font' | replace: '[slot]', slot
+      assign slot_font = settings[slot_setting_id]
+      for extra_weight in extra_weights
+        assign weight_font = slot_font | font_modify: 'weight', extra_weight
+        if weight_font != blank
+          assign weight_face_id = '[family]-[weight]-[style]|' | replace: '[family]', weight_font.family | replace: '[weight]', weight_font.weight | replace: '[style]', weight_font.style
+          unless rendered_fonts contains weight_face_id
+            echo weight_font | font_face: font_display: 'swap'
+            assign rendered_fonts = rendered_fonts | append: weight_face_id
+          endunless
+        endif
+      endfor
+    endfor
   %}
 
   :root {
@@ -181,6 +203,21 @@
     --font-h4--spacing: var(--font-heading--spacing);
     --font-h5--spacing: var(--font-heading--spacing);
     --font-h6--spacing: var(--font-heading--spacing);
+    --font-h7--spacing: var(--font-heading--spacing);
+    --font-h8--spacing: var(--font-heading--spacing);
+    --font-h9--spacing: var(--font-heading--spacing);
+    --font-h10--spacing: var(--font-heading--spacing);
+    --font-h11--spacing: var(--font-heading--spacing);
+    --font-h12--spacing: var(--font-heading--spacing);
+    --font-h13--spacing: var(--font-heading--spacing);
+    --font-h14--spacing: var(--font-heading--spacing);
+    --font-h15--spacing: var(--font-heading--spacing);
+    --font-h16--spacing: var(--font-heading--spacing);
+    --font-h17--spacing: var(--font-heading--spacing);
+    --font-h18--spacing: var(--font-heading--spacing);
+    --font-h19--spacing: var(--font-heading--spacing);
+    --font-h20--spacing: var(--font-heading--spacing);
+    --font-h21--spacing: var(--font-heading--spacing);
     --font-paragraph--spacing: 0.5em;
 
     /** Z-Index / Layering */
@@ -238,7 +275,7 @@
 
     /* Typography presets */
     {% liquid
-      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign font_sizes = "paragraph, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, text_button, h18, h19, h20, text_strong, text_caption, text_label, h21, text_link" | split: ", "
       assign fluid_size_cutoff = 48
       assign absolute_font_size_min = 10
 
@@ -314,11 +351,14 @@
         endif
       endfor
 
-      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6" | split: ", "
+      assign type_presets = "paragraph, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, text_button, h18, h19, h20, text_strong, text_caption, text_label, h21, text_link" | split: ", "
+      assign mobile_font_sizes = ''
 
       for preset_name in type_presets
         assign preset_size = '--font-size--[preset_name]' | replace: '[preset_name]', preset_name
         assign preset_line_height = 'type_line_height_[preset_name]' | replace: '[preset_name]', preset_name
+        assign weight_setting_id = 'type_weight_[preset_name]' | replace: '[preset_name]', preset_name
+        assign chosen_weight = settings[weight_setting_id]
 
         if preset_name == 'paragraph'
           assign preset_font = '--font-body--family'
@@ -326,6 +366,9 @@
           assign preset_weight = '400'
           assign preset_case = '--font-body--case'
 
+          if chosen_weight != blank
+            assign preset_weight = chosen_weight
+          endif
           echo '--font-[preset_name]--weight: [preset_weight];' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
         else
           assign preset_font_id = 'type_font_[preset_name]' | replace: '[preset_name]', preset_name
@@ -335,7 +378,11 @@
           assign preset_case = 'type_case_[preset_name]' | replace: '[preset_name]', preset_name
           assign preset_letter_spacing = 'type_letter_spacing_[preset_name]' | replace: '[preset_name]', preset_name
 
-          echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
+          if chosen_weight != blank
+            echo '--font-[preset_name]--weight: [chosen_weight];' | replace: '[preset_name]', preset_name | replace: '[chosen_weight]', chosen_weight
+          else
+            echo '--font-[preset_name]--weight: var([preset_weight]);' | replace: '[preset_name]', preset_name | replace: '[preset_weight]', preset_weight
+          endif
           echo '--font-[preset_name]--letter-spacing: var(--letter-spacing--[preset_letter_spacing]);' | replace: '[preset_name]', preset_name | replace: '[preset_letter_spacing]', settings[preset_letter_spacing]
         endif
 
@@ -344,6 +391,16 @@
         echo '--font-[preset_name]--style: var([preset_style]);' | replace: '[preset_name]', preset_name | replace: '[preset_style]', preset_style
         echo '--font-[preset_name]--case: [preset_case];' | replace: '[preset_name]', preset_name | replace: '[preset_case]', settings[preset_case]
         echo '--font-[preset_name]--line-height: var(--line-height--[preset_line_height]);' | replace: '[preset_name]', preset_name | replace: '[preset_line_height]', settings[preset_line_height]
+
+        comment
+          Optional mobile size per preset. Empty means "automatic": the size above keeps its built-in behavior on mobile.
+        endcomment
+        assign mobile_size_id = 'type_size_mobile_[preset_name]' | replace: '[preset_name]', preset_name
+        assign mobile_size_value = settings[mobile_size_id]
+        if mobile_size_value != blank
+          assign mobile_size_rem = mobile_size_value | times: 1 | divided_by: 16.0
+          assign mobile_font_sizes = mobile_font_sizes | append: '--font-size--[preset_name]: [mobile_size_rem]rem;' | replace: '[preset_name]', preset_name | replace: '[mobile_size_rem]', mobile_size_rem
+        endif
       endfor
     %}
 
@@ -573,6 +630,19 @@
     --button-text-case-primary: {{ settings.button_text_case_primary }};
     --button-text-case-secondary: {{ settings.button_text_case_secondary }};
 
+    /* Button font size (Automatic uses the Paragraph size) and letter spacing */
+    --button-font-size-primary: {% if settings.button_size_primary != blank %}{{ settings.button_size_primary | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-font-size-secondary: {% if settings.button_size_secondary != blank %}{{ settings.button_size_secondary | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-letter-spacing-primary: var(--letter-spacing--{{ settings.button_letter_spacing_primary | default: 'body-normal' }});
+    --button-letter-spacing-secondary: var(--letter-spacing--{{ settings.button_letter_spacing_secondary | default: 'body-normal' }});
+
+    /* Link button (the Link style of the button block) */
+    --button-font-family-link: var(--font-{{ settings.type_font_button_link | default: 'body' }}--family);
+    --button-text-case-link: {% if settings.button_text_case_link == 'uppercase' %}uppercase{% else %}inherit{% endif %};
+    --button-font-size-link: {% if settings.button_size_link != blank %}{{ settings.button_size_link | times: 1 | divided_by: 16.0 }}rem{% else %}var(--font-paragraph--size){% endif %};
+    --button-letter-spacing-link: var(--letter-spacing--{{ settings.button_letter_spacing_link | default: 'body-normal' }});
+    --button-underline-link: {% if settings.button_underline_link %}underline{% else %}none{% endif %};
+
     /* Borders */
     --border-color: rgb(var(--color-border-rgb) / var(--opacity-50));
     --border-width-sm: 1px;
@@ -648,6 +718,27 @@
     --cart-secondary-font-family: var(--font-{{ settings.cart_price_font }}--family);
     --cart-secondary-font-style: var(--font-{{ settings.cart_price_font }}--style);
     --cart-secondary-font-weight: var(--font-{{ settings.cart_price_font }}--weight);
+
+    {% liquid
+      if settings.button_size_mobile_primary != blank
+        assign button_mobile_rem = settings.button_size_mobile_primary | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-primary: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+      if settings.button_size_mobile_secondary != blank
+        assign button_mobile_rem = settings.button_size_mobile_secondary | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-secondary: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+      if settings.button_size_mobile_link != blank
+        assign button_mobile_rem = settings.button_size_mobile_link | times: 1 | divided_by: 16.0
+        assign mobile_font_sizes = mobile_font_sizes | append: '--button-font-size-link: ' | append: button_mobile_rem | append: 'rem;'
+      endif
+    %}
+
+    {% if mobile_font_sizes != blank %}
+      @media screen and (max-width: 749px) {
+        {{ mobile_font_sizes }}
+      }
+    {% endif %}
   }
 
   .custom-color-quick-add {

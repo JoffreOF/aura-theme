@@ -1,0 +1,320 @@
+{%- doc -%}
+  Aura cart extras for the summary: order-summary rows (page), interest-free payments and the
+  "Added to your portfolio" box (gold value of every line).
+
+  @param {string} part - 'head' (page only: label, subtotal, shipping), 'extras' or 'notes'
+  @param {string} [context] - 'drawer' for the cart drawer, otherwise the cart page
+{%- enddoc -%}
+
+{%- liquid
+  assign is_drawer = false
+  if context == 'drawer'
+    assign is_drawer = true
+  endif
+-%}
+
+{%- if part == 'head' and is_drawer == false -%}
+  <p class="cart-aura__label cart-aura__label--head">{{ 'cart_aura.order_summary' | t }}</p>
+  {%- if cart.cart_level_discount_applications.size == 0 -%}
+    <div class="cart-aura__row">
+      <span>{{ 'cart_aura.subtotal' | t }}</span>
+      <span><bdi>{{ cart.items_subtotal_price | money }}</bdi></span>
+    </div>
+  {%- endif -%}
+  <div class="cart-aura__row cart-aura__row--muted">
+    <span>{{ 'cart_aura.shipping' | t }}</span>
+    <span>{{ 'cart_aura.shipping_next_step' | t }}</span>
+  </div>
+{%- elsif part == 'extras' -%}
+  {%- liquid
+    assign payments = settings.cart_installments_payments | default: 6 | plus: 0
+    assign gram_price = shop.metafields.gold.price_18k_per_g.value
+
+    comment
+      Portfolio: every line needs a weight, otherwise the box is hidden rather than showing a partial figure.
+      Weights are summed in tenths of a gram (integers) so the total reads 8.1 and never 8.100000001.
+    endcomment
+    assign total_gold_cents = 0
+    assign total_tenths = 0
+    assign portfolio_ok = true
+    if gram_price == blank or cart.item_count == 0
+      assign portfolio_ok = false
+    endif
+    for item in cart.items
+      assign line_weight = item.variant.metafields.gold.weight_g.value
+      if line_weight == blank
+        assign portfolio_ok = false
+        break
+      endif
+      assign unit_cents = line_weight | times: gram_price | times: 100 | round
+      assign total_gold_cents = unit_cents | times: item.quantity | plus: total_gold_cents
+      assign unit_tenths = line_weight | times: 10 | round
+      assign total_tenths = unit_tenths | times: item.quantity | plus: total_tenths
+    endfor
+    if total_gold_cents <= 0
+      assign portfolio_ok = false
+    endif
+
+    if portfolio_ok
+      assign fraction = total_tenths | modulo: 10
+      assign whole = total_tenths | minus: fraction | divided_by: 10
+      assign total_grams = whole | append: '.' | append: fraction
+      assign gold_amount = total_gold_cents | money
+    endif
+
+    assign show_installments = false
+    if cart.total_price > 0 and payments >= 2
+      assign show_installments = true
+      assign per_payment = cart.total_price | times: 1.0 | divided_by: payments | round
+      assign installment_amount = per_payment | money
+    endif
+  -%}
+
+  {%- if show_installments -%}
+    {%- if is_drawer -%}
+      <p class="cart-aura__installments-line">
+        <span class="cart-aura__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M2.5 8h15" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </span>
+        <span>{{ 'cart_aura.installments_html' | t: count: payments, amount: installment_amount }}</span>
+      </p>
+    {%- else -%}
+      <div
+        class="cart-aura__installments-box"
+        style="background: {{ settings.cart_installments_background }}; border-color: {{ settings.cart_installments_border }}; color: {{ settings.cart_installments_text }};"
+      >
+        <span class="cart-aura__icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M2.5 8h15" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </span>
+        <span class="cart-aura__installments-text">
+          <span>{{ 'cart_aura.installments_box' | t: count: payments, amount: installment_amount }}</span>
+          <small>{{ 'cart_aura.installments_note' | t }}</small>
+        </span>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if portfolio_ok -%}
+    <div
+      class="cart-aura__portfolio{% if is_drawer %} cart-aura__portfolio--strip{% endif %}"
+      style="background: {{ settings.cart_portfolio_background }}; color: {{ settings.cart_portfolio_text }};"
+    >
+      {%- if is_drawer -%}
+        <span class="cart-aura__portfolio-text">
+          <span class="cart-aura__label">{{ 'cart_aura.portfolio_label' | t }}</span>
+          <small>{{ 'cart_aura.portfolio_strip' | t: grams: total_grams }}</small>
+        </span>
+        <span class="cart-aura__portfolio-amount">{{ gold_amount }}</span>
+      {%- else -%}
+        <span class="cart-aura__label">{{ 'cart_aura.portfolio_label' | t }}</span>
+        <span class="cart-aura__portfolio-amount">{{ gold_amount }}</span>
+        <small>{{ 'cart_aura.portfolio_text' | t: grams: total_grams }}</small>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- elsif part == 'notes' -%}
+  {%- if is_drawer -%}
+    <p class="cart-aura__notes cart-aura__notes--drawer">
+      <span>{{ 'cart_aura.note_drawer' | t }}</span>
+      <a href="{{ routes.cart_url }}">{{ 'cart_aura.view_full_bag' | t }}</a>
+    </p>
+  {%- else -%}
+    <p class="cart-aura__notes">
+      {%- if customer != nil -%}
+        {{- 'cart_aura.note_signed_in' | t: email: customer.email, currency: cart.currency.iso_code -}}
+      {%- else -%}
+        {{- 'cart_aura.note_guest' | t: currency: cart.currency.iso_code -}}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .cart-aura__label {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    font-weight:300;
+  }
+
+  .cart-aura__label--head {
+    @media screen and (min-width: 750px) {
+      color: var(--color, var(--color-foreground));
+      opacity: 1;
+      font-weight: 400;
+    }
+  }
+
+  .cart-aura__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gap-sm);
+    font-size: 15px;
+  }
+
+  .cart-aura__row > span:last-child {
+    font-weight: 500;
+  }
+
+  .cart-aura__row--muted > span:last-child {
+    font-weight: 400;
+  }
+
+  .cart-aura__row--muted {
+    opacity: 0.7;
+  }
+
+  .cart-aura__icon {
+    display: inline-flex;
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .cart-aura__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cart-aura__installments-line {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    margin: 0;
+    font-size: var(--font-size--sm);
+  }
+
+  /* Same look as the product page installments box */
+  .cart-aura__installments-box {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    padding: var(--padding-md) var(--padding-lg);
+    border: 1px solid;
+    font-size: 15px;
+  }
+
+  .cart-aura__installments-box .cart-aura__icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .cart-aura__installments-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xs);
+  }
+
+  /* The note follows the main line, 2px smaller, never below 10px, always Regular */
+  .cart-aura__installments-text small {
+    opacity: 0.7;
+    font-weight: 400;
+    font-size: max(10px, calc(1em - 2px));
+  }
+
+  .cart-aura__portfolio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    padding: var(--padding-lg);
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .cart-aura__portfolio .cart-aura__label {
+    color: inherit;
+  }
+
+  .cart-aura__portfolio small {
+    font-size: var(--font-size--xs);
+    line-height: 1.5;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+
+  .cart-aura__portfolio-amount {
+    font-family: var(--font-heading--family);
+    font-size: var(--font-size--2xl);
+    line-height: 1.1;
+  }
+
+  .cart-aura__portfolio:not(.cart-aura__portfolio--strip) .cart-aura__portfolio-amount {
+    font-size: 34px;
+  }
+
+  .cart-aura__portfolio--strip {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--padding-md) var(--padding-lg);
+  }
+
+  .cart-aura__portfolio-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cart-aura__notes {
+    margin: 0;
+    font-size: var(--font-size--xs);
+  }
+
+  .cart-aura__notes:not(.cart-aura__notes--drawer),
+  .cart-aura__notes--drawer > span {
+    opacity: 0.75;
+  }
+
+  .cart-aura__notes--drawer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap-sm);
+    width: 100%;
+  }
+
+  .cart-aura__notes--drawer a {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+
+  .cart-aura-line {
+    margin: 0;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .cart-aura-line--installments {
+    font-size: 12px;
+  }
+
+  .cart-aura-line strong,
+  .cart-aura__installments-line strong {
+    font-weight: 500;
+  }
+
+  .cart-aura-line--weight {
+    opacity: 0.7;
+  }
+
+
+  .cart-items__price .cart-aura-line {
+    margin-block-start: var(--gap-3xs, 2px);
+  }
+
+  .cart-items__remove .cart-items__remove-text {
+    font-size: var(--font-size--xs);
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+{% endstylesheet %}

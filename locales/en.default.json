@@ -11,8 +11,8 @@
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",
-    "cart": "Cart",
-    "cart_count": "Total items in cart",
+    "cart": "Bag",
+    "cart_count": "Total items in bag",
     "close_dialog": "Close dialog",
     "country_region": "Country/Region",
     "country_results_count": "{{ count }} results",
@@ -70,7 +70,7 @@
   "actions": {
     // Quick add button on product cards, shortened version of add to cart
     "add": "Add",
-    "add_to_cart": "Add to cart",
+    "add_to_cart": "Add to bag",
     // Success message shown after adding item to cart
     "added": "Added",
     // Button to apply discount code to cart
@@ -122,7 +122,111 @@
     "view_store_information": "View store information",
     "sort": "Sort"
   },
+  "cart_aura": {
+    "pieces": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    },
+    "subtitle": "{{ pieces }} · Prices locked when you pay",
+    "order_summary": "Order summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shipping_next_step": "Next step",
+    "installments_box": "{{ count }} interest-free payments of {{ amount }}",
+    "installments_note": "All cards via Mercado Pago",
+    "portfolio_label": "Added to your portfolio",
+    "portfolio_text": "This is the gold value of your pieces ({{ grams }} g of 18k gold). The difference with your total is our disclosed craftsmanship markup.",
+    "portfolio_strip": "Gold value of {{ grams }} g of 18k gold",
+    "line_weight": "{{ grams }} g of 18k gold",
+    "line_gold": "Adds {{ amount }} to your portfolio",
+    "note_signed_in": "Signed in as {{ email }}. Prices include IGV and are charged in {{ currency }}.",
+    "note_guest": "Prices include IGV and are charged in {{ currency }}.",
+    "note_drawer": "Shipping at next step · IGV included",
+    "view_full_bag": "View full bag",
+    "installments_html": "or <strong>{{ count }} × {{ amount }}</strong> interest-free"
+  },
+  "pre_checkout": {
+    "title": "Your details",
+    "document_type": "Document type",
+    "types": {
+      "ce": "Carnet de extranjería",
+      "passport": "Passport",
+      "other": "Other"
+    },
+    "document_number": "Document number",
+    "eight_digits": "8 digits",
+    "look_up": "Look up",
+    "looking": "Looking up your DNI…",
+    "verifying": "Checking that you are a person…",
+    "found": "Found:",
+    "not_you": "Not you? Edit",
+    "enter_manually": "Enter my details manually",
+    "first_name": "First name",
+    "last_names": "Last names",
+    "phone": "Phone",
+    "email": "Email",
+    "shipping_address": "Shipping address",
+    "country": "Country",
+    "department": "Department",
+    "choose": "Choose…",
+    "province": "Province",
+    "district": "District",
+    "address": "Address",
+    "address_hint": "Street, number, apartment",
+    "reference": "Reference (optional)",
+    "reference_hint": "Near…",
+    "district_note": "You will enter your district at the next step.",
+    "other_note": "You will enter your name, address and document number at the next step.",
+    "continue": "Continue to payment",
+    "carried_over": "Your details are carried over, so you won't type them twice.",
+    "privacy": "We use your DNI only to fill in your delivery details and record your purchase. We never share it.",
+    "summary": "Order summary",
+    "steps": {
+      "label": "Checkout steps",
+      "bag": "Bag",
+      "details": "Your details",
+      "payment": "Payment"
+    },
+    "errors": {
+      "invalid_dni": "Enter the 8 digits of your DNI.",
+      "unavailable": "We couldn't look up that DNI right now. Please enter your details manually.",
+      "no_address": "We found your name but no address. Please enter your address.",
+      "required": "Please complete your name, address, province and district.",
+      "email": "Enter a valid email address.",
+      "region": "Choose your department.",
+      "submit_failed": "We couldn't continue. Please try again in a moment."
+    }
+  },
   "blocks": {
+    "installments_box": {
+      "label": "{{ count }} interest-free payments of {{ amount }}",
+      "note": "All cards via Mercado Pago"
+    },
+    "price_note": {
+      "updated": "Price updated daily at 10:00 AM PET with the gold price."
+    },
+    "pricing_panel": {
+      "heading": "What you're paying for",
+      "how_we_price": "How we price",
+      "gold_value": "Gold value",
+      "gold_detail": "{{ grams }} g × {{ price }} / g (18k)",
+      "craftsmanship": "Craftsmanship & setting",
+      "markup": "Our markup on gold: ×{{ markup }}",
+      "portfolio_note_html": "<strong>Adds {{ amount }}</strong> in gold value to your portfolio. Gemstones are not included in the gold valuation."
+    },
+    "gold_price_bar": {
+      "label": "Today's gold price",
+      "price": "18k · {{ price }} / g",
+      "note": "Updated daily at 10:00 AM PET · Based on the international 18k gold equivalent"
+    },
+    "gold_breakdown": {
+      "gold_value": "Gold value",
+      "craftsmanship": "Craftsmanship",
+      "weight": "{{ grams }} g"
+    },
+    "installments": {
+      "label": "or {{ count }} × {{ amount }} interest-free"
+    },
     "contact_form": {
       "name": "Name",
       "email": "Email",
@@ -171,15 +275,15 @@
     "account_orders": "Orders",
     "account_profile": "Profile",
     "blog_details_separator": "|",
-    "cart_estimated_total": "Estimated total",
-    "cart_title": "Cart",
+    "cart_estimated_total": "Total",
+    "cart_title": "Your bag",
     "cart_subtotal": "Subtotal",
-    "cart_total": "Cart total",
-    "checkout": "Check out",
+    "cart_total": "Bag total",
+    "checkout": "Continue",
     "collection_placeholder": "Collection title",
     "discount_code": "Discount code",
     "shipping_discount_error": "Shipping discounts are shown at checkout after adding an address",
-    "discount_code_error": "Discount code cannot be applied to your cart",
+    "discount_code_error": "Discount code cannot be applied to your bag",
     "discounts": "Discounts",
     "duties_and_taxes_included": "Duties and taxes included.",
     "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "Duties and taxes included. Discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
@@ -248,8 +352,8 @@
     "quick_order_list": "Quick order list",
     "recently_viewed_products": "Recently viewed",
     "remove_all": "Remove all",
-    "remove_all_items_confirmation": "Remove all {{ count }} items from your cart?",
-    "remove_one_item_confirmation": "Remove 1 item from your cart?",
+    "remove_all_items_confirmation": "Remove all {{ count }} items from your bag?",
+    "remove_one_item_confirmation": "Remove 1 item from your bag?",
     "reviews": "reviews",
     "read_more": "Read more...",
     "search_input_label": "Search",
@@ -272,11 +376,11 @@
     "total_items": "Total items",
     "variant": "Variant",
     "variant_total": "Variant total",
-    "view_cart": "View cart",
-    "your_cart": "Your cart",
+    "view_cart": "View bag",
+    "your_cart": "Your bag",
     "items_added_to_cart": {
-      "one": "1 item added to cart",
-      "other": "{{ count }} items added to cart"
+      "one": "1 item added to bag",
+      "other": "{{ count }} items added to bag"
     },
     // Button to go from search preview to full search results page
     "search_results_view_all": "View all",
@@ -306,7 +410,7 @@
     "each_abbreviation": "ea",
     "price_at": "at",
     "price_range": "Price range",
-    "your_cart_is_empty": "Your cart is empty",
+    "your_cart_is_empty": "Your bag is empty",
     "product_count": "Product count",
     "errors": "Errors",
     "wrong_password": "Wrong password",
@@ -356,10 +460,10 @@
   },
   "products": {
     "product": {
-      "add_to_cart": "Add to cart",
+      "add_to_cart": "Add to bag",
       "adding_to_cart": "Adding...",
-      "added_to_cart": "Added to cart",
-      "add_to_cart_error": "Error adding to cart",
+      "added_to_cart": "Added to bag",
+      "add_to_cart_error": "Error adding to bag",
       "quantity_error_max": "This item has a maximum of {{ maximum }}",
       "sold_out": "Sold out",
       "unavailable": "Unavailable",
@@ -367,9 +471,9 @@
       "quantity_increments": "Increments of {{ increment }}",
       "quantity_minimum": "Minimum of {{ minimum }}",
       "quantity_maximum": "Maximum of {{ maximum }}",
-      "in_cart": "in cart",
+      "in_cart": "in bag",
       "default_title": "Default Title",
-      "sticky_add_to_cart": "Quick add to cart bar"
+      "sticky_add_to_cart": "Quick add to bag bar"
     }
   }
 }

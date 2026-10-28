@@ -1,0 +1,263 @@
+{%- doc -%}
+  "or 6 x $115.23 interest-free": the selected variant's price divided into equal payments.
+  The amount is rounded to the cent. Needs a product in context (closest.product).
+{%- enddoc -%}
+
+{%- liquid
+  assign variant = closest.product.selected_or_first_available_variant
+  assign payments = block.settings.payments | plus: 0
+  assign alignment = block.settings.alignment | replace: 'left', 'flex-start' | replace: 'right', 'flex-end'
+
+  assign show = false
+  if variant != blank and variant.price > 0 and payments >= 2
+    assign show = true
+    assign per_payment = variant.price | times: 1.0 | divided_by: payments | round
+    assign amount = per_payment | money
+  endif
+-%}
+
+{%- if show -%}
+  <div
+    class="product-installments spacing-style {{ block.settings.type_preset }}"
+    style="
+      {% render 'spacing-padding', settings: block.settings %}
+      --installments-align: {{ alignment }};
+      {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.show_icon -%}
+      <span class="product-installments__icon" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <rect x="2.5" y="4.5" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M2.5 8h15" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+      </span>
+    {%- endif -%}
+    <span>{{ 'blocks.installments.label' | t: count: payments, amount: amount }}</span>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="product-installments product-installments--hint" {{ block.shopify_attributes }}>Installments: needs a product with a price</div>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-installments {
+    display: flex;
+    align-items: center;
+    justify-content: var(--installments-align, flex-start);
+    gap: var(--gap-xs);
+    color: var(--color, var(--color-foreground));
+  }
+
+  .product-installments__icon {
+    display: inline-flex;
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .product-installments__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-installments--hint {
+    opacity: 0.5;
+    font-size: 0.75rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Installments",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the price split into equal payments. The wording is in the theme language files (blocks.installments.label)."
+    },
+    {
+      "type": "range",
+      "id": "payments",
+      "label": "Number of payments",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show card icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "text_caption",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installments",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

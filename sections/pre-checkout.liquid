@@ -1,0 +1,448 @@
+{%- comment -%}
+  Pre-checkout page ("Your details"): document type, DNI lookup (through the app proxy to the aura-dni Worker),
+  the delivery form, and a hand-off to Shopify's checkout with the details already filled in.
+  Use it on a page with the template "pre-checkout". Behavior is in assets/pre-checkout.js.
+  Anything but a DNI skips the form and goes straight to checkout. See docs/BRIEF.md section 5.
+{%- endcomment -%}
+
+{%- liquid
+  assign regions = 'Amazonas,Ancash,Apurímac,Arequipa,Ayacucho,Cajamarca,El Callao,Cusco,Huancavelica,Huánuco,Ica,Junín,La Libertad,Lambayeque,Lima (Department),Lima (Metropolitan),Loreto,Madre de Dios,Moquegua,Pasco,Piura,Puno,San Martín,Tacna,Tumbes,Ucayali' | split: ','
+
+  assign is_guest = true
+  if customer
+    assign is_guest = false
+  endif
+
+  comment
+    A signed-in customer's default address (when it exists) prefills the form. Its Company field holds the DNI.
+  endcomment
+  assign saved = customer.default_address
+-%}
+
+<script src="{{ 'pre-checkout.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<div class="pre-checkout page-width" data-pre-checkout>
+  <script type="application/json" data-config>
+    {
+      "proxy": {{ section.settings.proxy_path | json }},
+      "siteKey": {{ section.settings.turnstile_site_key | json }},
+      "guest": {{ is_guest | json }},
+      "checkoutUrl": {{ routes.root_url | append: 'checkout' | json }},
+      "cartUrl": {{ routes.cart_url | json }},
+      "prefill": {
+        "email": {{ customer.email | json }},
+        "firstName": {{ saved.first_name | json }},
+        "lastName": {{ saved.last_name | json }},
+        "phone": {{ saved.phone | json }},
+        "dni": {{ saved.company | json }},
+        "address": {{ saved.address1 | json }},
+        "province": {{ saved.city | json }}
+      },
+      "messages": {
+        "invalidDni": {{ 'pre_checkout.errors.invalid_dni' | t | json }},
+        "verifying": {{ 'pre_checkout.verifying' | t | json }},
+        "looking": {{ 'pre_checkout.looking' | t | json }},
+        "unavailable": {{ 'pre_checkout.errors.unavailable' | t | json }},
+        "noAddress": {{ 'pre_checkout.errors.no_address' | t | json }},
+        "required": {{ 'pre_checkout.errors.required' | t | json }},
+        "email": {{ 'pre_checkout.errors.email' | t | json }},
+        "region": {{ 'pre_checkout.errors.region' | t | json }},
+        "submitFailed": {{ 'pre_checkout.errors.submit_failed' | t | json }},
+        "found": {{ 'pre_checkout.found' | t | json }},
+        "continuing": {{ 'pre_checkout.continuing' | t | json }}
+      }
+    }
+  </script>
+
+  <nav class="pre-checkout__steps" aria-label="{{ 'pre_checkout.steps.label' | t }}">
+    <a href="{{ routes.cart_url }}">1 · {{ 'pre_checkout.steps.bag' | t }}</a>
+    <strong aria-current="step">2 · {{ 'pre_checkout.steps.details' | t }}</strong>
+    <span>3 · {{ 'pre_checkout.steps.payment' | t }}</span>
+  </nav>
+
+  {%- if cart.empty? -%}
+    <div class="pre-checkout__empty">
+      <h1 class="h2">{{ 'content.your_cart_is_empty' | t }}</h1>
+      <a class="button" href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}">
+        <span class="button-text">{{ 'actions.continue_shopping' | t }}</span>
+      </a>
+    </div>
+  {%- else -%}
+    <div class="pre-checkout__layout">
+      <div class="pre-checkout__main">
+        <h1 class="h2">{{ 'pre_checkout.title' | t }}</h1>
+
+        <form class="pre-checkout__form" data-form novalidate>
+          <div class="pc-field">
+            <label for="pc-doctype">{{ 'pre_checkout.document_type' | t }}</label>
+            <select id="pc-doctype" data-doctype>
+              <option value="dni" selected>DNI</option>
+              <option value="ce">{{ 'pre_checkout.types.ce' | t }}</option>
+              <option value="passport">{{ 'pre_checkout.types.passport' | t }}</option>
+              <option value="other">{{ 'pre_checkout.types.other' | t }}</option>
+            </select>
+          </div>
+
+          <section data-dni-block>
+            <div class="pc-row pc-row--lookup">
+              <div class="pc-field">
+                <label for="pc-dni">{{ 'pre_checkout.document_number' | t }}</label>
+                <input id="pc-dni" data-dni type="text" inputmode="numeric" autocomplete="off" placeholder="{{ 'pre_checkout.eight_digits' | t }}">
+              </div>
+              <button type="button" class="button" data-lookup>
+                <span class="button-text">{{ 'pre_checkout.look_up' | t }}</span>
+              </button>
+            </div>
+
+            {%- comment -%} Hidden trap for bots: people never see or fill it. {%- endcomment -%}
+            <div class="pc-trap" aria-hidden="true">
+              <label for="pc-website">Website</label>
+              <input id="pc-website" data-trap type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div data-turnstile></div>
+            <p class="pc-status" data-status role="status" aria-live="polite"></p>
+
+            <div class="pc-found" data-found hidden>
+              <span><span data-found-text></span></span>
+              <button type="button" class="pc-link" data-edit>{{ 'pre_checkout.not_you' | t }}</button>
+            </div>
+            <button type="button" class="pc-link" data-manual>{{ 'pre_checkout.enter_manually' | t }}</button>
+
+            <div data-fields hidden>
+              <div class="pc-row">
+                <div class="pc-field">
+                  <label for="pc-first">{{ 'pre_checkout.first_name' | t }}</label>
+                  <input id="pc-first" data-field="firstName" type="text" autocomplete="given-name" maxlength="60">
+                </div>
+                <div class="pc-field">
+                  <label for="pc-last">{{ 'pre_checkout.last_names' | t }}</label>
+                  <input id="pc-last" data-field="lastName" type="text" autocomplete="family-name" maxlength="60">
+                </div>
+              </div>
+              <div class="pc-row">
+                <div class="pc-field">
+                  <label for="pc-phone">{{ 'pre_checkout.phone' | t }}</label>
+                  <input id="pc-phone" data-field="phone" type="tel" autocomplete="tel" placeholder="+51" maxlength="20">
+                </div>
+                <div class="pc-field">
+                  <label for="pc-email">{{ 'pre_checkout.email' | t }}</label>
+                  <input id="pc-email" data-field="email" type="email" autocomplete="email" maxlength="120">
+                </div>
+              </div>
+
+              <h2 class="h4 pc-subtitle">{{ 'pre_checkout.shipping_address' | t }}</h2>
+              <div class="pc-row">
+                <div class="pc-field">
+                  <label for="pc-country">{{ 'pre_checkout.country' | t }}</label>
+                  <select id="pc-country" disabled><option>Peru</option></select>
+                </div>
+                <div class="pc-field">
+                  <label for="pc-region">{{ 'pre_checkout.department' | t }}</label>
+                  <select id="pc-region" data-field="region">
+                    <option value="">{{ 'pre_checkout.choose' | t }}</option>
+                    {%- for region in regions -%}
+                      <option value="{{ region }}">{{ region }}</option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              </div>
+              <div class="pc-row">
+                <div class="pc-field">
+                  <label for="pc-province">{{ 'pre_checkout.province' | t }}</label>
+                  <input id="pc-province" data-field="province" type="text" autocomplete="address-level2" maxlength="60">
+                </div>
+                <div class="pc-field">
+                  <label for="pc-district">{{ 'pre_checkout.district' | t }}</label>
+                  <input id="pc-district" data-field="district" type="text" autocomplete="address-level3" maxlength="60">
+                </div>
+              </div>
+              <div class="pc-field">
+                <label for="pc-address">{{ 'pre_checkout.address' | t }}</label>
+                <input id="pc-address" data-field="address" type="text" autocomplete="street-address" maxlength="120" placeholder="{{ 'pre_checkout.address_hint' | t }}">
+              </div>
+              <div class="pc-field">
+                <label for="pc-reference">{{ 'pre_checkout.reference' | t }}</label>
+                <input id="pc-reference" data-field="reference" type="text" maxlength="120" placeholder="{{ 'pre_checkout.reference_hint' | t }}">
+              </div>
+            </div>
+          </section>
+
+          <p class="pc-note" data-other-note hidden>{{ 'pre_checkout.other_note' | t }}</p>
+
+          <p class="pc-error" data-error role="alert" hidden></p>
+          <button type="submit" class="button pc-submit" data-submit>
+            <span class="button-text">{{ 'pre_checkout.continue' | t }}</span>
+          </button>
+          <p class="pc-note">{{ 'pre_checkout.carried_over' | t }}</p>
+          <p class="pc-note pc-privacy">{{ 'pre_checkout.privacy' | t }}</p>
+        </form>
+      </div>
+
+      <aside class="pre-checkout__summary" aria-label="{{ 'pre_checkout.summary' | t }}">
+        <p class="pc-label">{{ 'cart_aura.order_summary' | t }}</p>
+        <ul class="pc-items">
+          {%- for item in cart.items -%}
+            <li>
+              {%- if item.image -%}
+                {{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60, 120', class: 'pc-thumb' }}
+              {%- endif -%}
+              <span class="pc-item-text">
+                <span>{{ item.product.title }}{% if item.quantity > 1 %} × {{ item.quantity }}{% endif %}</span>
+                {%- unless item.product.has_only_default_variant -%}
+                  <small>{{ item.variant.title }}</small>
+                {%- endunless -%}
+              </span>
+              <span>{{ item.final_line_price | money }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="pc-totals">
+          <div><span>{{ 'cart_aura.subtotal' | t }}</span><span>{{ cart.items_subtotal_price | money }}</span></div>
+          <div class="pc-total"><span>{{ 'content.cart_estimated_total' | t }}</span><span>{{ cart.total_price | money_with_currency }}</span></div>
+        </div>
+        {% render 'cart-aura-summary', part: 'extras', context: 'page' %}
+      </aside>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .pre-checkout {
+    padding-block: var(--padding-4xl);
+  }
+
+  .pre-checkout__steps {
+    display: flex;
+    gap: var(--gap-xl);
+    margin-block-end: var(--margin-4xl);
+    font-size: var(--font-size--xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pre-checkout__steps a,
+  .pre-checkout__steps span {
+    opacity: 0.6;
+  }
+
+  .pre-checkout__layout {
+    display: grid;
+    gap: var(--gap-3xl);
+    align-items: start;
+  }
+
+  @media screen and (min-width: 750px) {
+    .pre-checkout__layout {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    }
+  }
+
+  .pre-checkout__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+    margin-block-start: var(--margin-2xl);
+  }
+
+  .pre-checkout [hidden] {
+    display: none !important;
+  }
+
+  .pc-row {
+    display: grid;
+    gap: var(--gap-lg);
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .pc-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pc-row--lookup {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+  }
+
+  .pc-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+    margin-block-end: var(--margin-lg);
+  }
+
+  .pc-field label,
+  .pc-label {
+    font-size: var(--font-size--xs);
+  }
+
+  .pc-label {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 var(--margin-lg);
+  }
+
+  .pc-field input,
+  .pc-field select {
+    width: 100%;
+    padding: var(--input-padding);
+    color: var(--color-input-text);
+    background: var(--color-input-background);
+    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+    font: inherit;
+  }
+
+  .pc-subtitle {
+    margin-block: var(--margin-lg);
+  }
+
+  .pc-trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .pc-status {
+    margin: var(--margin-xs) 0;
+    min-height: 1.4em;
+    font-size: var(--font-size--sm);
+  }
+
+  .pc-found {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+    padding: var(--padding-md) var(--padding-lg);
+    margin-block: var(--margin-lg);
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  .pc-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size--xs);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .pc-note {
+    margin: 0;
+    font-size: var(--font-size--xs);
+    opacity: 0.75;
+  }
+
+  .pc-error {
+    margin: 0;
+    color: var(--color-error);
+    font-size: var(--font-size--sm);
+  }
+
+  .pc-submit {
+    width: 100%;
+  }
+
+  .pre-checkout__summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xl);
+    padding: var(--padding-3xl);
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .pc-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pc-items li {
+    display: grid;
+    grid-template-columns: 3.75rem minmax(0, 1fr) auto;
+    gap: var(--gap-md);
+    align-items: center;
+  }
+
+  .pc-items li:not(:has(.pc-thumb)) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .pc-thumb {
+    width: 3.75rem;
+    height: 3.75rem;
+    object-fit: cover;
+  }
+
+  .pc-item-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pc-item-text small {
+    opacity: 0.7;
+  }
+
+  .pc-totals {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    padding-block-start: var(--padding-lg);
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+  }
+
+  .pc-totals > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pc-total {
+    font-size: var(--font-size--lg);
+  }
+
+  .pre-checkout__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-xl);
+    padding-block: var(--padding-6xl);
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pre-checkout",
+  "tag": "section",
+  "class": "section-pre-checkout",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The DNI pre-checkout page. Create a page called Your details and give it the template 'pre-checkout'. It talks to the aura-dni Worker through the Shopify app proxy."
+    },
+    {
+      "type": "text",
+      "id": "proxy_path",
+      "label": "App proxy path",
+      "default": "/apps/aura",
+      "info": "Subpath prefix and subpath of the app proxy. Leave as it is unless the proxy changes."
+    },
+    {
+      "type": "text",
+      "id": "turnstile_site_key",
+      "label": "Turnstile site key",
+      "default": "0x4AAAAAAFo3_XEEdgJtgFmR",
+      "info": "Public key of the Cloudflare Turnstile widget (the secret key stays in the Worker)."
+    }
+  ]
+}
+{% endschema %}

@@ -65,6 +65,20 @@
     if settings.limit_details_width
       assign product_grid_class = product_grid_class | append: ' product-information__grid--limit-details'
     endif
+  elsif settings.column_ratio != blank and settings.column_ratio != 'default'
+    # Column ratio is photos-details, e.g. 3-2. 1-1 reuses the equal columns layout.
+    assign ratio_parts = settings.column_ratio | split: '-'
+    assign ratio_media = ratio_parts[0] | plus: 0
+    assign ratio_details = ratio_parts[1] | plus: 0
+    if ratio_media == ratio_details
+      assign product_grid_class = product_grid_class | append: ' product-information__grid--half'
+    elsif ratio_media > 0 and ratio_details > 0
+      assign product_grid_class = product_grid_class | append: ' product-information__grid--ratio'
+      capture ratio_style
+        echo '--ratio-columns-media-left: minmax(0, ' | append: ratio_media | append: 'fr) minmax(0, ' | append: ratio_details | append: 'fr);'
+        echo '--ratio-columns-media-right: minmax(0, ' | append: ratio_details | append: 'fr) minmax(0, ' | append: ratio_media | append: 'fr);'
+      endcapture
+    endif
   endif
 
   # Determine content width
@@ -96,6 +110,9 @@
   {% endif %}
   <product-component
     class="{{ product_grid_class }}"
+    {% if ratio_style != blank %}
+      style="{{ ratio_style | strip_newlines }}"
+    {% endif %}
     data-product-grid-content
     {% unless product.id == blank %}
       view-event-payload="{{ product | standard_event_data: 'view' | escape }}"
@@ -305,6 +322,19 @@
         .product-information--media-none
       ).product-information--media-right {
       grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  /* Custom photos : details ratio (desktop only). Extra class keeps this above the theme default rules. */
+  @media screen and (min-width: 750px) {
+    .product-information__grid.product-information__grid--ratio:not(.product-information--media-none) {
+      &.product-information--media-left {
+        grid-template-columns: var(--ratio-columns-media-left);
+      }
+
+      &.product-information--media-right {
+        grid-template-columns: var(--ratio-columns-media-right);
+      }
     }
   }
 

@@ -53,12 +53,12 @@
     text-wrap: pretty;
   }
 
-  .text-block:not(.text-block--full-width):is(.h1, .h2, .h3, .h4, .h5, .h6) {
+  .text-block:not(.text-block--full-width):is(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .h18, .h19, .h20, .h21) {
     text-wrap: balance;
   }
 
   /* Hide underline unless text is using paragraph styles. The doubled class beats the global paragraph-link styles in base.css. */
-  .text-block.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6) a {
+  .text-block.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6, .h7, .h8, .h9, .h10, .h11, .h12, .h13, .h14, .h15, .h16, .h17, .h18, .h19, .h20, .h21) a {
     text-decoration-line: none;
     color: currentColor;
 
@@ -96,6 +96,66 @@
   .text-block h6,
   .text-block.h6 > * {
     margin-block: var(--font-h6--spacing);
+  }
+
+  .text-block.h7 > * {
+    margin-block: var(--font-h7--spacing);
+  }
+
+  .text-block.h8 > * {
+    margin-block: var(--font-h8--spacing);
+  }
+
+  .text-block.h9 > * {
+    margin-block: var(--font-h9--spacing);
+  }
+
+  .text-block.h10 > * {
+    margin-block: var(--font-h10--spacing);
+  }
+
+  .text-block.h11 > * {
+    margin-block: var(--font-h11--spacing);
+  }
+
+  .text-block.h12 > * {
+    margin-block: var(--font-h12--spacing);
+  }
+
+  .text-block.h13 > * {
+    margin-block: var(--font-h13--spacing);
+  }
+
+  .text-block.h14 > * {
+    margin-block: var(--font-h14--spacing);
+  }
+
+  .text-block.h15 > * {
+    margin-block: var(--font-h15--spacing);
+  }
+
+  .text-block.h16 > * {
+    margin-block: var(--font-h16--spacing);
+  }
+
+  .text-block.h17 > * {
+    margin-block: var(--font-h17--spacing);
+  }
+
+  .text-block.h18 > * {
+    margin-block: var(--font-h18--spacing);
+  }
+
+  .text-block.h19 > * {
+    margin-block: var(--font-h19--spacing);
+  }
+
+  .text-block.h20 > * {
+    margin-block: var(--font-h20--spacing);
+  }
+
+  .text-block.h21 > * {
+    margin-block: var(--font-h21--spacing);
   }
 
   .text-block p,

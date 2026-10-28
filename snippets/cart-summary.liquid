@@ -41,6 +41,8 @@
     {%- endif -%}
   </div>
 
+  {% render 'cart-aura-summary', part: 'head', context: context %}
+
   {% if settings.show_cart_note or settings.show_add_discount_code %}
     <div class="cart-actions">
       {% if settings.show_cart_note %}
@@ -227,7 +229,13 @@
       class="cart-totals__item cart-totals__total"
       role="status"
     >
-      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      <span class="cart-totals__total-label cart-primary-typography">
+        {%- if context == 'drawer' -%}
+          {{ 'cart_aura.subtotal' | t }}
+        {%- else -%}
+          {{ 'content.cart_estimated_total' | t }}
+        {%- endif -%}
+      </span>
       <text-component
         ref="cartTotal"
         value="{{ total_price | strip_html }}"
@@ -246,18 +254,42 @@
         {% endform %}
       </span>
     {% endif %}
-    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
-    </div>
   </div>
+
+  {% render 'cart-aura-summary', part: 'extras', context: context %}
 </div>
 
 <div class="cart__ctas">
+  {%- if settings.cart_precheckout_url != blank and cart != empty -%}
+    <a
+      href="{{ settings.cart_precheckout_url }}"
+      id="checkout"
+      class="cart__checkout-button button"
+      style="
+        --color-primary-button-background: {{ settings.cart_checkout_background }};
+        --color-primary-button-text: {{ settings.cart_checkout_text }};
+        --color-primary-button-border: {{ settings.cart_checkout_border }};
+        --color-primary-button-hover-background: color-mix(in srgb, {{ settings.cart_checkout_background }} 88%, #000);
+        --color-primary-button-hover-text: {{ settings.cart_checkout_text }};
+        --color-primary-button-hover-border: {{ settings.cart_checkout_border }};
+      "
+    >
+      <span class="button-text">{{ 'content.checkout' | t }}</span>
+    </a>
+  {%- else -%}
   <button
     type="submit"
     id="checkout"
     class="cart__checkout-button button"
     name="checkout"
+    style="
+      --color-primary-button-background: {{ settings.cart_checkout_background }};
+      --color-primary-button-text: {{ settings.cart_checkout_text }};
+      --color-primary-button-border: {{ settings.cart_checkout_border }};
+      --color-primary-button-hover-background: color-mix(in srgb, {{ settings.cart_checkout_background }} 88%, #000);
+      --color-primary-button-hover-text: {{ settings.cart_checkout_text }};
+      --color-primary-button-hover-border: {{ settings.cart_checkout_border }};
+    "
     {% if cart == empty %}
       disabled
     {% endif %}
@@ -267,6 +299,7 @@
       {{ 'content.checkout' | t }}
     </span>
   </button>
+  {%- endif -%}
 
   {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
     <div
@@ -278,6 +311,8 @@
       {{ content_for_additional_checkout_buttons }}
     </div>
   {% endif %}
+
+  {% render 'cart-aura-summary', part: 'notes', context: context %}
 </div>
 
 {% stylesheet %}
@@ -296,6 +331,9 @@
 
   .cart-totals:not(:has(.cart-actions)) {
     margin-block-start: var(--margin-3xs);
+  }
+
+  .cart-drawer__summary .cart-totals:not(:has(.cart-actions)) {
     border-block-start: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
     padding-block-start: var(--margin-xl);
   }
@@ -354,14 +392,6 @@
     flex-direction: column;
   }
 
-  .cart-totals__container {
-    row-gap: var(--gap-2xs);
-
-    &.cart-totals__container--has-installments {
-      row-gap: var(--gap-xs);
-    }
-  }
-
   .cart-totals__original-container:empty {
     display: none;
   }
@@ -369,7 +399,7 @@
   .cart-totals {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xl);
+    gap: var(--gap-sm);
     width: 100%;
     border-block-start: none;
 
@@ -394,15 +424,20 @@
   }
 
   .cart-totals__total-label {
-    font-size: var(--cart-font-size--sm);
+    font-size: 15px;
+  }
+
+  /* Bag page summary panel */
+  .cart-summary__inner .cart-totals__total-label {
+    font-size: 18px;
+
+    @media screen and (min-width: 750px) {
+      color: #ccc3cf;
+    }
   }
 
   .cart-totals__total-value {
-    font-size: var(--cart-font-size--xl);
-
-    @media screen and (max-width: 749px) {
-      font-size: var(--font-size--lg);
-    }
+    font-size: 18px;
   }
 
   .cart-totals__installments {

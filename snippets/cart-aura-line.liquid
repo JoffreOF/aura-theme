@@ -1,0 +1,45 @@
+{%- doc -%}
+  Extra cart line details: weight, installments and gold value (what the line adds to the portfolio).
+  Gold value = gold.weight_g x shop gold.price_18k_per_g x quantity. Renders nothing when data is missing.
+
+  @param {object} item - Cart line item
+  @param {string} part - 'weight', 'installments' or 'gold'
+{%- enddoc -%}
+
+{%- liquid
+  assign weight = item.variant.metafields.gold.weight_g.value
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value
+  assign payments = settings.cart_installments_payments | default: 6 | plus: 0
+
+  if part == 'weight' and weight != blank
+    comment
+      One decimal built from integers so a whole-gram weight keeps its ".0".
+    endcomment
+    assign scaled = weight | times: 10 | round
+    assign fraction = scaled | modulo: 10
+    assign whole = scaled | minus: fraction | divided_by: 10
+    assign grams = whole | append: '.' | append: fraction
+    assign weight_text = 'cart_aura.line_weight' | t: grams: grams
+  elsif part == 'installments' and item.final_line_price > 0 and payments >= 2
+    assign per_payment = item.final_line_price | times: 1.0 | divided_by: payments | round
+    assign installment_amount = per_payment | money
+    assign installments_text = 'cart_aura.installments_html' | t: count: payments, amount: installment_amount
+  elsif part == 'gold' and weight != blank and gram_price != blank
+    assign unit_gold_cents = weight | times: gram_price | times: 100 | round
+    assign line_gold_cents = unit_gold_cents | times: item.quantity
+    if line_gold_cents > 0
+      assign gold_amount = line_gold_cents | money
+      assign gold_text = 'cart_aura.line_gold' | t: amount: gold_amount
+    endif
+  endif
+-%}
+
+{%- if weight_text != blank -%}
+  <p class="cart-aura-line cart-aura-line--weight">{{ weight_text }}</p>
+{%- endif -%}
+{%- if installments_text != blank -%}
+  <p class="cart-aura-line cart-aura-line--installments">{{ installments_text }}</p>
+{%- endif -%}
+{%- if gold_text != blank -%}
+  <p class="cart-aura-line cart-aura-line--gold" style="color: {{ settings.cart_gold_line_color }};">{{ gold_text }}</p>
+{%- endif -%}

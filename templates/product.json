@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -29,7 +30,7 @@
             "constrain_to_viewport": false,
             "media_fit": "cover",
             "media_radius": 0,
-            "extend_media": true,
+            "extend_media": false,
             "zoom": true,
             "video_loop": false,
             "hide_variants": true,
@@ -50,7 +51,7 @@
             "custom_width_mobile": 100,
             "height": "fit",
             "details_position": "flex-start",
-            "gap": 12,
+            "gap": 24,
             "sticky_details_desktop": true,
             "background_media": "none",
             "background_color": "",
@@ -67,17 +68,18 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_9WaLn7": {
+            "text_kRE69b": {
               "type": "text",
-              "name": "t:names.title",
+              "name": "t:names.text",
               "settings": {
-                "text": "<h1>{{ closest.product.title }}</h1>",
-                "width": "100%",
+                "text": "<p><a href=\"/\" title=\"/\">Home</a> /&nbsp;</p>",
+                "width": "fit-content",
                 "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "h3",
+                "alignment": "left",
+                "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "0.8125rem",
+                "weight": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -86,45 +88,271 @@
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
-                "padding-block-start": 50,
+                "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
               "blocks": {}
             },
-            "price_a7krng": {
-              "type": "price",
+            "group_eYNJTz": {
+              "type": "group",
+              "name": "t:names.group",
               "settings": {
-                "show_sale_price_first": true,
-                "show_installments": true,
-                "show_tax_info": true,
-                "type_preset": "h5",
-                "width": "100%",
-                "alignment": "center",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "text_color": "",
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
                 "padding-block-start": 0,
-                "padding-block-end": 50,
+                "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
-              "blocks": {}
+              "blocks": {
+                "text_6nFTH7": {
+                  "type": "text",
+                  "name": "t:names.title",
+                  "settings": {
+                    "text": "<h1>{{ closest.product.title }}</h1>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "2.875rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_Bd7pbx": {
+                  "type": "text",
+                  "name": "t:names.text",
+                  "settings": {
+                    "text": "<p>{{ closest.product.metafields.specs.gold_type.value }} •&nbsp;{{ closest.product.metafields.specs.stone_type.value }}</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_6nFTH7",
+                "text_Bd7pbx"
+              ]
             },
-            "divider_HrJgFt": {
-              "type": "_divider",
-              "name": "t:names.divider",
+            "group_8WbQwM": {
+              "type": "group",
+              "name": "t:names.group",
               "settings": {
-                "thickness": 1,
-                "corner_radius": "square",
-                "divider_color": "{{ settings.color_palette.color2 }}",
-                "width_percent": 100,
-                "padding-block-start": 12,
-                "padding-block-end": 12
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "background_color": "",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "price_RwHFUB": {
+                  "type": "price",
+                  "settings": {
+                    "show_sale_price_first": true,
+                    "show_installments": true,
+                    "show_tax_info": false,
+                    "type_preset": "custom",
+                    "width": "100%",
+                    "alignment": "left",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1.75rem",
+                    "weight": "500",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "text_color": "",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "product_installments_box_Mr99Xm": {
+                  "type": "product-installments-box",
+                  "name": "Installments box",
+                  "settings": {
+                    "width": "100%",
+                    "payments": 6,
+                    "show_icon": true,
+                    "show_note": true,
+                    "note_reduction": 2,
+                    "main_preset": "custom",
+                    "main_font": "var(--font-body--family)",
+                    "main_font_size": "0.9375rem",
+                    "main_weight": "500",
+                    "main_line_height": "normal",
+                    "main_letter_spacing": "normal",
+                    "main_case": "none",
+                    "text_color": "",
+                    "background_color": "#ffffff",
+                    "border_color": "#4a253d",
+                    "border_width": 1,
+                    "corner_radius": 0,
+                    "padding-block-start": 14,
+                    "padding-block-end": 14,
+                    "padding-inline-start": 16,
+                    "padding-inline-end": 16
+                  },
+                  "blocks": {}
+                },
+                "product_price_note_RtNTFJ": {
+                  "type": "product-price-note",
+                  "name": "Price note",
+                  "settings": {
+                    "show_tax_note": true,
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.8125rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "price_RwHFUB",
+                "product_installments_box_Mr99Xm",
+                "product_price_note_RtNTFJ"
+              ]
+            },
+            "product_pricing_panel_7T6VqD": {
+              "type": "product-pricing-panel",
+              "settings": {
+                "width": "100%",
+                "how_we_price_link": "/",
+                "show_markup": true,
+                "show_portfolio_note": true,
+                "weight_decimals": "1",
+                "gold_color": "#c4a35a",
+                "craft_color": "{{ settings.color_palette.color10 }}",
+                "bar_height": 6,
+                "heading_preset": "custom",
+                "heading_font": "var(--font-body--family)",
+                "heading_font_size": "0.75rem",
+                "heading_weight": "",
+                "heading_line_height": "normal",
+                "heading_letter_spacing": "loose",
+                "heading_case": "uppercase",
+                "body_preset": "custom",
+                "body_font": "var(--font-body--family)",
+                "body_font_size": "0.875rem",
+                "body_weight": "",
+                "body_line_height": "normal",
+                "body_letter_spacing": "normal",
+                "body_case": "none",
+                "detail_reduction": 2,
+                "text_color": "",
+                "background_color": "{{ settings.color_palette.color2 }}",
+                "corner_radius": 0,
+                "padding-block-start": 16,
+                "padding-block-end": 16,
+                "padding-inline-start": 16,
+                "padding-inline-end": 16
               },
               "blocks": {}
             },
@@ -134,14 +362,14 @@
                 "variant_style": "buttons",
                 "show_swatches": true,
                 "option_label_text_color": "",
-                "variant_style_class": "default",
-                "custom_variant_background": "{{ settings.color_palette.background }}",
-                "custom_variant_text": "{{ settings.color_palette.foreground }}",
+                "variant_style_class": "custom",
+                "custom_variant_background": "{{ settings.color_palette.color10 }}",
+                "custom_variant_text": "{{ settings.color_palette.color1 }}",
                 "custom_variant_border": "{{ settings.color_palette.foreground }}",
-                "selected_variant_style_class": "default",
-                "custom_selected_variant_background": "{{ settings.color_palette.foreground }}",
-                "custom_selected_variant_text": "{{ settings.color_palette.background }}",
-                "custom_selected_variant_border": "{{ settings.color_palette.foreground }}",
+                "selected_variant_style_class": "custom",
+                "custom_selected_variant_background": "{{ settings.color_palette.background }}",
+                "custom_selected_variant_text": "{{ settings.color_palette.color10 }}",
+                "custom_selected_variant_border": "{{ settings.color_palette.background }}",
                 "alignment": "left",
                 "padding-block-start": 12,
                 "padding-block-end": 24,
@@ -195,15 +423,16 @@
                   "type": "add-to-cart",
                   "static": true,
                   "settings": {
-                    "style_class": "button",
-                    "custom_button_background": "{{ settings.color_palette.foreground }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "style_class": "button-custom",
+                    "custom_button_background": "{{ settings.color_palette.background }}",
+                    "custom_button_text": "{{ settings.color_palette.color10 }}",
                     "custom_button_border": "{{ settings.color_palette.background }}"
                   },
                   "blocks": {}
                 },
                 "accelerated-checkout": {
                   "type": "accelerated-checkout",
+                  "disabled": true,
                   "static": true,
                   "settings": {},
                   "blocks": {}
@@ -249,8 +478,9 @@
                         "max_width": "normal",
                         "alignment": "left",
                         "type_preset": "custom",
-                        "font": "var(--font-subheading--family)",
-                        "font_size": "1.125rem",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -274,7 +504,7 @@
                 "accordion_row_iJM37V": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Care",
+                    "heading": "Specifications",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -290,6 +520,7 @@
                         "type_preset": "custom",
                         "font": "var(--font-subheading--family)",
                         "font_size": "1.125rem",
+                        "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -313,7 +544,7 @@
                 "accordion_row_pLFDcD": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Design",
+                    "heading": "Care",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -329,6 +560,7 @@
                         "type_preset": "custom",
                         "font": "var(--font-subheading--family)",
                         "font_size": "1.125rem",
+                        "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -348,12 +580,94 @@
                   "block_order": [
                     "text_qLGEN9"
                   ]
+                },
+                "accordion_row_9cbCRJ": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Shipping & Returns",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_GGfjjN": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our dedication to excellence extends beyond materials; it encompasses the artistry and craftsmanship illustrated in every piece we create.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-subheading--family)",
+                        "font_size": "1.125rem",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 12,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_GGfjjN"
+                  ]
+                },
+                "accordion_row_9TqrTh": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Buyback",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_aYL6n6": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our dedication to excellence extends beyond materials; it encompasses the artistry and craftsmanship illustrated in every piece we create.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-subheading--family)",
+                        "font_size": "1.125rem",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 12,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_aYL6n6"
+                  ]
                 }
               },
               "block_order": [
                 "accordion_row_NdBezV",
                 "accordion_row_iJM37V",
-                "accordion_row_pLFDcD"
+                "accordion_row_pLFDcD",
+                "accordion_row_9cbCRJ",
+                "accordion_row_9TqrTh"
               ]
             },
             "disclosures_hFEnPD": {
@@ -377,9 +691,10 @@
             }
           },
           "block_order": [
-            "text_9WaLn7",
-            "price_a7krng",
-            "divider_HrJgFt",
+            "text_kRE69b",
+            "group_eYNJTz",
+            "group_8WbQwM",
+            "product_pricing_panel_7T6VqD",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "accordion_NKWPiW",
@@ -388,15 +703,16 @@
         }
       },
       "settings": {
-        "content_width": "content-full-width",
+        "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": true,
-        "limit_details_width": true,
-        "gap": 0,
+        "equal_columns": false,
+        "column_ratio": "3-2",
+        "limit_details_width": false,
+        "gap": 48,
         "enable_sticky_add_to_cart": true,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 40,
+        "padding-block-end": 100
       }
     },
     "product_recommendations_qnzPkn": {
@@ -413,6 +729,7 @@
             "type_preset": "h4",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
+            "weight": "",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
@@ -493,6 +810,7 @@
                 "border_opacity": 100,
                 "border_color": "",
                 "border_radius": 0,
+                "link": "",
                 "open_in_new_tab": false,
                 "padding-block-start": 2,
                 "padding-block-end": 0,
@@ -531,6 +849,7 @@
                     "border_opacity": 100,
                     "border_color": "",
                     "border_radius": 0,
+                    "link": "",
                     "open_in_new_tab": false,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
@@ -548,6 +867,7 @@
                         "type_preset": "h5",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
+                        "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -574,6 +894,7 @@
                         "alignment": "left",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
+                        "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -622,6 +943,7 @@
                     "border_opacity": 100,
                     "border_color": "",
                     "border_radius": 0,
+                    "link": "",
                     "open_in_new_tab": false,
                     "padding-block-start": 0,
                     "padding-block-end": 0,

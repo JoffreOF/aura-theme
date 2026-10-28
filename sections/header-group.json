@@ -11,6 +11,43 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
+    "header_announcements_Yii4ka": {
+      "type": "header-announcements",
+      "blocks": {
+        "gold_price_announcement_dCWqzB": {
+          "type": "_gold-price-announcement",
+          "name": "Gold price",
+          "settings": {
+            "show_change": true,
+            "bold_price": true,
+            "show_note": true,
+            "hide_note_on_mobile": true,
+            "note_opacity": 80,
+            "part_gap": 24,
+            "font": "var(--font-body--family)",
+            "font_size": "0.8125rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none",
+            "text_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "gold_price_announcement_dCWqzB"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "background_color": "",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -19,8 +56,8 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0
+            "padding-block-start": 6,
+            "padding-block-end": 6
           },
           "blocks": {}
         },
@@ -29,6 +66,8 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "background_color": "{{ settings.color_palette.background }}",
+            "text_color": "",
             "type_font_primary_size": "0.875rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",
@@ -38,6 +77,8 @@
             "featured_collections_aspect_ratio": "16 / 9",
             "image_border_radius": 0,
             "navigation_bar": false,
+            "background_color_navigation_bar": "{{ settings.color_palette.background }}",
+            "text_color_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
             "drawer_dividers": false
@@ -49,6 +90,7 @@
         "logo_position": "center",
         "menu_position": "left",
         "menu_row": "top",
+        "customer_account_menu": "customer-account-main-menu",
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
@@ -64,16 +106,34 @@
         "enable_sticky_header": "always",
         "divider_width": 0,
         "divider_size": "page-width",
+        "divider_color": "",
         "border_width": 0,
-        "background_color_top": "{{ settings.color_palette.background }}",
+        "bottom_border_color": "",
+        "actions_display_style": "icon",
+        "actions_font_size": "0.875rem",
+        "actions_font": "body",
+        "actions_text_case": "none",
+        "background_color_top": "{{ settings.color_palette.color2 }}",
+        "text_color_top": "",
+        "background_color_bottom": "",
+        "text_color_bottom": "",
+        "bubble_style": "default",
+        "bubble_background_color": "",
+        "bubble_text_color": "",
+        "enable_transparent_header_home": false,
+        "home_inverse_logo": false,
         "text_color_transparent_home": "{{ settings.color_palette.background }}",
-        "enable_transparent_header_home": true,
-        "enable_transparent_header_product": true,
-        "enable_transparent_header_collection": false
+        "enable_transparent_header_product": false,
+        "product_inverse_logo": false,
+        "text_color_transparent_product": "",
+        "enable_transparent_header_collection": false,
+        "collection_inverse_logo": false,
+        "text_color_transparent_collection": ""
       }
     }
   },
   "order": [
+    "header_announcements_Yii4ka",
     "header_section"
   ]
 }

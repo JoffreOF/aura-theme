@@ -115,7 +115,7 @@
                 </scroll-hint>
 
                 <div class="cart-drawer__summary">
-                  {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                  {% render 'cart-summary', section_id: 'cart-drawer-section', context: 'drawer' %}
                 </div>
               </scroll-hint>
             {%- endif -%}
@@ -186,6 +186,10 @@
     border-bottom: none;
     padding-block-end: 0;
     margin-block-end: 0;
+  }
+
+  cart-drawer-component .theme-drawer__title {
+    font-weight: 300;
   }
 
   .cart-drawer__close-button--empty {
