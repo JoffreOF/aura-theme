@@ -3,6 +3,7 @@
   the delivery form, and a hand-off to Shopify's checkout with the details already filled in.
   Use it on a page with the template "pre-checkout". Behavior is in assets/pre-checkout.js.
   Anything but a DNI skips the form and goes straight to checkout. See docs/BRIEF.md section 5.
+  Layout, background and text colour, padding and the title typography follow the cart page's sections.
 {%- endcomment -%}
 
 {%- liquid
@@ -17,60 +18,128 @@
     A signed-in customer's default address (when it exists) prefills the form. Its Company field holds the DNI.
   endcomment
   assign saved = customer.default_address
+
+  assign custom_color = false
+  if section.settings.background_color != blank or section.settings.text_color != blank
+    assign custom_color = true
+    render 'contrast-override', background_color: section.settings.background_color, text_color: section.settings.text_color, section_id: section.id
+  endif
+
+  comment
+    Title typography: a preset, or Custom with its own font, size, weight, line height, spacing and case.
+  endcomment
+  assign title_class = section.settings.type_preset | default: 'h2'
+  assign title_style = ''
+  if section.settings.type_preset == 'custom'
+    assign title_class = 'custom-typography'
+    if section.settings.font_size != blank
+      assign title_class = title_class | append: ' custom-font-size'
+    endif
+    capture title_style
+      render 'typography-style', settings: section.settings
+    endcapture
+  endif
+
+  comment
+    Colours for the fields, the summary panel and the buttons. Blank colours fall back to the theme's own.
+  endcomment
+  capture pc_style
+    render 'spacing-style', settings: section.settings
+    if section.settings.input_background != blank
+      echo '--pc-input-bg: ' | append: section.settings.input_background | append: ';'
+    endif
+    if section.settings.input_text != blank
+      echo '--pc-input-text: ' | append: section.settings.input_text | append: ';'
+    endif
+    if section.settings.input_border != blank
+      echo '--pc-input-border: ' | append: section.settings.input_border | append: ';'
+    endif
+    if section.settings.summary_background != blank
+      echo '--pc-summary-bg: ' | append: section.settings.summary_background | append: ';'
+    endif
+    if section.settings.summary_text != blank
+      echo '--pc-summary-text: ' | append: section.settings.summary_text | append: ';'
+    endif
+    if section.settings.button_background != blank
+      echo '--color-primary-button-background: ' | append: section.settings.button_background | append: ';'
+      echo '--color-primary-button-hover-background: color-mix(in srgb, ' | append: section.settings.button_background | append: ' 88%, #000);'
+    endif
+    if section.settings.button_text != blank
+      echo '--color-primary-button-text: ' | append: section.settings.button_text | append: ';'
+      echo '--color-primary-button-hover-text: ' | append: section.settings.button_text | append: ';'
+    endif
+    if section.settings.button_border != blank
+      echo '--color-primary-button-border: ' | append: section.settings.button_border | append: ';'
+      echo '--color-primary-button-hover-border: ' | append: section.settings.button_border | append: ';'
+    endif
+  endcapture
 -%}
 
 <script src="{{ 'pre-checkout.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
-<div class="pre-checkout page-width" data-pre-checkout>
-  <script type="application/json" data-config>
-    {
-      "proxy": {{ section.settings.proxy_path | json }},
-      "siteKey": {{ section.settings.turnstile_site_key | json }},
-      "guest": {{ is_guest | json }},
-      "checkoutUrl": {{ routes.root_url | append: 'checkout' | json }},
-      "cartUrl": {{ routes.cart_url | json }},
-      "prefill": {
-        "email": {{ customer.email | json }},
-        "firstName": {{ saved.first_name | json }},
-        "lastName": {{ saved.last_name | json }},
-        "phone": {{ saved.phone | json }},
-        "dni": {{ saved.company | json }},
-        "address": {{ saved.address1 | json }},
-        "province": {{ saved.city | json }}
-      },
-      "messages": {
-        "invalidDni": {{ 'pre_checkout.errors.invalid_dni' | t | json }},
-        "verifying": {{ 'pre_checkout.verifying' | t | json }},
-        "looking": {{ 'pre_checkout.looking' | t | json }},
-        "unavailable": {{ 'pre_checkout.errors.unavailable' | t | json }},
-        "noAddress": {{ 'pre_checkout.errors.no_address' | t | json }},
-        "required": {{ 'pre_checkout.errors.required' | t | json }},
-        "email": {{ 'pre_checkout.errors.email' | t | json }},
-        "region": {{ 'pre_checkout.errors.region' | t | json }},
-        "submitFailed": {{ 'pre_checkout.errors.submit_failed' | t | json }},
-        "found": {{ 'pre_checkout.found' | t | json }},
-        "continuing": {{ 'pre_checkout.continuing' | t | json }}
+<div class="section-background{% if custom_color %} color-custom-{{ section.id }}{% endif %}"></div>
+<div
+  class="section{% if custom_color %} color-custom-{{ section.id }}{% endif %} section--{{ section.settings.section_width }}"
+>
+  <div
+    class="pre-checkout spacing-style"
+    data-pre-checkout
+    style="{{ pc_style | strip_newlines }}"
+  >
+    <script type="application/json" data-config>
+      {
+        "proxy": {{ section.settings.proxy_path | json }},
+        "siteKey": {{ section.settings.turnstile_site_key | json }},
+        "guest": {{ is_guest | json }},
+        "checkoutUrl": {{ routes.root_url | append: 'checkout' | json }},
+        "cartUrl": {{ routes.cart_url | json }},
+        "prefill": {
+          "email": {{ customer.email | json }},
+          "firstName": {{ saved.first_name | json }},
+          "lastName": {{ saved.last_name | json }},
+          "phone": {{ saved.phone | json }},
+          "dni": {{ saved.company | json }},
+          "address": {{ saved.address1 | json }},
+          "province": {{ saved.city | json }}
+        },
+        "messages": {
+          "invalidDni": {{ 'pre_checkout.errors.invalid_dni' | t | json }},
+          "verifying": {{ 'pre_checkout.verifying' | t | json }},
+          "looking": {{ 'pre_checkout.looking' | t | json }},
+          "unavailable": {{ 'pre_checkout.errors.unavailable' | t | json }},
+          "noAddress": {{ 'pre_checkout.errors.no_address' | t | json }},
+          "required": {{ 'pre_checkout.errors.required' | t | json }},
+          "email": {{ 'pre_checkout.errors.email' | t | json }},
+          "region": {{ 'pre_checkout.errors.region' | t | json }},
+          "submitFailed": {{ 'pre_checkout.errors.submit_failed' | t | json }},
+          "found": {{ 'pre_checkout.found' | t | json }},
+          "continuing": {{ 'pre_checkout.continuing' | t | json }}
+        }
       }
-    }
-  </script>
+    </script>
 
-  <nav class="pre-checkout__steps" aria-label="{{ 'pre_checkout.steps.label' | t }}">
-    <a href="{{ routes.cart_url }}">1 · {{ 'pre_checkout.steps.bag' | t }}</a>
-    <strong aria-current="step">2 · {{ 'pre_checkout.steps.details' | t }}</strong>
-    <span>3 · {{ 'pre_checkout.steps.payment' | t }}</span>
-  </nav>
-
-  {%- if cart.empty? -%}
-    <div class="pre-checkout__empty">
-      <h1 class="h2">{{ 'content.your_cart_is_empty' | t }}</h1>
-      <a class="button" href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}">
-        <span class="button-text">{{ 'actions.continue_shopping' | t }}</span>
-      </a>
-    </div>
-  {%- else -%}
-    <div class="pre-checkout__layout">
+    {%- if cart.empty? -%}
+      <div class="pre-checkout__empty">
+        <h1 class="{{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>{{ 'content.your_cart_is_empty' | t }}</h1>
+        <a class="button" href="{{ settings.empty_cart_button_link | default: routes.all_products_collection_url }}">
+          <span class="button-text">{{ 'actions.continue_shopping' | t }}</span>
+        </a>
+      </div>
+    {%- else -%}
       <div class="pre-checkout__main">
-        <h1 class="h2">{{ 'pre_checkout.title' | t }}</h1>
+        {%- if section.settings.show_steps -%}
+          <nav class="pre-checkout__steps" aria-label="{{ 'pre_checkout.steps.label' | t }}">
+            <a href="{{ routes.cart_url }}">1 · {{ 'pre_checkout.steps.bag' | t }}</a>
+            <strong aria-current="step">2 · {{ 'pre_checkout.steps.details' | t }}</strong>
+            <span>3 · {{ 'pre_checkout.steps.payment' | t }}</span>
+          </nav>
+        {%- endif -%}
+
+        <div class="pre-checkout__title text-{{ section.settings.alignment }}">
+          <h1 class="{{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>
+            {{- section.settings.title | default: 'Your details' -}}
+          </h1>
+        </div>
 
         <form class="pre-checkout__form" data-form novalidate>
           <div class="pc-field">
@@ -84,14 +153,14 @@
           </div>
 
           <section data-dni-block>
-            <div class="pc-row pc-row--lookup">
-              <div class="pc-field">
-                <label for="pc-dni">{{ 'pre_checkout.document_number' | t }}</label>
+            <div class="pc-field">
+              <label for="pc-dni">{{ 'pre_checkout.document_number' | t }}</label>
+              <div class="pc-lookup">
                 <input id="pc-dni" data-dni type="text" inputmode="numeric" autocomplete="off" placeholder="{{ 'pre_checkout.eight_digits' | t }}">
+                <button type="button" class="button pc-lookup__button" data-lookup>
+                  <span class="button-text">{{ 'pre_checkout.look_up' | t }}</span>
+                </button>
               </div>
-              <button type="button" class="button" data-lookup>
-                <span class="button-text">{{ 'pre_checkout.look_up' | t }}</span>
-              </button>
             </div>
 
             {%- comment -%} Hidden trap for bots: people never see or fill it. {%- endcomment -%}
@@ -157,7 +226,7 @@
                   <input id="pc-district" data-field="district" type="text" autocomplete="address-level3" maxlength="60">
                 </div>
               </div>
-              <p class="pc-note">{{ 'pre_checkout.district_note' | t }}</p>
+              <p class="pc-note pc-note--spaced">{{ 'pre_checkout.district_note' | t }}</p>
               <div class="pc-field">
                 <label for="pc-address">{{ 'pre_checkout.address' | t }}</label>
                 <input id="pc-address" data-field="address" type="text" autocomplete="street-address" maxlength="120" placeholder="{{ 'pre_checkout.address_hint' | t }}">
@@ -204,19 +273,38 @@
         </div>
         {% render 'cart-aura-summary', part: 'extras', context: 'page' %}
       </aside>
-    </div>
-  {%- endif -%}
+    {%- endif -%}
+  </div>
 </div>
 
 {% stylesheet %}
+  /* Same two-column grid as the cart page: the form, then a summary panel the width of the theme's sidebar */
   .pre-checkout {
-    padding-block: var(--padding-4xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-3xl) var(--padding-5xl);
+    align-items: start;
+  }
+
+  @media screen and (min-width: 750px) {
+    .pre-checkout {
+      grid-template-columns: 1fr min(50vw, var(--sidebar-width));
+    }
+
+    .pre-checkout:has(.pre-checkout__empty) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pre-checkout [hidden] {
+    display: none !important;
   }
 
   .pre-checkout__steps {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--gap-xl);
-    margin-block-end: var(--margin-4xl);
+    margin-block-end: var(--margin-2xl);
     font-size: var(--font-size--xs);
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -227,43 +315,26 @@
     opacity: 0.6;
   }
 
-  .pre-checkout__layout {
-    display: grid;
-    gap: var(--gap-3xl);
-    align-items: start;
-  }
-
-  @media screen and (min-width: 750px) {
-    .pre-checkout__layout {
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    }
+  .pre-checkout__title h1 {
+    margin: 0;
   }
 
   .pre-checkout__form {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xl);
+    gap: var(--gap-lg);
     margin-block-start: var(--margin-2xl);
-  }
-
-  .pre-checkout [hidden] {
-    display: none !important;
   }
 
   .pc-row {
     display: grid;
-    gap: var(--gap-lg);
+    gap: 0 var(--gap-lg);
     grid-template-columns: 1fr;
   }
 
   @media screen and (min-width: 750px) {
     .pc-row {
       grid-template-columns: 1fr 1fr;
-    }
-
-    .pc-row--lookup {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: end;
     }
   }
 
@@ -282,18 +353,43 @@
   .pc-label {
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin: 0 0 var(--margin-lg);
+    margin: 0;
   }
 
   .pc-field input,
   .pc-field select {
     width: 100%;
+    min-height: var(--minimum-touch-target);
     padding: var(--input-padding);
-    color: var(--color-input-text);
-    background: var(--color-input-background);
-    border: var(--style-border-width-inputs) solid var(--color-input-border);
+    color: var(--pc-input-text, var(--color-input-text));
+    background: var(--pc-input-bg, var(--color-input-background));
+    border: var(--style-border-width-inputs) solid var(--pc-input-border, var(--color-input-border));
     border-radius: var(--style-border-radius-inputs);
     font: inherit;
+  }
+
+  .pc-field input::placeholder {
+    color: var(--pc-input-text, var(--color-input-text));
+    opacity: 0.5;
+  }
+
+  /* The number box and its button share one row, the same height, centred on each other */
+  .pc-lookup {
+    display: flex;
+    align-items: stretch;
+    gap: var(--gap-md);
+  }
+
+  .pc-lookup input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .pc-lookup__button {
+    flex: none;
+    height: auto;
+    min-height: var(--minimum-touch-target);
+    padding-block: 0;
   }
 
   .pc-subtitle {
@@ -309,7 +405,7 @@
   }
 
   .pc-status {
-    margin: var(--margin-xs) 0;
+    margin: 0;
     min-height: 1.4em;
     font-size: var(--font-size--sm);
   }
@@ -320,7 +416,8 @@
     gap: var(--gap-lg);
     padding: var(--padding-md) var(--padding-lg);
     margin-block: var(--margin-lg);
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    background: var(--pc-summary-bg, rgb(var(--color-foreground-rgb) / var(--opacity-10)));
+    color: var(--pc-summary-text, inherit);
   }
 
   .pc-link {
@@ -340,6 +437,10 @@
     opacity: 0.75;
   }
 
+  .pc-note--spaced {
+    margin-block-end: var(--margin-lg);
+  }
+
   .pc-error {
     margin: 0;
     color: var(--color-error);
@@ -355,7 +456,8 @@
     flex-direction: column;
     gap: var(--gap-xl);
     padding: var(--padding-3xl);
-    background: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    background: var(--pc-summary-bg, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
+    color: var(--pc-summary-text, inherit);
   }
 
   .pc-items {
@@ -429,6 +531,595 @@
     {
       "type": "paragraph",
       "content": "The DNI pre-checkout page. Create a page called Your details and give it the template 'pre-checkout'. It talks to the aura-dni Worker through the Shopify app proxy."
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "{{ settings.color_palette.color10 }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_steps",
+      "label": "Show the steps (Bag, Your details, Payment)",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "h2",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "t:settings.weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "line_height",
+      "label": "t:settings.line_height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Summary panel and found bar"
+    },
+    {
+      "type": "color",
+      "id": "summary_background",
+      "label": "Background",
+      "default": "{{ settings.color_palette.color2 }}"
+    },
+    {
+      "type": "color",
+      "id": "summary_text",
+      "label": "Text",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "Fields"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "color",
+      "id": "input_border",
+      "label": "Border",
+      "default": "{{ settings.color_palette.color7 }}"
+    },
+    {
+      "type": "header",
+      "content": "Buttons (Look up and Continue to payment)"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Text",
+      "default": "{{ settings.color_palette.color10 }}"
+    },
+    {
+      "type": "color",
+      "id": "button_border",
+      "label": "Border",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "header",
+      "content": "Connection"
     },
     {
       "type": "text",
