@@ -142,18 +142,18 @@
         </div>
 
         <form class="pre-checkout__form" data-form novalidate>
-          <div class="pc-field">
-            <label for="pc-doctype">{{ 'pre_checkout.document_type' | t }}</label>
-            <select id="pc-doctype" data-doctype>
-              <option value="dni" selected>DNI</option>
-              <option value="ce">{{ 'pre_checkout.types.ce' | t }}</option>
-              <option value="passport">{{ 'pre_checkout.types.passport' | t }}</option>
-              <option value="other">{{ 'pre_checkout.types.other' | t }}</option>
-            </select>
-          </div>
-
-          <section data-dni-block>
+          <div class="pc-row pc-row--document">
             <div class="pc-field">
+              <label for="pc-doctype">{{ 'pre_checkout.document_type' | t }}</label>
+              <select id="pc-doctype" data-doctype>
+                <option value="dni" selected>DNI</option>
+                <option value="ce">{{ 'pre_checkout.types.ce' | t }}</option>
+                <option value="passport">{{ 'pre_checkout.types.passport' | t }}</option>
+                <option value="other">{{ 'pre_checkout.types.other' | t }}</option>
+              </select>
+            </div>
+
+            <div class="pc-field" data-dni-number>
               <label for="pc-dni">{{ 'pre_checkout.document_number' | t }}</label>
               <div class="pc-lookup">
                 <input id="pc-dni" data-dni type="text" inputmode="numeric" autocomplete="off" placeholder="{{ 'pre_checkout.eight_digits' | t }}">
@@ -162,6 +162,9 @@
                 </button>
               </div>
             </div>
+          </div>
+
+          <section data-dni-block>
 
             {%- comment -%} Hidden trap for bots: people never see or fill it. {%- endcomment -%}
             <div class="pc-trap" aria-hidden="true">
@@ -262,8 +265,9 @@
                 {%- unless item.product.has_only_default_variant -%}
                   <small>{{ item.variant.title }}</small>
                 {%- endunless -%}
+                {%- render 'cart-aura-line', item: item, part: 'weight' -%}
               </span>
-              <span>{{ item.final_line_price | money }}</span>
+              <span class="pc-item-price">{{ item.final_line_price | money }}</span>
             </li>
           {%- endfor -%}
         </ul>
@@ -313,6 +317,10 @@
   .pre-checkout__steps a,
   .pre-checkout__steps span {
     opacity: 0.6;
+  }
+
+  .pre-checkout__steps strong {
+    font-weight: 500;
   }
 
   .pre-checkout__title h1 {
@@ -374,6 +382,14 @@
   }
 
   /* The number box and its button share one row, the same height, centred on each other */
+  .pc-row--document > .pc-field {
+    margin-block-end: 0;
+  }
+
+  .pc-row--document {
+    margin-block-end: var(--margin-lg);
+  }
+
   .pc-lookup {
     display: flex;
     align-items: stretch;
@@ -418,6 +434,11 @@
     margin-block: var(--margin-lg);
     background: var(--pc-summary-bg, rgb(var(--color-foreground-rgb) / var(--opacity-10)));
     color: var(--pc-summary-text, inherit);
+    font-size: 0.875rem;
+  }
+
+  .pc-found__name {
+    font-weight: 500;
   }
 
   .pc-link {
@@ -489,6 +510,12 @@
   .pc-item-text {
     display: flex;
     flex-direction: column;
+    font-size: 14px;
+  }
+
+  .pc-item-price {
+    font-size: 15px;
+    font-weight: 500;
   }
 
   .pc-item-text small {

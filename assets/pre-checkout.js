@@ -24,6 +24,7 @@ function init(root) {
   const el = {
     doctype: $('[data-doctype]'),
     dniBlock: $('[data-dni-block]'),
+    dniNumber: $('[data-dni-number]'),
     dni: $('[data-dni]'),
     lookup: $('[data-lookup]'),
     trap: $('[data-trap]'),
@@ -210,7 +211,12 @@ function init(root) {
     field('province').value = person.province || '';
     field('district').value = person.district || '';
     field('region').value = person.region || '';
-    el.foundText.textContent = `${config.messages.found} ${person.firstNames} ${person.lastNames}`.trim();
+    // The customer's name is set apart (weight 500 in the stylesheet); textContent keeps it safe from markup.
+    const name = document.createElement('span');
+    name.className = 'pc-found__name';
+    name.textContent = `${person.firstNames} ${person.lastNames}`.trim();
+    el.foundText.textContent = `${config.messages.found} `;
+    el.foundText.appendChild(name);
     el.found.hidden = false;
     showFields(true);
     if (!person.hasAddress) setStatus(config.messages.noAddress);
@@ -241,6 +247,7 @@ function init(root) {
   el.doctype.addEventListener('change', () => {
     const isDni = el.doctype.value === 'dni';
     el.dniBlock.hidden = !isDni;
+    el.dniNumber.hidden = !isDni;
     el.otherNote.hidden = isDni;
     setError('');
   });
