@@ -318,9 +318,10 @@ function el(tag, className, text) {
 }
 
 /** Product images come from Shopify's CDN; anything else is ignored. */
-function imageUrl(url, width) {
+export function imageUrl(url, width) {
   try {
-    const u = new URL(url);
+    // The theme's image_url filter gives protocol-relative links ("//cdn.shopify.com/..."); the app proxy gives https ones.
+    const u = new URL(String(url).startsWith('//') ? `https:${url}` : url);
     if (u.protocol !== 'https:' || !u.hostname.endsWith('shopify.com')) return null;
     u.searchParams.set('width', String(width));
     return u.toString();
