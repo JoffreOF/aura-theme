@@ -1,0 +1,1567 @@
+{%- comment -%}
+  My Portfolio page: what the signed-in customer owns in gold, its cost basis, its value today, a value-over-time chart,
+  a table of pieces, a history of purchases, and a view for one piece (?piece=<entry id>).
+  Use it on a page with the template "portfolio". The entries come from the app proxy (assets/portfolio.js);
+  the gold price and its history come from the shop metafields gold.price_18k_per_g and gold.price_history.
+  See docs/BRIEF.md section 4.
+{%- endcomment -%}
+
+{%- liquid
+  comment
+    The sample pieces only ever show inside the theme editor (design mode), so a customer on the live store
+    can never see them, even if the setting is left on.
+  endcomment
+  assign preview = false
+  if section.settings.preview_sample and request.design_mode
+    assign preview = true
+  endif
+  assign show_page = false
+  if customer or preview
+    assign show_page = true
+  endif
+
+  assign custom_color = false
+  if section.settings.background_color != blank or section.settings.text_color != blank
+    assign custom_color = true
+    render 'contrast-override', background_color: section.settings.background_color, text_color: section.settings.text_color, section_id: section.id
+  endif
+
+  assign title_class = section.settings.type_preset | default: 'h1'
+  assign title_style = ''
+  if section.settings.type_preset == 'custom'
+    assign title_class = 'custom-typography'
+    if section.settings.font_size != blank
+      assign title_class = title_class | append: ' custom-font-size'
+    endif
+    capture title_style
+      render 'typography-style', settings: section.settings
+    endcapture
+  endif
+
+  comment
+    Gold price: kept as text so the page does the arithmetic exactly (no floating point).
+  endcomment
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | append: ''
+  assign history = shop.metafields.gold.price_history.value
+  assign updated_at = shop.metafields.gold.price_updated_at.value
+
+  capture pf_style
+    render 'spacing-style', settings: section.settings
+    if section.settings.accent_color != blank
+      echo '--pf-accent: ' | append: section.settings.accent_color | append: ';'
+    endif
+    if section.settings.card_border_color != blank
+      echo '--pf-card-border: ' | append: section.settings.card_border_color | append: ';'
+    endif
+    if section.settings.card_background != blank
+      echo '--pf-card-bg: ' | append: section.settings.card_background | append: ';'
+    endif
+    if section.settings.panel_background != blank
+      echo '--pf-panel-bg: ' | append: section.settings.panel_background | append: ';'
+    endif
+    if section.settings.accent_color != blank
+      echo '--color-primary-button-background: transparent;'
+      echo '--color-primary-button-text: ' | append: section.settings.accent_color | append: ';'
+      echo '--color-primary-button-border: ' | append: section.settings.accent_color | append: ';'
+      echo '--color-primary-button-hover-background: ' | append: section.settings.accent_color | append: ';'
+      echo '--color-primary-button-hover-text: ' | append: section.settings.background_color | append: ';'
+      echo '--color-primary-button-hover-border: ' | append: section.settings.accent_color | append: ';'
+    endif
+  endcapture
+-%}
+
+<script src="{{ 'portfolio.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+<div class="section-background{% if custom_color %} color-custom-{{ section.id }}{% endif %}"></div>
+<div
+  class="section{% if custom_color %} color-custom-{{ section.id }}{% endif %} section--{{ section.settings.section_width }}"
+>
+  <div class="portfolio spacing-style" data-portfolio style="{{ pf_style | strip_newlines }}">
+    {%- if show_page -%}
+      <script type="application/json" data-config>
+        {
+          "proxy": {{ section.settings.proxy_path | json }},
+          "preview": {{ preview | json }},
+          "locale": {{ request.locale.iso_code | json }},
+          "buybackEmail": {{ section.settings.buyback_email | json }},
+          "defaultRange": {{ section.settings.default_range | json }},
+          "gramPrice": {{ gram_price | json }},
+          "history": {{ history | json }},
+          "updatedAt": {{ updated_at | json }},
+          "sampleGramPrice": {{ section.settings.sample_gram_price | json }},
+          "sample": [
+            {%- if preview -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'sample_piece' -%}
+                  {
+                    "title": {{ block.settings.title | json }},
+                    "category": {{ block.settings.category | json }},
+                    "variant": {{ block.settings.variant | json }},
+                    "image": {{ block.settings.image | image_url: width: 800 | json }},
+                    "weight": {{ block.settings.weight_g | json }},
+                    "price": {{ block.settings.price_per_g | json }},
+                    "date": {{ block.settings.purchase_date | json }},
+                    "orderName": {{ block.settings.order_name | json }},
+                    "status": {{ block.settings.status | json }}
+                  }{% unless forloop.last %},{% endunless %}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          ],
+          "strings": {
+            "error": {{ 'portfolio.error' | t | json }},
+            "signedOut": {{ 'portfolio.signed_out' | t | json }},
+            "noPrice": {{ 'portfolio.no_price' | t | json }},
+            "notFound": {{ 'portfolio.not_found' | t | json }},
+            "noChart": {{ 'portfolio.chart_empty' | t | json }},
+            "cardValueSub": {{ 'portfolio.card_value_sub' | t | json }},
+            "cardValueSubOne": {{ 'portfolio.card_value_sub_one' | t | json }},
+            "cardChangeSub": {{ 'portfolio.card_change_sub' | t | json }},
+            "goldAdded": {{ 'portfolio.gold_added' | t | json }},
+            "piecesMany": {{ 'portfolio.pieces_many' | t | json }},
+            "thPiece": {{ 'portfolio.th_piece' | t | json }},
+            "thAdded": {{ 'portfolio.th_added' | t | json }},
+            "thWeight": {{ 'portfolio.th_weight' | t | json }},
+            "thCost": {{ 'portfolio.th_cost' | t | json }},
+            "thValue": {{ 'portfolio.th_value' | t | json }},
+            "thChange": {{ 'portfolio.th_change' | t | json }},
+            "view": {{ 'portfolio.view' | t | json }},
+            "requestBuyback": {{ 'portfolio.request_buyback' | t | json }},
+            "purchased": {{ 'portfolio.purchased' | t | json }},
+            "refunded": {{ 'portfolio.refunded' | t | json }},
+            "footnoteSource": {{ 'portfolio.footnote_source' | t | json }},
+            "sinceDate": {{ 'portfolio.since_date' | t | json }},
+            "rowAdded": {{ 'portfolio.row_added' | t | json }},
+            "rowAddedValue": {{ 'portfolio.row_added_value' | t | json }},
+            "rowOrder": {{ 'portfolio.row_order' | t | json }},
+            "rowOrderValue": {{ 'portfolio.row_order_value' | t | json }},
+            "rowWeight": {{ 'portfolio.row_weight' | t | json }},
+            "rowWeightValue": {{ 'portfolio.row_weight_value' | t | json }},
+            "rowPriceThen": {{ 'portfolio.row_price_then' | t | json }},
+            "rowCost": {{ 'portfolio.row_cost' | t | json }},
+            "rowPriceNow": {{ 'portfolio.row_price_now' | t | json }},
+            "rowValue": {{ 'portfolio.row_value' | t | json }},
+            "costLegend": {{ 'portfolio.cost_legend' | t | json }},
+            "buybackSubject": {{ 'portfolio.buyback_subject' | t | json }},
+            "buybackBody": {{ 'portfolio.buyback_body' | t | json }}
+          }
+        }
+      </script>
+
+      <header class="pf-head" data-head>
+        <div class="pf-head__title text-{{ section.settings.alignment }}">
+          {%- if customer.first_name != blank -%}
+            <p class="pf-eyebrow">{{ 'portfolio.greeting' | t: name: customer.first_name }}</p>
+          {%- endif -%}
+          <h1 class="{{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>
+            {%- if section.settings.title != blank -%}{{ section.settings.title }}{%- else -%}{{ 'portfolio.title' | t }}{%- endif -%}
+          </h1>
+        </div>
+        {%- if customer -%}
+          <nav class="pf-links" aria-label="{{ 'portfolio.title' | t }}">
+            <a href="{{ routes.account_url }}">{{ 'portfolio.orders' | t }}</a>
+            <a href="{{ routes.account_url }}">{{ 'portfolio.account' | t }}</a>
+            <a href="{{ routes.account_logout_url }}">{{ 'portfolio.sign_out' | t }}</a>
+          </nav>
+        {%- endif -%}
+      </header>
+
+      {%- if preview and customer == null -%}
+        <p class="pf-note">{{ 'portfolio.preview_note' | t }}</p>
+      {%- endif -%}
+
+      <p class="pf-status" data-loading role="status">{{ 'portfolio.loading' | t }}</p>
+      <p class="pf-status pf-status--error" data-error role="alert" hidden></p>
+      <p class="pf-status" data-empty hidden>{{ 'portfolio.empty' | t }}</p>
+
+      <div class="pf-dashboard" data-dashboard hidden>
+        <div class="pf-cards">
+          <div class="pf-card">
+            <p class="pf-label">{{ 'portfolio.card_value' | t }}</p>
+            <p class="pf-card__value" data-card-value></p>
+            <p class="pf-card__sub" data-card-value-sub></p>
+          </div>
+          <div class="pf-card">
+            <p class="pf-label">{{ 'portfolio.card_cost' | t }}</p>
+            <p class="pf-card__value" data-card-cost></p>
+            <p class="pf-card__sub">{{ 'portfolio.card_cost_sub' | t }}</p>
+          </div>
+          <div class="pf-card">
+            <p class="pf-label">{{ 'portfolio.card_change' | t }}</p>
+            <p class="pf-card__value" data-card-change></p>
+            <p class="pf-card__sub" data-card-change-sub></p>
+          </div>
+        </div>
+
+        <section class="pf-panel">
+          <div class="pf-panel__head">
+            <h2 class="pf-panel__title">{{ 'portfolio.chart_title' | t }}</h2>
+            {%- render 'portfolio-ranges' -%}
+          </div>
+          <div class="pf-chart" data-chart></div>
+          <div class="pf-axis" data-axis aria-hidden="true"></div>
+          <p class="pf-legend"><span class="pf-legend__dot" aria-hidden="true"></span>{{ 'portfolio.chart_legend' | t }}</p>
+        </section>
+
+        <div class="pf-tabs" role="tablist">
+          <button type="button" role="tab" class="pf-tab" data-tab="pieces" aria-selected="true">{{ 'portfolio.tab_pieces' | t }}</button>
+          <button type="button" role="tab" class="pf-tab" data-tab="history" aria-selected="false">{{ 'portfolio.tab_history' | t }}</button>
+        </div>
+
+        <div data-panel="pieces">
+          <table class="pf-table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'portfolio.th_piece' | t }}</th>
+                <th scope="col">{{ 'portfolio.th_added' | t }}</th>
+                <th scope="col">{{ 'portfolio.th_weight' | t }}</th>
+                <th scope="col">{{ 'portfolio.th_cost' | t }}</th>
+                <th scope="col">{{ 'portfolio.th_value' | t }}</th>
+                <th scope="col">{{ 'portfolio.th_change' | t }}</th>
+                <th scope="col"><span class="visually-hidden">{{ 'portfolio.view' | t }}</span></th>
+              </tr>
+            </thead>
+            <tbody data-pieces></tbody>
+          </table>
+        </div>
+        <div data-panel="history" hidden>
+          <ul class="pf-log" data-history></ul>
+        </div>
+
+        <div class="pf-footnotes">
+          <p>{{ 'portfolio.footnote_values' | t }}</p>
+          <p data-source></p>
+        </div>
+      </div>
+
+      <div class="pf-piece" data-piece hidden>
+        <a class="pf-back" href="{{ page.url }}">{{ 'portfolio.back' | t }}</a>
+        <div class="pf-piece__grid">
+          <div class="pf-piece__side">
+            <div class="pf-photo" data-photo></div>
+            <h2 class="pf-piece__title" data-piece-title></h2>
+            <p class="pf-piece__meta" data-piece-meta></p>
+            <dl class="pf-facts" data-piece-rows></dl>
+            <a class="button pf-buyback" data-buyback href="#">
+              <span class="button-text">{{ 'portfolio.request_buyback' | t }}</span>
+            </a>
+            <p class="pf-note">{{ 'portfolio.buyback_note' | t }}</p>
+          </div>
+          <div class="pf-piece__main">
+            <p class="pf-label">{{ 'portfolio.piece_value_label' | t }}</p>
+            <div class="pf-piece__value-row">
+              <div>
+                <p class="pf-piece__value" data-piece-value></p>
+                <p class="pf-piece__change" data-piece-change></p>
+              </div>
+              {%- render 'portfolio-ranges' -%}
+            </div>
+            <section class="pf-panel pf-panel--chart">
+              <div class="pf-chart" data-chart></div>
+              <div class="pf-axis" data-axis aria-hidden="true"></div>
+              <p class="pf-legend pf-legend--cost" data-cost-legend></p>
+            </section>
+            <p class="pf-note">{{ 'portfolio.piece_footnote' | t }} <span data-source></span></p>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="pf-signed-out">
+        <h1 class="{{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>
+          {%- if section.settings.title != blank -%}{{ section.settings.title }}{%- else -%}{{ 'portfolio.title' | t }}{%- endif -%}
+        </h1>
+        <p>{{ 'portfolio.sign_in_prompt' | t }}</p>
+        <a class="button" href="{{ routes.account_login_url }}">
+          <span class="button-text">{{ 'portfolio.sign_in' | t }}</span>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .portfolio {
+    --pf-accent-color: var(--pf-accent, var(--color-foreground));
+    --pf-border: var(--pf-card-border, rgb(var(--color-foreground-rgb) / var(--opacity-20, 0.2)));
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xl);
+  }
+
+  .portfolio [hidden] {
+    display: none !important;
+  }
+
+  .pf-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--gap-xl);
+  }
+
+  .pf-head h1,
+  .pf-signed-out h1 {
+    margin: 0;
+  }
+
+  .pf-eyebrow,
+  .pf-label {
+    margin: 0 0 var(--margin-2xs);
+    font-size: var(--font-size--xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .pf-links {
+    display: flex;
+    gap: var(--gap-xl);
+    font-size: var(--font-size--xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pf-links a,
+  .pf-link,
+  .pf-back {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .pf-status {
+    margin: 0;
+  }
+
+  .pf-status--error {
+    color: var(--color-error);
+  }
+
+  .pf-note {
+    margin: 0;
+    font-size: var(--font-size--xs);
+    opacity: 0.75;
+  }
+
+  .pf-signed-out {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-xl);
+  }
+
+  .pf-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xl);
+  }
+
+  /* ---- three cards ---- */
+  .pf-cards {
+    display: grid;
+    gap: var(--gap-xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .pf-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .pf-card,
+  .pf-panel {
+    border: 1px solid var(--pf-border);
+    background: var(--pf-card-bg, transparent);
+  }
+
+  .pf-card {
+    padding: var(--padding-3xl) var(--padding-xl);
+    text-align: center;
+  }
+
+  .pf-card__value {
+    margin: var(--margin-xs) 0;
+    font-family: var(--font-heading--family);
+    font-size: 2.125rem;
+    line-height: 1.1;
+    color: var(--pf-accent-color);
+  }
+
+  .pf-card__value.is-negative,
+  .pf-piece__change.is-negative,
+  .pf-cell.is-negative {
+    color: var(--color-error);
+  }
+
+  .pf-card__sub {
+    margin: 0;
+    font-size: var(--font-size--xs);
+    opacity: 0.75;
+  }
+
+  /* ---- chart ---- */
+  .pf-panel {
+    padding: var(--padding-3xl);
+    background: var(--pf-panel-bg, var(--pf-card-bg, transparent));
+  }
+
+  .pf-panel__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+    margin-block-end: var(--margin-xl);
+  }
+
+  .pf-panel__title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+  .pf-ranges {
+    display: flex;
+    gap: var(--gap-xs);
+  }
+
+  .pf-range {
+    min-width: 2.75rem;
+    min-height: 2.5rem;
+    padding: 0 var(--padding-md);
+    border: 1px solid var(--pf-border);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size--xs);
+    cursor: pointer;
+  }
+
+  .pf-range[aria-pressed='true'] {
+    background: var(--pf-accent-color);
+    border-color: var(--pf-accent-color);
+    color: var(--color-background);
+  }
+
+  .pf-chart {
+    position: relative;
+    height: 17rem;
+  }
+
+  .pf-chart__svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .pf-chart__grid {
+    stroke: rgb(var(--color-foreground-rgb) / 0.12);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pf-chart__area {
+    fill: color-mix(in srgb, var(--pf-accent-color) 9%, transparent);
+  }
+
+  .pf-chart__line {
+    fill: none;
+    stroke: var(--pf-accent-color);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pf-chart__cost {
+    stroke: rgb(var(--color-foreground-rgb) / 0.45);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pf-chart__empty {
+    margin: 0;
+    padding-block: var(--padding-4xl);
+    text-align: center;
+    opacity: 0.75;
+  }
+
+  .pf-marker {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border: 2px solid var(--pf-accent-color);
+    border-radius: 50%;
+    background: var(--color-background);
+    cursor: pointer;
+  }
+
+  .pf-marker::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+  }
+
+  .pf-tip {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    gap: var(--gap-md);
+    align-items: center;
+    padding: var(--padding-md);
+    transform: translate(-50%, calc(-100% - 16px));
+    background: var(--pf-accent-color);
+    color: var(--color-background);
+    font-size: var(--font-size--xs);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .pf-tip__thumb {
+    display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: rgb(255 255 255 / 0.2);
+  }
+
+  .pf-tip__thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pf-tip__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pf-axis {
+    position: relative;
+    height: 1.5rem;
+    margin-block-start: var(--margin-md);
+    font-size: var(--font-size--xs);
+    opacity: 0.75;
+  }
+
+  .pf-axis span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .pf-axis span:first-child {
+    transform: none;
+  }
+
+  .pf-axis span:last-child {
+    transform: translateX(-100%);
+  }
+
+  .pf-legend {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    margin: var(--margin-md) 0 0;
+    font-size: var(--font-size--xs);
+    opacity: 0.8;
+  }
+
+  .pf-legend__dot {
+    flex: none;
+    box-sizing: border-box;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--pf-accent-color);
+    border-radius: 50%;
+  }
+
+  .pf-legend--cost::before {
+    content: '';
+    flex: none;
+    width: 1.5rem;
+    border-top: 1px dashed currentColor;
+  }
+
+  /* ---- tabs and table ---- */
+  .pf-tabs {
+    display: flex;
+    gap: var(--gap-2xl);
+    margin-block-end: calc(var(--gap-3xl) * -0.5);
+  }
+
+  .pf-tab {
+    padding: 0 0 var(--padding-xs);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-size: 1.5rem;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+
+  .pf-tab[aria-selected='true'] {
+    border-bottom-color: var(--pf-accent-color);
+    opacity: 1;
+  }
+
+  .pf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size--sm);
+  }
+
+  .pf-table th {
+    padding: var(--padding-md) var(--padding-sm);
+    border-bottom: 1px solid var(--pf-border);
+    font-size: var(--font-size--xs);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .pf-row {
+    border-bottom: 1px solid var(--pf-border);
+  }
+
+  .pf-cell {
+    padding: var(--padding-lg) var(--padding-sm);
+    vertical-align: middle;
+  }
+
+  .pf-cell small {
+    display: block;
+    opacity: 0.7;
+  }
+
+  .pf-cell--strong {
+    font-weight: 500;
+  }
+
+  .pf-cell--actions {
+    text-align: right;
+    white-space: nowrap;
+    font-size: var(--font-size--xs);
+  }
+
+  .pf-cell--piece {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  .pf-thumb {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
+    background: rgb(var(--color-foreground-rgb) / 0.08);
+  }
+
+  .pf-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pf-piece-title {
+    display: block;
+    font-family: var(--font-heading--family);
+    font-size: 1.25rem;
+  }
+
+  .pf-piece-name small {
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pf-table thead {
+      display: none;
+    }
+
+    .pf-table,
+    .pf-table tbody {
+      display: block;
+    }
+
+    .pf-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 var(--gap-lg);
+      padding-block: var(--padding-lg);
+    }
+
+    .pf-cell {
+      padding: var(--padding-2xs) 0;
+    }
+
+    .pf-cell--piece,
+    .pf-cell--actions {
+      grid-column: 1 / -1;
+    }
+
+    .pf-cell--actions {
+      text-align: left;
+    }
+
+    .pf-cell[data-label]:not(.pf-cell--piece)::before {
+      content: attr(data-label);
+      display: block;
+      font-size: var(--font-size--xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+  }
+
+  .pf-log {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pf-log__item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-lg);
+    padding-block: var(--padding-lg);
+    border-bottom: 1px solid var(--pf-border);
+  }
+
+  .pf-log__date {
+    min-width: 8rem;
+    opacity: 0.75;
+  }
+
+  .pf-log__what {
+    flex: 1;
+  }
+
+  .pf-log__item.is-refunded {
+    opacity: 0.6;
+  }
+
+  .pf-log__tag {
+    font-size: var(--font-size--xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pf-footnotes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    font-size: var(--font-size--xs);
+    opacity: 0.8;
+  }
+
+  .pf-footnotes p {
+    margin: 0;
+  }
+
+  /* ---- one piece ---- */
+  .pf-piece {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xl);
+  }
+
+  .pf-back {
+    font-size: var(--font-size--xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pf-piece__grid {
+    display: grid;
+    gap: var(--gap-3xl);
+    grid-template-columns: 1fr;
+  }
+
+  @media screen and (min-width: 750px) {
+    .pf-piece__grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+
+  .pf-piece__side,
+  .pf-piece__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+  }
+
+  .pf-photo {
+    aspect-ratio: 1 / 1;
+    background: rgb(var(--color-foreground-rgb) / 0.08);
+  }
+
+  .pf-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pf-piece__title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 2.25rem;
+    font-weight: 400;
+  }
+
+  .pf-piece__meta {
+    margin: calc(var(--gap-lg) * -0.5) 0 0;
+    opacity: 0.75;
+  }
+
+  .pf-facts {
+    margin: 0;
+    border-top: 1px solid var(--pf-border);
+  }
+
+  .pf-facts__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+    padding-block: var(--padding-md);
+    border-bottom: 1px solid var(--pf-border);
+    font-size: var(--font-size--sm);
+  }
+
+  .pf-facts dt,
+  .pf-facts dd {
+    margin: 0;
+  }
+
+  .pf-facts dt {
+    opacity: 0.75;
+  }
+
+  .pf-buyback {
+    width: 100%;
+  }
+
+  .pf-piece__value-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+  }
+
+  .pf-piece__value {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 3rem;
+    line-height: 1.1;
+    color: var(--pf-accent-color);
+  }
+
+  .pf-piece__change {
+    margin: 0;
+    font-size: var(--font-size--sm);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Portfolio",
+  "tag": "section",
+  "class": "section-portfolio",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The customer's gold portfolio. Create a page called My Portfolio and give it the template 'portfolio'. The entries come from the app proxy; the gold price comes from the shop metafields."
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "default": "{{ settings.color_palette.color10 }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "default": "{{ settings.color_palette.color1 }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "My Portfolio"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "type_preset",
+      "label": "t:settings.preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "h1",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "t:settings.weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "line_height",
+      "label": "t:settings.line_height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "case",
+      "label": "t:settings.case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (numbers, chart line, active tab)",
+      "default": "{{ settings.color_palette.background }}"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card and table lines",
+      "default": "{{ settings.color_palette.color7 }}"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background"
+    },
+    {
+      "type": "color",
+      "id": "panel_background",
+      "label": "Chart panel background"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "select",
+      "id": "default_range",
+      "label": "Chart range when the page opens",
+      "options": [
+        {
+          "value": "1m",
+          "label": "1 month"
+        },
+        {
+          "value": "6m",
+          "label": "6 months"
+        },
+        {
+          "value": "1y",
+          "label": "1 year"
+        },
+        {
+          "value": "all",
+          "label": "All"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "text",
+      "id": "buyback_email",
+      "label": "Buyback requests go to",
+      "default": "helloauracapital@gmail.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_sample",
+      "label": "Show sample pieces in the theme editor",
+      "default": false,
+      "info": "Shows the sample pieces below, in place of real data, only while you are editing the theme. Customers on the live store never see them."
+    },
+    {
+      "type": "text",
+      "id": "sample_gram_price",
+      "label": "Sample: today's 18k price per gram",
+      "default": "104.57",
+      "info": "Only used for the sample pieces, so the preview does not depend on the real price."
+    },
+    {
+      "type": "header",
+      "content": "Connection"
+    },
+    {
+      "type": "text",
+      "id": "proxy_path",
+      "label": "App proxy path",
+      "default": "/apps/aura",
+      "info": "Subpath prefix and subpath of the app proxy. Leave as it is unless the proxy changes."
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "sample_piece",
+      "name": "Sample piece",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Only shown while 'Show sample pieces' is on."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Spiral Marquise Ring"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category",
+          "default": "Rings"
+        },
+        {
+          "type": "text",
+          "id": "variant",
+          "label": "Size or variant",
+          "default": "Size 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "weight_g",
+          "label": "Gold weight (g)",
+          "default": "4.00"
+        },
+        {
+          "type": "text",
+          "id": "price_per_g",
+          "label": "18k price per gram on the purchase day",
+          "default": "100.90"
+        },
+        {
+          "type": "text",
+          "id": "purchase_date",
+          "label": "Purchase date",
+          "default": "2026-06-20",
+          "info": "Year-month-day, for example 2026-06-20."
+        },
+        {
+          "type": "text",
+          "id": "order_name",
+          "label": "Order number",
+          "default": "#1042"
+        },
+        {
+          "type": "select",
+          "id": "status",
+          "label": "Status",
+          "options": [
+            {
+              "value": "active",
+              "label": "In your portfolio"
+            },
+            {
+              "value": "refunded",
+              "label": "Refunded"
+            }
+          ],
+          "default": "active"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -10,31 +10,41 @@
 {
   "sections": {
     "main": {
-      "type": "main-page",
+      "type": "portfolio",
       "blocks": {
-        "heading": {
-          "type": "text",
-          "name": "t:names.title",
+        "sample-1": {
+          "type": "sample_piece",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
-            "width": "100%",
-            "type_preset": "h2"
+            "title": "Spiral Marquise Ring",
+            "category": "Rings",
+            "variant": "Size 6",
+            "weight_g": "4.00",
+            "price_per_g": "100.90",
+            "purchase_date": "2026-06-20",
+            "order_name": "#1042",
+            "status": "active"
           }
         },
-        "page-content": {
-          "type": "page-content",
-          "settings": {}
+        "sample-2": {
+          "type": "sample_piece",
+          "settings": {
+            "title": "Rolo chain bracelet",
+            "category": "Bracelets",
+            "variant": "",
+            "weight_g": "4.10",
+            "price_per_g": "98.40",
+            "purchase_date": "2026-04-15",
+            "order_name": "#1018",
+            "status": "active"
+          }
         }
       },
       "block_order": [
-        "heading",
-        "page-content"
+        "sample-1",
+        "sample-2"
       ],
       "settings": {
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
-        "padding-block-end": 80
+        "preview_sample": true
       }
     }
   },

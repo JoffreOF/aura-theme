@@ -8,7 +8,7 @@
   assign render_wrapper = render_wrapper | default: true, allow_false: true
 -%}
 
-{%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+{%- if settings.cart_type == 'drawer' and template.name != 'cart' and template.suffix != 'pre-checkout' -%}
   {% if render_wrapper %}
     <div
       id="shopify-section-cart-drawer-section"
