@@ -93,11 +93,15 @@
             {%- if preview -%}
               {%- for block in section.blocks -%}
                 {%- if block.type == 'sample_piece' -%}
+                  {%- assign sample_image = '' -%}
+                  {%- if block.settings.image != blank -%}
+                    {%- assign sample_image = block.settings.image | image_url: width: 800 -%}
+                  {%- endif -%}
                   {
                     "title": {{ block.settings.title | json }},
                     "category": {{ block.settings.category | json }},
                     "variant": {{ block.settings.variant | json }},
-                    "image": {{ block.settings.image | image_url: width: 800 | json }},
+                    "image": {{ sample_image | json }},
                     "weight": {{ block.settings.weight_g | json }},
                     "price": {{ block.settings.price_per_g | json }},
                     "date": {{ block.settings.purchase_date | json }},
