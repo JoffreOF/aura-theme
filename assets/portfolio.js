@@ -209,9 +209,9 @@ export function axisTicks(from, end) {
 
 // ---------- sample data for designing the page without orders ----------
 
-export function sampleData() {
+function builtInSample() {
   const entry = (id, title, variant, category, weightG, micros, date, handle) => ({
-    id, title, variant, category, handle, image: null, weightG, purity: '18k', pricePerGramMicros: micros,
+    id, orderName: `#10${id}0`, title, variant, category, handle, image: null, weightG, purity: '18k', pricePerGramMicros: micros,
     costBasisCents: Number(productInCents(parseDec(weightG), parseDec(String(micros / 1_000_000)))),
     addedAt: `${date}T15:00:00Z`, status: 'active', statusUpdatedAt: null,
   });
@@ -236,6 +236,68 @@ export function sampleData() {
     gramPrice: '104.57',
     updatedAt: '2026-10-01T15:00:00Z',
   };
+}
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** A positive plain decimal, or null. */
+function positiveDec(text) {
+  try {
+    const d = parseDec(String(text ?? ''));
+    return d.n > 0n ? d : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The sample portfolio for designing the page: the pieces typed into the section's sample blocks in the theme editor
+ * (name, category, variant, photo, weight, price per gram, date, order number, status). A block with a missing or
+ * unreadable value is ignored; with no usable block the three wireframe pieces are used. The price history is
+ * drawn straight from each purchase price to today's sample price, so the chart agrees with the cost basis.
+ */
+export function sampleData(pieces = [], gramPrice = '104.57', today = limaDate(new Date().toISOString())) {
+  const todayPrice = positiveDec(gramPrice) ? String(gramPrice).trim() : '104.57';
+  const entries = [];
+  for (const piece of pieces || []) {
+    const weight = positiveDec(piece.weight);
+    const price = positiveDec(piece.price);
+    const date = String(piece.date ?? '').trim();
+    if (!piece.title || !weight || !price || !DATE.test(date) || Number.isNaN(dateMs(date))) continue;
+    entries.push({
+      id: entries.length + 1,
+      orderName: piece.orderName || null,
+      title: piece.title,
+      variant: piece.variant || null,
+      category: piece.category || null,
+      handle: null,
+      image: piece.image || null,
+      weightG: String(piece.weight).trim(),
+      purity: '18k',
+      pricePerGramMicros: Number((price.n * 1_000_000n) / 10n ** BigInt(price.scale)),
+      costBasisCents: Number(productInCents(weight, price)),
+      addedAt: `${date}T15:00:00Z`,
+      status: piece.status === 'refunded' ? 'refunded' : 'active',
+      statusUpdatedAt: null,
+    });
+  }
+  if (!entries.length) return builtInSample();
+
+  const anchors = new Map();
+  for (const e of entries) anchors.set(limaDate(e.addedAt), e.pricePerGramMicros / 1_000_000);
+  const sorted = [...anchors.entries()].sort(([a], [b]) => a.localeCompare(b));
+  if (sorted[sorted.length - 1][0] < today) sorted.push([today, Number(todayPrice)]);
+  const history = [];
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const [d0, p0] = sorted[i];
+    const [d1, p1] = sorted[i + 1];
+    const days = (dateMs(d1) - dateMs(d0)) / DAY;
+    for (let k = 0; k < days; k += 7) {
+      history.push([new Date(dateMs(d0) + k * DAY).toISOString().slice(0, 10), Math.round((p0 + ((p1 - p0) * k) / days) * 100) / 100]);
+    }
+  }
+  history.push([sorted[sorted.length - 1][0], sorted[sorted.length - 1][1]]);
+  return { entries, history, gramPrice: todayPrice, updatedAt: `${today}T15:00:00Z` };
 }
 
 // ---------- the page ----------
@@ -285,7 +347,7 @@ function init(root) {
   const pieceUrl = (id) => `${window.location.pathname}?piece=${encodeURIComponent(id)}`;
 
   async function load() {
-    if (config.preview) return { ok: true, ...sampleData() };
+    if (config.preview) return { ok: true, ...sampleData(config.sample, config.sampleGramPrice) };
     try {
       const query = pieceId && /^\d+$/.test(pieceId) ? `?piece=${pieceId}` : '';
       const response = await fetch(`${config.proxy}/portfolio${query}`, { headers: { Accept: 'application/json' } });
@@ -433,7 +495,7 @@ function init(root) {
       piece.append(thumb, name);
       const added = el('td', 'pf-cell');
       added.dataset.label = t.thAdded;
-      added.append(el('span', '', formatDate(limaDate(e.addedAt), locale)), el('small', '', t.purchased));
+      added.append(el('span', '', formatDate(limaDate(e.addedAt), locale)), el('small', '', [t.purchased, e.orderName].filter(Boolean).join(' · ')));
       const cells = [
         [t.thWeight, `${formatGrams(e.weightG)} g`],
         [t.thCost, formatMoney(BigInt(e.costBasisCents), locale)],
@@ -459,7 +521,7 @@ function init(root) {
       const item = el('li', 'pf-log__item');
       item.append(
         el('span', 'pf-log__date', formatDate(limaDate(e.addedAt), locale)),
-        el('span', 'pf-log__what', `${t.purchased} · ${e.title}`),
+        el('span', 'pf-log__what', `${t.purchased} · ${e.title}${e.orderName ? ` (${fmt(t.rowOrderValue, { order: e.orderName })})` : ''}`),
         el('span', 'pf-log__amount', formatMoney(BigInt(e.costBasisCents), locale)),
       );
       if (e.status === 'refunded') {
@@ -524,6 +586,7 @@ function init(root) {
 
     const rows = [
       [t.rowAdded, fmt(t.rowAddedValue, { date: formatDate(date, locale) })],
+      ...(entry.orderName ? [[t.rowOrder, entry.orderName]] : []),
       [t.rowWeight, fmt(t.rowWeightValue, { grams: formatGrams(entry.weightG) })],
       [t.rowPriceThen, `${formatGramPrice(entry.pricePerGramMicros, locale)} / g`],
       [t.rowCost, formatMoney(cost, locale)],

@@ -7,7 +7,14 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign preview = section.settings.preview_sample
+  comment
+    The sample pieces only ever show inside the theme editor (design mode), so a customer on the live store
+    can never see them, even if the setting is left on.
+  endcomment
+  assign preview = false
+  if section.settings.preview_sample and request.design_mode
+    assign preview = true
+  endif
   assign show_page = false
   if customer or preview
     assign show_page = true
@@ -81,6 +88,26 @@
           "gramPrice": {{ gram_price | json }},
           "history": {{ history | json }},
           "updatedAt": {{ updated_at | json }},
+          "sampleGramPrice": {{ section.settings.sample_gram_price | json }},
+          "sample": [
+            {%- if preview -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'sample_piece' -%}
+                  {
+                    "title": {{ block.settings.title | json }},
+                    "category": {{ block.settings.category | json }},
+                    "variant": {{ block.settings.variant | json }},
+                    "image": {{ block.settings.image | image_url: width: 800 | json }},
+                    "weight": {{ block.settings.weight_g | json }},
+                    "price": {{ block.settings.price_per_g | json }},
+                    "date": {{ block.settings.purchase_date | json }},
+                    "orderName": {{ block.settings.order_name | json }},
+                    "status": {{ block.settings.status | json }}
+                  }{% unless forloop.last %},{% endunless %}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          ],
           "strings": {
             "error": {{ 'portfolio.error' | t | json }},
             "signedOut": {{ 'portfolio.signed_out' | t | json }},
@@ -106,6 +133,8 @@
             "sinceDate": {{ 'portfolio.since_date' | t | json }},
             "rowAdded": {{ 'portfolio.row_added' | t | json }},
             "rowAddedValue": {{ 'portfolio.row_added_value' | t | json }},
+            "rowOrder": {{ 'portfolio.row_order' | t | json }},
+            "rowOrderValue": {{ 'portfolio.row_order_value' | t | json }},
             "rowWeight": {{ 'portfolio.row_weight' | t | json }},
             "rowWeightValue": {{ 'portfolio.row_weight_value' | t | json }},
             "rowPriceThen": {{ 'portfolio.row_price_then' | t | json }},
@@ -1433,9 +1462,16 @@
     {
       "type": "checkbox",
       "id": "preview_sample",
-      "label": "Show sample data (for designing the page)",
+      "label": "Show sample pieces in the theme editor",
       "default": false,
-      "info": "Shows three sample pieces to everyone, even signed out. Turn it off before the page goes live."
+      "info": "Shows the sample pieces below, in place of real data, only while you are editing the theme. Customers on the live store never see them."
+    },
+    {
+      "type": "text",
+      "id": "sample_gram_price",
+      "label": "Sample: today's 18k price per gram",
+      "default": "104.57",
+      "info": "Only used for the sample pieces, so the preview does not depend on the real price."
     },
     {
       "type": "header",
@@ -1447,6 +1483,84 @@
       "label": "App proxy path",
       "default": "/apps/aura",
       "info": "Subpath prefix and subpath of the app proxy. Leave as it is unless the proxy changes."
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "sample_piece",
+      "name": "Sample piece",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Only shown while 'Show sample pieces' is on."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "Spiral Marquise Ring"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category",
+          "default": "Rings"
+        },
+        {
+          "type": "text",
+          "id": "variant",
+          "label": "Size or variant",
+          "default": "Size 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "weight_g",
+          "label": "Gold weight (g)",
+          "default": "4.00"
+        },
+        {
+          "type": "text",
+          "id": "price_per_g",
+          "label": "18k price per gram on the purchase day",
+          "default": "100.90"
+        },
+        {
+          "type": "text",
+          "id": "purchase_date",
+          "label": "Purchase date",
+          "default": "2026-06-20",
+          "info": "Year-month-day, for example 2026-06-20."
+        },
+        {
+          "type": "text",
+          "id": "order_name",
+          "label": "Order number",
+          "default": "#1042"
+        },
+        {
+          "type": "select",
+          "id": "status",
+          "label": "Status",
+          "options": [
+            {
+              "value": "active",
+              "label": "In your portfolio"
+            },
+            {
+              "value": "refunded",
+              "label": "Refunded"
+            }
+          ],
+          "default": "active"
+        }
+      ]
     }
   ]
 }
