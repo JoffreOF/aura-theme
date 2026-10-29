@@ -1,0 +1,10 @@
+{%- doc -%}
+  The 1M / 6M / 1Y / All buttons above a portfolio chart. The page script wires them up.
+{%- enddoc -%}
+
+<div class="pf-ranges" role="group" aria-label="{{ 'portfolio.range_label' | t }}">
+  <button type="button" class="pf-range" data-range="1m" aria-pressed="false">{{ 'portfolio.range_1m' | t }}</button>
+  <button type="button" class="pf-range" data-range="6m" aria-pressed="false">{{ 'portfolio.range_6m' | t }}</button>
+  <button type="button" class="pf-range" data-range="1y" aria-pressed="false">{{ 'portfolio.range_1y' | t }}</button>
+  <button type="button" class="pf-range" data-range="all" aria-pressed="true">{{ 'portfolio.range_all' | t }}</button>
+</div>
