@@ -338,6 +338,7 @@ function init(root) {
   };
   for (const key of Object.keys(config.strings)) config.strings[key] = decode(config.strings[key]);
   const t = config.strings;
+  debug(root, `portfolio.js started. preview=${config.preview}, sample pieces=${(config.sample || []).length}, gram price=${config.sampleGramPrice || config.gramPrice}`);
   const locale = config.locale || 'en-US';
   const $ = (selector, scope = root) => scope.querySelector(selector);
   const $$ = (selector, scope = root) => [...scope.querySelectorAll(selector)];
@@ -627,6 +628,7 @@ function init(root) {
   // ---- go ----
   show('loading');
   load().then((data) => {
+    debug(root, `data: ok=${data.ok}, entries=${(data.entries || []).length}, price=${data.gramPrice}`);
     if (!data.ok) {
       if (data.reason === 'signed_out') return show('error', t.signedOut);
       return show('error', t.error);
@@ -637,6 +639,7 @@ function init(root) {
     return renderDashboard(data);
   }).catch((error) => {
     console.error('portfolio', error);
+    debug(root, `crashed while drawing: ${error && error.message}`);
     show('error', t.error);
   });
 }
@@ -647,8 +650,21 @@ function boot(scope) {
   scope.querySelectorAll('[data-portfolio]').forEach((node) => {
     if (node.dataset.pfReady) return;
     node.dataset.pfReady = '1';
-    init(node);
+    try {
+      init(node);
+    } catch (error) {
+      console.error('portfolio', error);
+      debug(node, `crashed while starting: ${error && error.message}`);
+    }
   });
+}
+
+// Only the theme editor renders [data-debug] (see the section); on the live store this does nothing.
+function debug(root, message) {
+  const node = root.querySelector('[data-debug]');
+  if (!node) return;
+  node.dataset.state = 'started';
+  node.append(document.createElement('br'), message);
 }
 
 if (typeof document !== 'undefined') {
