@@ -196,6 +196,8 @@
     "since_date": "{change} ({percent}) since {date}",
     "row_added": "Added",
     "row_added_value": "{date} · purchased",
+    "row_order": "Order",
+    "row_order_value": "Order {order}",
     "row_weight": "Gold weight",
     "row_weight_value": "{grams} g of 18k gold",
     "row_price_then": "18k price on that day",

@@ -11,7 +11,41 @@
   "sections": {
     "main": {
       "type": "portfolio",
-      "settings": {}
+      "blocks": {
+        "sample-1": {
+          "type": "sample_piece",
+          "settings": {
+            "title": "Spiral Marquise Ring",
+            "category": "Rings",
+            "variant": "Size 6",
+            "weight_g": "4.00",
+            "price_per_g": "100.90",
+            "purchase_date": "2026-06-20",
+            "order_name": "#1042",
+            "status": "active"
+          }
+        },
+        "sample-2": {
+          "type": "sample_piece",
+          "settings": {
+            "title": "Rolo chain bracelet",
+            "category": "Bracelets",
+            "variant": "",
+            "weight_g": "4.10",
+            "price_per_g": "98.40",
+            "purchase_date": "2026-04-15",
+            "order_name": "#1018",
+            "status": "active"
+          }
+        }
+      },
+      "block_order": [
+        "sample-1",
+        "sample-2"
+      ],
+      "settings": {
+        "preview_sample": true
+      }
     }
   },
   "order": [
