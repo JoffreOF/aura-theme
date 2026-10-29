@@ -167,10 +167,14 @@ export function yDomain(points, floor = 0) {
 
 /** Where the points sit as percentages of the chart box, plus an SVG path for the line and the area. */
 export function chartGeometry(points, domain, from, end) {
-  const span = Math.max(dateMs(end) - dateMs(from), 1);
-  const x = (d) => ((dateMs(d) - dateMs(from)) / span) * 100;
+  const span = dateMs(end) - dateMs(from);
+  // Everything happened on one day (a first purchase today): there is no time to spread the points over,
+  // so draw one flat line across the whole width, with the marker at its start.
+  const sameDay = span < DAY;
+  const x = (d) => (sameDay ? 0 : ((dateMs(d) - dateMs(from)) / span) * 100);
   const y = (v) => 100 - ((v - domain.min) / (domain.max - domain.min)) * 100;
-  const coords = points.map((p) => [x(p.date), y(p.value)]);
+  const shown = sameDay && points.length === 1 ? [points[0], points[0]] : points;
+  const coords = shown.map((p, i) => [sameDay ? (i / (shown.length - 1)) * 100 : x(p.date), y(p.value)]);
   const line = coords.map(([cx, cy], i) => `${i ? 'L' : 'M'}${cx.toFixed(3)} ${cy.toFixed(3)}`).join(' ');
   const area = `${line} L${coords[coords.length - 1][0].toFixed(3)} 100 L${coords[0][0].toFixed(3)} 100 Z`;
   return { x, y, line, area };
