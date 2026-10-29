@@ -159,7 +159,9 @@ export function buildSeries({ entries, history, gramPrice, start, end }) {
 export function yDomain(points, floor = 0) {
   const values = points.map((p) => p.value);
   const max = Math.max(...values);
-  if (floor === 0) return { min: 0, max: max * 1.12 || 1 };
+  // Nothing has moved yet (every value the same): leave more room above, so the line sits near the middle.
+  const flat = Math.min(...values) === max;
+  if (floor === 0) return { min: 0, max: max * (flat ? 1.7 : 1.12) || 1 };
   const min = Math.min(...values, floor);
   const pad = Math.max((max - min) * 0.2, max * 0.01, 0.5);
   return { min: Math.max(0, min - pad), max: max + pad };
@@ -633,7 +635,23 @@ function init(root) {
     if (!data.gramPrice) return show('error', t.noPrice);
     if (pieceId || (config.preview && new URLSearchParams(window.location.search).has('piece'))) return renderPiece(data);
     return renderDashboard(data);
+  }).catch((error) => {
+    console.error('portfolio', error);
+    show('error', t.error);
   });
 }
 
-if (typeof document !== 'undefined') document.querySelectorAll('[data-portfolio]').forEach(init);
+// The theme editor redraws a section whenever it is edited, and a module script runs only once per page,
+// so start again on every section load. Each portfolio element is started once.
+function boot(scope) {
+  scope.querySelectorAll('[data-portfolio]').forEach((node) => {
+    if (node.dataset.pfReady) return;
+    node.dataset.pfReady = '1';
+    init(node);
+  });
+}
+
+if (typeof document !== 'undefined') {
+  boot(document);
+  document.addEventListener('shopify:section:load', () => boot(document));
+}
