@@ -110,6 +110,12 @@
     "view_store_information": "View store information",
     "sort": "Sort"
   },
+  "aura_filters": {
+    "piece_count": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    }
+  },
   "cart_aura": {
     "pieces": {
       "one": "{{ count }} piece",
