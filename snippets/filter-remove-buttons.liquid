@@ -7,6 +7,7 @@
   @param {boolean} show_filter_label - Whether to show the filter label
   @param {string} results_url - The results URL
   @param {boolean} should_show_clear_all - Whether to show the clear all button
+  @param {string} [form_id] - id of the facets form component the buttons act on (default: the one they sit in)
 {%- enddoc -%}
 
 <div class="facets-remove facets-remove--mobile-and-vertical">
@@ -28,8 +29,8 @@
         data-url="{{ filter.url_to_remove }}"
         tabindex="0"
         role="button"
-        on:click="/removeFilter?form="
-        on:keydown="/removeFilter?form="
+        on:click="/removeFilter?form={{ form_id }}"
+        on:keydown="/removeFilter?form={{ form_id }}"
       >
         {%- if filter.min_value.value != null and filter.max_value.value != null %}
           <bdi>{{ filter.min_value.value | money }}–{{ filter.max_value.value | money }}</bdi>
@@ -58,8 +59,8 @@
           data-url="{{ value.url_to_remove }}"
           tabindex="0"
           role="button"
-          on:click="/removeFilter?form="
-          on:keydown="/removeFilter?form="
+          on:click="/removeFilter?form={{ form_id }}"
+          on:keydown="/removeFilter?form={{ form_id }}"
         >
           {% if value.swatch %}
             {% render 'swatch', swatch: value.swatch, mode: 'pill' %}
@@ -87,8 +88,8 @@
         type="button"
         class="button-unstyled facets__clear-all-link"
         ref="clearButton"
-        on:click="/removeFilter?form="
-        on:keydown="/removeFilter?form="
+        on:click="/removeFilter?form={{ form_id }}"
+        on:keydown="/removeFilter?form={{ form_id }}"
       >
         {{- 'actions.clear_all' | t -}}
       </button>
