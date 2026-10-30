@@ -77,6 +77,48 @@
 
   # Use collection.id if available (normal collection). Don't fall back to handle — non-numeric IDs fail GID validation.
   assign collection_id = results.id | default: collection.id
+
+  # Aura collection page: toolbar and sidebar controls (sidebar style only)
+  assign is_vertical = false
+  if block_settings.filter_style == 'vertical'
+    assign is_vertical = true
+  endif
+
+  assign hide_sort_values = ''
+  if block_settings.show_sort_title_ascending == false
+    assign hide_sort_values = hide_sort_values | append: 'title-ascending,'
+  endif
+  if block_settings.show_sort_title_descending == false
+    assign hide_sort_values = hide_sort_values | append: 'title-descending,'
+  endif
+  if block_settings.show_sort_created_ascending == false
+    assign hide_sort_values = hide_sort_values | append: 'created-ascending,'
+  endif
+  if block_settings.show_sort_created_descending == false
+    assign hide_sort_values = hide_sort_values | append: 'created-descending,'
+  endif
+
+  assign chips_in_toolbar = false
+  if is_vertical and block_settings.enable_filtering and block_settings.chips_in_toolbar
+    assign chips_in_toolbar = true
+  endif
+  assign overflow_form_id = 'FacetFiltersFormComponent--' | append: section.id | append: '-overflow'
+
+  assign facets_modifiers = ''
+  if block_settings.show_group_dividers == false
+    assign facets_modifiers = facets_modifiers | append: ' facets--no-dividers'
+  endif
+  if block_settings.collapsible_groups == false
+    assign facets_modifiers = facets_modifiers | append: ' facets--static-groups'
+  endif
+  if block_settings.checkbox_shape == 'round'
+    assign facets_modifiers = facets_modifiers | append: ' facets--round-checks'
+  endif
+  assign facets_modifiers = facets_modifiers | append: ' facets--title-' | append: block_settings.group_title_size
+  assign facets_aura_style = ''
+  if block_settings.checkbox_color != blank
+    assign facets_aura_style = ' --facets-check-color: ' | append: block_settings.checkbox_color | append: ';'
+  endif
 -%}
 
 {%- liquid
@@ -109,25 +151,35 @@
   {% if block_settings.filter_style == 'vertical' %}
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
-      class="facets facets--horizontal facets-controls-wrapper spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
+      class="facets facets--horizontal facets-controls-wrapper facets-controls-wrapper--aura spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
-      {% if block_settings.enable_filtering %}
+      {% if block_settings.enable_filtering and block_settings.show_filters_title %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
       {% endif %}
 
       <div
-        class="products-count-wrapper"
+        class="products-count-wrapper{% unless block_settings.show_results_count %} products-count-wrapper--off{% endunless %}"
         data-testid="products-count"
       >
         <span role="status">
           {% if products_count > 25000 %}
             {{- 'content.item_count_cutoff' | t: count: 25000 -}}
           {% else %}
-            {{- 'content.item_count' | t: count: products_count -}}
+            {{- 'aura_filters.piece_count' | t: count: products_count -}}
           {% endif %}
         </span>
       </div>
+
+      {% if chips_in_toolbar %}
+        {% render 'filter-remove-buttons',
+          filters: filters,
+          results_url: results_url,
+          show_filter_label: block_settings.show_filter_label,
+          should_show_clear_all: true,
+          form_id: overflow_form_id
+        %}
+      {% endif %}
 
       {% if block_settings.enable_sorting %}
         {% render 'sorting',
@@ -137,7 +189,10 @@
           suffix: 'desktop',
           sort_position: 'desktop',
           should_use_select_on_mobile: false,
-          section_id: section.id
+          section_id: section.id,
+          sort_style: block_settings.sort_style,
+          show_label: block_settings.show_sort_label,
+          hide_values: hide_sort_values
         %}
       {% endif %}
 
@@ -154,6 +209,7 @@
       {% endif %}
       facets-block-wrapper
       facets-block-wrapper--{{ block_settings.filter_style }}
+      {%- if is_vertical %} facets-block-wrapper--width-{{ block_settings.sidebar_width }}{% if block_settings.sidebar_sticky %} facets-block-wrapper--sticky{% endif %}{% endif %}
       {%- if has_custom_color %} color-custom-{{ block.id }}{% endif %}
       {%- if block_settings.filter_width == 'full-width' %} facets-block-wrapper--full-width{% endif %}
     "
@@ -171,8 +227,8 @@
     {{ block.shopify_attributes }}
   >
     <div
-      class="facets facets--{{ block_settings.filter_style }} spacing-style"
-      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
+      class="facets facets--{{ block_settings.filter_style }}{% if is_vertical %}{{ facets_modifiers }}{% endif %} spacing-style"
+      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}{{ facets_aura_style }}"
       aria-label="{{ 'accessibility.filters' | t }}"
     >
       <facets-form-component
@@ -191,12 +247,14 @@
           ref="facetsForm"
         >
           {% if should_show_pane %}
-            {% render 'filter-remove-buttons',
-              filters: filters,
-              results_url: results_url,
-              show_filter_label: block_settings.show_filter_label,
-              should_show_clear_all: true
-            %}
+            {% unless chips_in_toolbar %}
+              {% render 'filter-remove-buttons',
+                filters: filters,
+                results_url: results_url,
+                show_filter_label: block_settings.show_filter_label,
+                should_show_clear_all: true
+              %}
+            {% endunless %}
 
             {% if block_settings.enable_filtering %}
               {% assign total_active_values = 0 %}
@@ -232,7 +290,7 @@
                         else
                           assign should_render_clear = false
                         endif
-                        render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id
+                        render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id, show_counts: block_settings.show_value_counts
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -299,7 +357,10 @@
                   suffix: 'desktop',
                   sort_position: 'desktop',
                   should_use_select_on_mobile: false,
-                  section_id: section.id
+                  section_id: section.id,
+                  sort_style: block_settings.sort_style,
+                  show_label: block_settings.show_sort_label,
+                  hide_values: hide_sort_values
                 %}
               {% endif %}
 
@@ -391,7 +452,8 @@
               suffix: 'mobile',
               sort_position: 'mobile',
               should_use_select_on_mobile: should_use_select_on_mobile,
-              section_id: section.id
+              section_id: section.id,
+              hide_values: hide_sort_values
             %}
           </form>
         </facets-form-component>
@@ -491,7 +553,7 @@
 
                         assign active_value_count = filter.active_values | size
                         assign total_active_values = total_active_values | plus: active_value_count
-                        render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id
+                        render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id, show_counts: block_settings.show_value_counts
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -505,7 +567,8 @@
                 filter_style: block_settings.filter_style,
                 suffix: 'overflow',
                 should_use_select_on_mobile: should_use_select_on_mobile,
-                section_id: section.id
+                section_id: section.id,
+                hide_values: hide_sort_values
               %}
             {% endif %}
           </scroll-hint>
@@ -1299,6 +1362,111 @@
     height: var(--font-paragraph--size);
     position: absolute;
   }
+
+  /* ---- Aura collection page: toolbar (count, chips, sort) ---- */
+  .products-count-wrapper.products-count-wrapper--off {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .facets-controls-wrapper--aura {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--gap-md) var(--gap-xl);
+      padding-block-end: var(--padding-lg);
+    }
+
+    .facets-controls-wrapper--aura .products-count-wrapper {
+      margin-inline-start: 0;
+      text-transform: none;
+      color: var(--color-foreground);
+    }
+
+    .facets-controls-wrapper--aura .sorting-filter {
+      margin-inline-start: auto;
+    }
+
+    .facets.facets--horizontal.facets-controls-wrapper--aura .facets-remove:has(facet-remove-component) {
+      display: flex;
+      flex: 0 1 auto;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .facets-controls-wrapper--aura .facets-remove__pill {
+      border: var(--style-border-width) solid currentcolor;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--color-foreground);
+      cursor: pointer;
+    }
+
+    .facets-controls-wrapper--aura .facets__clear-all-link {
+      display: inline-flex;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      font-size: var(--font-size--xs);
+    }
+  }
+
+  /* ---- Aura collection page: sidebar ---- */
+  @media screen and (min-width: 750px) {
+    .collection-wrapper:has(.facets-block-wrapper--width-narrow) {
+      --facets-vertical-col-width: 5;
+    }
+
+    .collection-wrapper:has(.facets-block-wrapper--width-wide) {
+      --facets-vertical-col-width: 7;
+    }
+
+    .facets-block-wrapper--sticky {
+      position: sticky;
+      top: calc(var(--sticky-header-offset, 0px) + var(--padding-xl));
+      align-self: start;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .collection-wrapper:has(.facets-block-wrapper--width-narrow) {
+      --facets-vertical-col-width: 4;
+    }
+
+    .collection-wrapper:has(.facets-block-wrapper--width-wide) {
+      --facets-vertical-col-width: 6;
+    }
+  }
+
+  .facets--vertical.facets--title-small .facets__summary {
+    font-size: var(--font-size--xs);
+  }
+
+  .facets--vertical.facets--title-medium .facets__summary {
+    font-size: var(--font-size--sm);
+  }
+
+  .facets.facets--no-dividers.facets--vertical .facets__item::before {
+    content: none;
+  }
+
+  .facets--static-groups .facets__summary {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .facets--static-groups .facets__summary .icon-caret {
+    display: none;
+  }
+
+  .facets--round-checks .checkbox .icon-checkmark {
+    border-radius: 50%;
+  }
+
+  .facets .checkbox__input:checked + .checkbox__label .icon-checkmark {
+    background-color: var(--facets-check-color, var(--color-foreground));
+    border-color: var(--facets-check-color, var(--color-foreground));
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -1389,6 +1557,175 @@
       "id": "enable_grid_density",
       "label": "t:settings.enable_grid_density",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Toolbar (sidebar style)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters_title",
+      "label": "Show the word \"Filters\"",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_results_count",
+      "label": "Show the number of pieces",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "chips_in_toolbar",
+      "label": "Show chosen filters and \"Clear all\" in the toolbar",
+      "info": "Off keeps them at the top of the sidebar.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sorting"
+    },
+    {
+      "type": "select",
+      "id": "sort_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "popover",
+          "label": "Menu (theme default)"
+        },
+        {
+          "value": "boxed",
+          "label": "Box showing the current choice"
+        }
+      ],
+      "default": "boxed"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_label",
+      "label": "Show the word \"Sort\"",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_title_ascending",
+      "label": "Offer: Alphabetically, A-Z",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_title_descending",
+      "label": "Offer: Alphabetically, Z-A",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_created_ascending",
+      "label": "Offer: Date, old to new",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_created_descending",
+      "label": "Offer: Date, new to old",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "standard",
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "sidebar_sticky",
+      "label": "Keep the sidebar in view while scrolling",
+      "default": true,
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_value_counts",
+      "label": "Show how many pieces each choice has",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_group_dividers",
+      "label": "Lines between groups",
+      "default": true,
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsible_groups",
+      "label": "Groups can be opened and closed",
+      "default": false,
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "select",
+      "id": "group_title_size",
+      "label": "Group title size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small",
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "select",
+      "id": "checkbox_shape",
+      "label": "Checkbox shape",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "round",
+          "label": "Round"
+        }
+      ],
+      "default": "square",
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "color",
+      "id": "checkbox_color",
+      "label": "Checked checkbox colour",
+      "info": "Empty uses the text colour."
     },
     {
       "type": "header",

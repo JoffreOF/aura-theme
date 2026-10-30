@@ -8,10 +8,13 @@
   @param {string} [sort_position] - { 'desktop' | 'mobile' } Used in a data-testID selector for automated testing
   @param {boolean} should_use_select_on_mobile - Whether to use a select element for the sorting component on mobile
   @param {string} section_id - The section ID
+  @param {string} [sort_style] - 'popover' (default) or 'boxed': label, then a bordered box showing the current option (desktop toolbar only)
+  @param {boolean} [show_label] - false hides the word "Sort" visually (it stays for screen readers)
+  @param {string} [hide_values] - sort values to leave out, comma separated, e.g. 'title-ascending,title-descending'
 {%- enddoc -%}
 
 <sorting-filter-component
-  class="sorting-filter{% if filter_style == 'horizontal' %} sorting-filter__horizontal{% endif %}"
+  class="sorting-filter{% if filter_style == 'horizontal' %} sorting-filter__horizontal{% endif %}{% if sort_style == 'boxed' and suffix == 'desktop' %} sorting-filter--boxed{% endif %}"
   on:change="/updateFilterAndSorting"
   on:keydown="/handleKeyDown"
   {% if sort_position != blank %}
@@ -45,14 +48,22 @@
         {% endif %}
       >
         {% for option in results.sort_options %}
-          <option
-            value="{{ option.value }}"
-            {% if option.value == sort_by %}
-              selected
-            {% endif %}
-          >
-            {{ option.name }}
-          </option>
+          {% liquid
+            assign skip_option = false
+            if hide_values != blank and hide_values contains option.value and option.value != sort_by
+              assign skip_option = true
+            endif
+          %}
+          {% unless skip_option %}
+            <option
+              value="{{ option.value }}"
+              {% if option.value == sort_by %}
+                selected
+              {% endif %}
+            >
+              {{ option.name }}
+            </option>
+          {% endunless %}
         {% endfor %}
       </select>
       <svg
@@ -85,18 +96,20 @@
         ref="summary"
       >
         <span
-          class="facets__label"
+          class="facets__label{% if show_label == false %} visually-hidden{% endif %}"
           id="sort-label-{{ section_id }}"
         >
           {{- 'actions.sort' | t -}}
         </span>
-        <span
-          class="facets__status h6 desktop:hidden"
-        >
-          {{- status -}}
-        </span>
-        <span class="svg-wrapper icon-caret icon-animated">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
+        <span class="sorting-filter__box">
+          <span
+            class="facets__status h6{% unless sort_style == 'boxed' and suffix == 'desktop' %} desktop:hidden{% endunless %}"
+          >
+            {{- status -}}
+          </span>
+          <span class="svg-wrapper icon-caret icon-animated">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
         </span>
       </summary>
       <floating-panel-component
@@ -108,6 +121,13 @@
       >
         <div class="sorting-filter__options-inner">
           {% for option in results.sort_options %}
+            {% liquid
+              assign skip_option = false
+              if hide_values != blank and hide_values contains option.value and option.value != sort_by
+                assign skip_option = true
+              endif
+            %}
+            {% if skip_option %}{% continue %}{% endif %}
             <label
               for="sort-option-{{ option.value }}-{{ section_id }}"
             >
@@ -215,6 +235,38 @@
   .sorting-filter {
     @media screen and (min-width: 750px) {
       z-index: var(--facets-upper-z-index);
+    }
+  }
+
+  .sorting-filter__box {
+    display: contents;
+  }
+
+  @media screen and (min-width: 750px) {
+    .sorting-filter--boxed .facets__summary {
+      justify-content: flex-start;
+      align-items: center;
+      gap: var(--gap-md);
+    }
+
+    .sorting-filter--boxed .sorting-filter__box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--gap-lg);
+      min-width: 9.5rem;
+      padding: var(--padding-xs) var(--padding-md);
+      border: var(--style-border-width) solid rgb(var(--color-foreground-rgb) / 0.3);
+      border-radius: var(--style-border-radius-inputs);
+      color: var(--color-foreground);
+    }
+
+    .facets--horizontal .sorting-filter.sorting-filter--boxed .facets__status,
+    .facets--horizontal .sorting-filter.sorting-filter--boxed .facets__panel[open] .facets__status {
+      display: inline;
+      margin: 0;
+      font-size: var(--font-size--sm);
+      font-weight: 400;
     }
   }
 
