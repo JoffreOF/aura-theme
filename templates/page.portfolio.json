@@ -18,6 +18,7 @@
             "title": "Spiral Marquise Ring",
             "category": "Rings",
             "variant": "Size 6",
+            "image": "shopify://shop_images/ProductPlaceholder.jpg",
             "weight_g": "4.00",
             "price_per_g": "100.90",
             "purchase_date": "2026-06-20",
@@ -31,6 +32,7 @@
             "title": "Rolo chain bracelet",
             "category": "Bracelets",
             "variant": "",
+            "image": "shopify://shop_images/ProductPlaceholder.jpg",
             "weight_g": "4.10",
             "price_per_g": "98.40",
             "purchase_date": "2026-04-15",
@@ -44,7 +46,29 @@
         "sample-2"
       ],
       "settings": {
-        "preview_sample": true
+        "section_width": "page-width",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding-block-start": 40,
+        "padding-block-end": 80,
+        "title": "My Portfolio",
+        "alignment": "left",
+        "type_preset": "custom",
+        "font": "var(--font-heading--family)",
+        "font_size": "3rem",
+        "weight": "300",
+        "line_height": "normal",
+        "letter_spacing": "normal",
+        "case": "none",
+        "accent_color": "{{ settings.color_palette.background }}",
+        "card_border_color": "{{ settings.color_palette.color7 }}",
+        "card_background": "",
+        "panel_background": "",
+        "default_range": "all",
+        "buyback_email": "helloauracapital@gmail.com",
+        "preview_sample": true,
+        "sample_gram_price": "104.57",
+        "proxy_path": "/apps/aura"
       }
     }
   },
