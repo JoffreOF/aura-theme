@@ -266,7 +266,7 @@
             "card-gallery": {
               "type": "_product-card-gallery",
               "settings": {
-                "image_ratio": "portrait",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -282,7 +282,7 @@
             "group": {
               "type": "_product-card-group",
               "settings": {
-                "content_direction": "row",
+                "content_direction": "column",
                 "vertical_on_mobile": true,
                 "horizontal_alignment": "space-between",
                 "vertical_alignment": "flex-start",
@@ -328,8 +328,8 @@
                     "align_baseline": false,
                     "horizontal_alignment_flex_direction_column": "flex-start",
                     "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 0,
-                    "width": "custom",
+                    "gap": 4,
+                    "width": "fill",
                     "custom_width": 60,
                     "width_mobile": "fill",
                     "custom_width_mobile": 100,
@@ -356,17 +356,46 @@
                     "padding-inline-end": 0
                   },
                   "blocks": {
+                    "product_eyebrow_mXcnAq": {
+                      "type": "product-eyebrow",
+                      "name": "Product eyebrow",
+                      "settings": {
+                        "show_category": true,
+                        "show_stone": true,
+                        "separator": "·",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "loose",
+                        "case": "uppercase",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
                     "product_title_GDE6KA": {
                       "type": "product-title",
                       "name": "t:names.product_title",
                       "settings": {
-                        "width": "fit-content",
+                        "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
-                        "type_preset": "h5",
-                        "font": "var(--font-body--family)",
-                        "font_size": "1rem",
-                        "weight": "",
+                        "type_preset": "custom",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.375rem",
+                        "weight": "400",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -388,12 +417,12 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
-                        "type_preset": "h5",
+                        "type_preset": "custom",
                         "width": "100%",
                         "alignment": "left",
                         "font": "var(--font-body--family)",
                         "font_size": "1rem",
-                        "weight": "",
+                        "weight": "500",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
@@ -404,74 +433,50 @@
                         "padding-inline-end": 0
                       },
                       "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "product_title_GDE6KA",
-                    "price_prVYBm"
-                  ]
-                },
-                "group_njW3rP": {
-                  "type": "_product-card-group",
-                  "name": "t:names.group",
-                  "settings": {
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "flex-start",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 0,
-                    "width": "fill",
-                    "custom_width": 40,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "background_media": "none",
-                    "background_color": "",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "swatches_4LLXdb": {
-                      "type": "swatches",
+                    },
+                    "product_installments_niNjfH": {
+                      "type": "product-installments",
+                      "name": "Installments",
                       "settings": {
-                        "product_swatches_alignment": "flex-end",
-                        "product_swatches_alignment_mobile": "flex-start",
-                        "hide_padding": false,
-                        "product_swatches_padding_top": 0,
-                        "product_swatches_padding_bottom": 0,
-                        "product_swatches_padding_left": 0,
-                        "product_swatches_padding_right": 0
+                        "payments": 6,
+                        "show_icon": true,
+                        "type_preset": "paragraph",
+                        "alignment": "left",
+                        "text_color": "",
+                        "padding-block-start": 4,
+                        "padding-block-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "product_gold_breakdown_yhhPn6": {
+                      "type": "product-gold-breakdown",
+                      "name": "Gold breakdown",
+                      "settings": {
+                        "show_weight": true,
+                        "weight_decimals": "1",
+                        "gold_color": "#C4A35A",
+                        "track_color": "",
+                        "bar_height": 4,
+                        "row_gap": 6,
+                        "type_preset": "paragraph",
+                        "text_color": "",
+                        "padding-block-start": 12,
+                        "padding-block-end": 0
                       },
                       "blocks": {}
                     }
                   },
                   "block_order": [
-                    "swatches_4LLXdb"
+                    "product_eyebrow_mXcnAq",
+                    "product_title_GDE6KA",
+                    "price_prVYBm",
+                    "product_installments_niNjfH",
+                    "product_gold_breakdown_yhhPn6"
                   ]
                 }
               },
               "block_order": [
-                "group_wwVYk6",
-                "group_njW3rP"
+                "group_wwVYk6"
               ]
             }
           },
