@@ -8,6 +8,7 @@
   @param {boolean} [should_render_clear] - Whether to render the clear button
   @param {boolean} [show_swatch_label] - Whether to show the swatch label
   @param {boolean} [in_drawer] - Whether the filter is in a drawer
+  @param {boolean} [show_counts] - Whether to show how many products each value has
 {%- enddoc -%}
 
 {% render 'variant-picker-styles' %}
@@ -368,10 +369,17 @@
                       </label>
                     </div>
                   {% else %}
+                    {% liquid
+                      assign value_count = nil
+                      if show_counts
+                        assign value_count = value.count
+                      endif
+                    %}
                     {% render 'checkbox',
                       name: value.param_name,
                       value: value.value,
                       label: value.label,
+                      count: value_count,
                       checked: value.active,
                       id: input_id,
                       disabled: is_disabled,
