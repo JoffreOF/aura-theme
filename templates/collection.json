@@ -251,6 +251,24 @@
         "padding-block-end": 36
       }
     },
+    "collection_tabs_WtnAWt": {
+      "type": "collection-tabs",
+      "name": "Collection tabs",
+      "settings": {
+        "menu": "collections",
+        "section_width": "page-width",
+        "alignment": "start",
+        "gap": 32,
+        "font": "body",
+        "font_size": "0.8125rem",
+        "letter_spacing": "loose",
+        "uppercase": true,
+        "background_color": "",
+        "text_color": "",
+        "padding-block-start": 12,
+        "padding-block-end": 12
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -557,6 +575,7 @@
   },
   "order": [
     "section",
+    "collection_tabs_WtnAWt",
     "main"
   ]
 }
