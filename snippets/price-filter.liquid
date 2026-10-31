@@ -5,6 +5,7 @@
   @param {string} filter_style - The filter style, can be 'horizontal' or 'vertical'.
   @param {boolean} [should_render_clear] - Whether to render the clear button.
   @param {string} [id_prefix] - Unique prefix to avoid duplicate IDs when rendered multiple times.
+  @param {boolean} [compact] - Boxes read "$ min" and "$ max", with no "to" between them and no highest-price line.
 
   @example
   {% render 'price-filter', filter: filter, filter_style: 'vertical', id_prefix: 'dialog' %}
@@ -74,6 +75,9 @@
           {%- if filter_style == 'horizontal' %}
             price-facet--horizontal
           {%- endif %}
+          {%- if compact %}
+            price-facet--compact
+          {%- endif %}
         "
         id="facet-inputs-{{ filter.param_name | escape | replace: '.', '-' }}"
         data-money-format="{{ shop.money_format | strip_html }}"
@@ -94,7 +98,7 @@
                 {%- endif -%}
                 type="text"
                 inputmode="decimal"
-                placeholder="0"
+                placeholder="{% if compact %}{{ 'aura_filters.price_min' | t }}{% else %}0{% endif %}"
                 data-min="0"
                 data-max="{{ min_input_max_value | money_without_currency }}"
                 ref="minInput"
@@ -110,7 +114,9 @@
               </label>
             </div>
 
-            <div class="price-facet__separator">{{ 'fields.separator' | t }}</div>
+            {%- unless compact -%}
+              <div class="price-facet__separator">{{ 'fields.separator' | t }}</div>
+            {%- endunless -%}
 
             <div class="field price-facet__field">
               <input
@@ -122,7 +128,7 @@
                 {%- endif -%}
                 type="text"
                 inputmode="decimal"
-                placeholder="{{ filter.range_max | money_without_currency }}"
+                placeholder="{% if compact %}{{ 'aura_filters.price_max' | t }}{% else %}{{ filter.range_max | money_without_currency }}{% endif %}"
                 data-min="{{ max_input_min_value | money_without_currency }}"
                 data-max="{{ filter.range_max | money_without_currency }}"
                 ref="maxInput"
@@ -139,17 +145,19 @@
           </div>
         </div>
 
-        <div
-          class="
-            price-facet__highest-price
-            {%- if filter_style == 'horizontal' %}
-              price-facet__highest-price--horizontal
-            {%- endif %}
-          "
-        >
-          {%- capture formatted_highest_price -%}<bdi>{{ filter.range_max | money }}</bdi>{%- endcapture -%}
-          {{ 'content.price_filter_html' | t: price: formatted_highest_price }}
-        </div>
+        {%- unless compact -%}
+          <div
+            class="
+              price-facet__highest-price
+              {%- if filter_style == 'horizontal' %}
+                price-facet__highest-price--horizontal
+              {%- endif %}
+            "
+          >
+            {%- capture formatted_highest_price -%}<bdi>{{ filter.range_max | money }}</bdi>{%- endcapture -%}
+            {{ 'content.price_filter_html' | t: price: formatted_highest_price }}
+          </div>
+        {%- endunless -%}
 
         {% if filter.min_value.value != null or filter.max_value.value != null %}
           {% assign has_active_values = true %}
@@ -216,6 +224,19 @@
 
   .price-facet__input::placeholder {
     color: var(--facets-input-label-color);
+  }
+
+  .price-facet--compact .price-facet__inputs-wrapper {
+    flex-wrap: nowrap;
+  }
+
+  .price-facet--compact .price-facet__field {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .price-facet--compact .price-facet__input {
+    text-align: start;
   }
 
   .price-facet__separator {

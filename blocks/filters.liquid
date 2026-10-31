@@ -285,10 +285,25 @@
                           assign should_render_clear = false
                         endif
 
-                        render 'price-filter', filter: filter, filter_style: block_settings.filter_style, should_render_clear: should_render_clear, id_prefix: 'horizontal'
+                        render 'price-filter', filter: filter, filter_style: block_settings.filter_style, should_render_clear: should_render_clear, id_prefix: 'horizontal', compact: block_settings.price_compact
                       -%}
                     {% else %}
                       {% liquid
+                        assign skip_filter = false
+                        if filter.param_name == 'filter.p.product_type'
+                          assign category_options = 0
+                          for category_value in filter.values
+                            if category_value.count > 0 or category_value.active
+                              assign category_options = category_options | plus: 1
+                            endif
+                          endfor
+                          if block_settings.category_group == 'never'
+                            assign skip_filter = true
+                          elsif block_settings.category_group != 'always' and category_options < 2 and filter.active_values.size == 0
+                            assign skip_filter = true
+                          endif
+                        endif
+
                         if filter.active_values.size > 0
                           assign is_active = true
                         endif
@@ -300,7 +315,9 @@
                         else
                           assign should_render_clear = false
                         endif
-                        render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id, show_counts: block_settings.show_value_counts
+                        unless skip_filter
+                          render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id, show_counts: block_settings.show_value_counts
+                        endunless
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -553,17 +570,34 @@
                           assign is_active = true
                         endif
 
-                        render 'price-filter', filter: filter, filter_style: 'vertical', should_render_clear: false, id_prefix: 'dialog'
+                        render 'price-filter', filter: filter, filter_style: 'vertical', should_render_clear: false, id_prefix: 'dialog', compact: block_settings.price_compact
                       -%}
                     {% else %}
                       {% liquid
+                        assign skip_filter = false
+                        if filter.param_name == 'filter.p.product_type'
+                          assign category_options = 0
+                          for category_value in filter.values
+                            if category_value.count > 0 or category_value.active
+                              assign category_options = category_options | plus: 1
+                            endif
+                          endfor
+                          if block_settings.category_group == 'never'
+                            assign skip_filter = true
+                          elsif block_settings.category_group != 'always' and category_options < 2 and filter.active_values.size == 0
+                            assign skip_filter = true
+                          endif
+                        endif
+
                         if filter.active_values.size > 0
                           assign is_active = true
                         endif
 
                         assign active_value_count = filter.active_values | size
                         assign total_active_values = total_active_values | plus: active_value_count
-                        render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id, show_counts: block_settings.show_value_counts
+                        unless skip_filter
+                          render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id, show_counts: block_settings.show_value_counts
+                        endunless
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -1720,6 +1754,34 @@
       "label": "Keep the sidebar in view while scrolling",
       "default": true,
       "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "select",
+      "id": "category_group",
+      "label": "Category group",
+      "info": "Automatic shows it only when the pieces on the page belong to more than one category (All jewelry, Best sellers), and hides it on a single category such as Rings.",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Automatic"
+        },
+        {
+          "value": "always",
+          "label": "Always show"
+        },
+        {
+          "value": "never",
+          "label": "Never show"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "checkbox",
+      "id": "price_compact",
+      "label": "Price boxes as \"$ min\" and \"$ max\"",
+      "info": "Takes out the \"to\" between the boxes and the highest-price line.",
+      "default": true
     },
     {
       "type": "checkbox",
