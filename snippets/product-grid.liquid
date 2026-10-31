@@ -20,13 +20,23 @@
   {% render 'util-product-grid-card-size' section: section %}
 {% endcapture %}
 {% assign product_card_size = product_card_size | strip %}
+{% liquid
+  assign use_fixed_columns = false
+  if section.settings.layout_type == 'grid' and section.settings.desktop_columns != blank and section.settings.desktop_columns != 'auto'
+    assign use_fixed_columns = true
+  endif
+%}
 
 {% style %}
   @media screen and (min-width: 750px) {
     {% case section.settings.layout_type %}
       {% when 'grid' %}
         .product-grid--{{ section.id }}:is(.product-grid--grid) {
-          --product-grid-columns-desktop: repeat(auto-fill, minmax({{ product_card_size }}, 1fr));
+          {% if use_fixed_columns %}
+            --product-grid-columns-desktop: repeat({{ section.settings.desktop_columns }}, minmax(0, 1fr));
+          {% else %}
+            --product-grid-columns-desktop: repeat(auto-fill, minmax({{ product_card_size }}, 1fr));
+          {% endif %}
         }
 
 
@@ -54,6 +64,7 @@
     {% endcase %}
 
     /* This logic helps prevent displaying one column for an large or extra-large product card size on a small screen. We want it to display at least two columns. */
+    {% unless use_fixed_columns %}
     {% case section.settings.product_card_size %}
       {% when 'extra-large' or 'large' %}
         @container product-grid (max-width: calc({{ product_card_size }} * 3 + {{ section.settings.columns_gap_horizontal }}px * 2)) {
@@ -62,6 +73,7 @@
           }
         }
     {% endcase %}
+    {% endunless %}
 
     /* When zoomed out, fit as many 100px-wide columns as possible */
     .product-grid--{{ section.id }}[product-grid-view='zoom-out'] {
