@@ -64,7 +64,87 @@
 
       {% paginate collection.products by products_per_page %}
         {% capture children %}
+          {% comment %}
+            Collection promos (blocks added in the theme editor) print two marked copies (<!--cp:d:5-->...<!--/cp-->
+            for desktop, <!--cp:m:3-->... for mobile); they are taken out here and dropped between the products at
+            their slots. Only on the first page of a grid layout.
+          {% endcomment %}
+          {%- capture grid_blocks -%}
+            {%- if paginate.current_page == 1 and section.settings.layout_type == 'grid' -%}
+              {% content_for 'blocks' %}
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- liquid
+            assign promo_d = ''
+            assign promo_m = ''
+            if grid_blocks != blank
+              assign pieces = grid_blocks | split: '<!--/cp-->'
+              for piece in pieces
+                if piece contains '<!--cp:'
+                  assign rest = piece | split: '<!--cp:' | last
+                  assign kind = rest | slice: 0
+                  assign after_kind = rest | slice: 2, 99999
+                  assign slot = after_kind | split: '-->' | first
+                  assign html = after_kind | remove_first: slot | remove_first: '-->'
+                  assign entry = slot | append: '~~' | append: html | append: '^^cp^^'
+                  if kind == 'd'
+                    assign promo_d = promo_d | append: entry
+                  else
+                    assign promo_m = promo_m | append: entry
+                  endif
+                endif
+              endfor
+            endif
+            assign promo_d_list = promo_d | split: '^^cp^^'
+            assign promo_m_list = promo_m | split: '^^cp^^'
+            assign d_next = 1
+            assign m_next = 1
+            assign d_done = '|'
+            assign m_done = '|'
+          -%}
           {% for product in collection.products %}
+            {%- liquid
+              for attempt in (1..8)
+                assign found = false
+                for entry in promo_d_list
+                  assign marker = '|' | append: forloop.index | append: '|'
+                  assign entry_slot = entry | split: '~~' | first | plus: 0
+                  if entry_slot <= d_next
+                    unless d_done contains marker
+                      echo entry | split: '~~' | last
+                      assign d_done = d_done | append: forloop.index | append: '|'
+                      assign d_next = d_next | plus: 1
+                      assign found = true
+                      break
+                    endunless
+                  endif
+                endfor
+                unless found
+                  break
+                endunless
+              endfor
+              for attempt in (1..8)
+                assign found = false
+                for entry in promo_m_list
+                  assign marker = '|' | append: forloop.index | append: '|'
+                  assign entry_slot = entry | split: '~~' | first | plus: 0
+                  if entry_slot <= m_next
+                    unless m_done contains marker
+                      echo entry | split: '~~' | last
+                      assign m_done = m_done | append: forloop.index | append: '|'
+                      assign m_next = m_next | plus: 1
+                      assign found = true
+                      break
+                    endunless
+                  endif
+                endfor
+                unless found
+                  break
+                endunless
+              endfor
+              assign d_next = d_next | plus: 1
+              assign m_next = m_next | plus: 1
+            -%}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -80,6 +160,22 @@
               %}
             </li>
           {% endfor %}
+
+          {%- liquid
+            # Promos whose slot is after the last product go at the end
+            for entry in promo_d_list
+              assign marker = '|' | append: forloop.index | append: '|'
+              unless d_done contains marker
+                echo entry | split: '~~' | last
+              endunless
+            endfor
+            for entry in promo_m_list
+              assign marker = '|' | append: forloop.index | append: '|'
+              unless m_done contains marker
+                echo entry | split: '~~' | last
+              endunless
+            endfor
+          -%}
         {% endcapture %}
 
         {% render 'product-grid',
@@ -101,6 +197,11 @@
   "enabled_on": {
     "templates": ["collection"]
   },
+  "blocks": [
+    {
+      "type": "_collection-promo"
+    }
+  ],
   "settings": [
     {
       "type": "select",
@@ -117,6 +218,36 @@
         }
       ],
       "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "Columns on desktop",
+      "info": "Auto fits as many as the card size allows. A number fixes the columns (the wireframe uses 3).",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ],
+      "default": "auto",
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
     },
     {
       "type": "select",
@@ -141,7 +272,7 @@
         }
       ],
       "default": "medium",
-      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+      "visible_if": "{{ section.settings.layout_type == 'grid' and section.settings.desktop_columns == 'auto' }}"
     },
     {
       "type": "select",

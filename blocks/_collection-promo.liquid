@@ -1,0 +1,906 @@
+{%- doc -%}
+  Collection promo: an image tile with an eyebrow, heading, description and a link that takes one or two product slots
+  of the collection grid (the editorial tile of the collection wireframe).
+
+  sections/main-collection.liquid places it on the server: this block prints two copies wrapped in markers, one for
+  desktop and one for mobile, each with its own position, and the section drops them between the products at those
+  positions. Each copy is hidden on the other screen size, so desktop and mobile can use different positions and
+  widths. Only shown on page 1 of a grid layout collection.
+
+  Adapted from the Collection promo block of the 2710 theme (video, hide-after timer and calendar left out).
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign show = true
+  if s.only_collection != blank and collection.handle != s.only_collection.handle
+    assign show = false
+  endif
+
+  assign position_parts = s.content_position | default: 'bottom-left' | split: '-'
+  case position_parts[0]
+    when 'top'
+      assign justify = 'flex-start'
+    when 'middle'
+      assign justify = 'center'
+    else
+      assign justify = 'flex-end'
+  endcase
+  case position_parts[1]
+    when 'center'
+      assign align = 'center'
+    when 'right'
+      assign align = 'flex-end'
+    else
+      assign align = 'flex-start'
+  endcase
+
+  assign has_button = false
+  assign button_link = s.link | default: s.tile_link
+  if s.label != blank and button_link != blank
+    assign has_button = true
+  endif
+
+  assign d_span = s.desktop_width | plus: 0
+  assign m_span = s.mobile_width | plus: 0
+  assign d_vw = 25 | times: d_span
+  assign m_vw = 50 | times: m_span
+  assign image_sizes = '(min-width: 750px) ' | append: d_vw | append: 'vw, ' | append: m_vw | append: 'vw'
+
+  # The section counts "after product N" as the slot N + 1
+  assign d_slot = s.position | plus: 1
+  assign m_slot = s.mobile_position | plus: 1
+  assign d_open = '<!--cp:d:' | append: d_slot | append: '-->'
+  assign m_open = '<!--cp:m:' | append: m_slot | append: '-->'
+-%}
+
+{%- if show -%}
+  {%- capture tile -%}
+    <div
+      class="collection-promo__inner spacing-style"
+      style="
+        {% render 'spacing-style', settings: s %}
+        --promo-justify: {{ justify }};
+        --promo-align: {{ align }};
+        --promo-text-align: {{ s.content_alignment }};
+        --promo-text-gap: {{ s.text_gap }}px;
+        --promo-gap: {{ s.gap }}px;
+        --promo-radius: {{ s.border_radius }}px;
+        --promo-button-color: {{ s.button_color }};
+        --promo-button-solid-text: {{ s.button_solid_text }};
+      "
+    >
+      <div class="collection-promo__media">
+        {%- if s.image != blank -%}
+          {{
+            s.image
+            | image_url: width: 2400
+            | image_tag:
+              widths: '400, 600, 800, 1000, 1200, 1600, 2000, 2400',
+              sizes: image_sizes,
+              loading: 'lazy',
+              class: 'collection-promo__image',
+              style: 'object-position: [fp]'
+            | replace: '[fp]', s.image.presentation.focal_point
+          }}
+          {%- if s.mobile_image != blank -%}
+            {{
+              s.mobile_image
+              | image_url: width: 1600
+              | image_tag:
+                widths: '400, 600, 800, 1000, 1200, 1600',
+                sizes: image_sizes,
+                loading: 'lazy',
+                class: 'collection-promo__image collection-promo__image--mobile',
+                style: 'object-position: [fp]'
+              | replace: '[fp]', s.mobile_image.presentation.focal_point
+            }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'collection-promo__image collection-promo__placeholder' }}
+        {%- endif -%}
+        {%- if s.toggle_overlay -%}
+          {% render 'overlay', settings: s, layer: '0' %}
+        {%- endif -%}
+      </div>
+
+      {%- if s.tile_link != blank -%}
+        <a class="collection-promo__link" href="{{ s.tile_link }}">
+          <span class="visually-hidden">{{ s.heading_text | default: s.eyebrow_text | default: s.label | escape }}</span>
+        </a>
+      {%- endif -%}
+
+      <div class="collection-promo__content">
+        <div class="collection-promo__texts">
+          {%- if s.eyebrow_text != blank -%}
+            <p
+              class="collection-promo__text collection-promo__eyebrow"
+              style="
+                --color: {{ s.eyebrow_text_color }};
+                font-size: {{ s.eyebrow_font_size }};
+                letter-spacing: var(--letter-spacing--body-loose);
+                text-transform: {% if s.eyebrow_case == 'uppercase' %}uppercase{% else %}none{% endif %};
+              "
+            >
+              {{- s.eyebrow_text -}}
+            </p>
+          {%- endif -%}
+          {%- if s.heading_text != blank -%}
+            <h3
+              class="collection-promo__text collection-promo__heading"
+              style="
+                --color: {{ s.heading_text_color }};
+                --promo-heading-size: {{ s.heading_font_size }};
+                --promo-heading-size-mobile: {{ s.heading_font_size_mobile }};
+                font-family: var(--font-heading--family);
+                {% if s.heading_weight != blank %}font-weight: {{ s.heading_weight }};{% endif %}
+              "
+            >
+              {{- s.heading_text -}}
+            </h3>
+          {%- endif -%}
+          {%- if s.description_text != blank -%}
+            <p
+              class="collection-promo__text collection-promo__description"
+              style="--color: {{ s.description_text_color }}; font-size: {{ s.description_font_size }};"
+            >
+              {{- s.description_text -}}
+            </p>
+          {%- endif -%}
+        </div>
+        {%- if has_button -%}
+          <div class="collection-promo__action">
+            <a
+              href="{{ button_link }}"
+              class="collection-promo__button collection-promo__button--{{ s.button_style }}"
+            >
+              {{- s.label -}}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endcapture -%}
+
+  {%- comment -%} Markers read by sections/main-collection.liquid: <!--cp:desktop-or-mobile:slot--> {%- endcomment -%}
+  {{ d_open }}<li
+    class="collection-promo collection-promo--desktop"
+    style="--promo-span: {{ d_span }}; --promo-rows: {{ s.desktop_rows | default: '1' }};"
+    data-promo-id="{{ block.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {{- tile -}}
+  </li><!--/cp-->
+  {%- if s.show_on_mobile -%}
+    {{ m_open }}<li
+      class="collection-promo collection-promo--mobile{% if m_span == 2 %} collection-promo--full{% endif %}"
+      style="--promo-span: {{ m_span }}; --promo-mobile-ratio: {{ s.mobile_ratio | default: 0.8 }};"
+      data-promo-id="{{ block.id }}"
+    >
+      {{- tile -}}
+    </li><!--/cp-->
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  /* Products fill the hole a 2 column promo would leave at the end of a row */
+  .product-grid:has(> .collection-promo) {
+    grid-auto-flow: row dense;
+  }
+
+  .collection-promo {
+    grid-column: span var(--promo-span, 1);
+    position: relative;
+    display: flex;
+    min-width: 0;
+    list-style: none;
+    container-type: inline-size;
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-promo--desktop {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .collection-promo--mobile {
+      display: none;
+    }
+
+    /* Tall promo: two rows of product cards */
+    .collection-promo--desktop {
+      grid-row: span var(--promo-rows, 1);
+    }
+  }
+
+  .collection-promo__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: var(--promo-justify);
+    align-items: var(--promo-align);
+    gap: var(--promo-gap);
+    /* Fills the row height the product cards set, it never makes the row taller itself */
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    isolation: isolate;
+    text-align: var(--promo-text-align);
+    border-radius: var(--promo-radius, 0);
+  }
+
+  /* A minimum height, for a promo that ends up alone on a row (for example after a filter leaves few products).
+     It is lower than a product card, so it never makes the cards of its row taller. */
+  .collection-promo::before {
+    content: '';
+    display: block;
+    padding-top: calc(100% / var(--promo-span, 1) * 0.75);
+  }
+
+  .collection-promo--mobile.collection-promo--full::before {
+    content: '';
+    display: block;
+    padding-top: calc(100% / var(--promo-mobile-ratio, 0.8));
+  }
+
+  .collection-promo__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .collection-promo__media :is(img, svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .collection-promo__image {
+    position: absolute;
+    inset: 0;
+  }
+
+  .collection-promo__image--mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-promo__image:has(+ .collection-promo__image--mobile) {
+      display: none;
+    }
+
+    .collection-promo__image--mobile {
+      display: block;
+    }
+  }
+
+  .collection-promo__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .collection-promo__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: var(--promo-align);
+    gap: var(--promo-gap);
+    max-width: 100%;
+    pointer-events: none;
+  }
+
+  .collection-promo__content :is(a, button) {
+    pointer-events: auto;
+  }
+
+  .collection-promo__texts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--promo-text-gap);
+  }
+
+  .collection-promo .collection-promo__text {
+    margin: 0;
+    color: var(--color, inherit);
+  }
+
+  .collection-promo__heading {
+    font-size: var(--promo-heading-size-mobile, 1.5rem);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  @media screen and (min-width: 750px) {
+    .collection-promo__heading {
+      font-size: var(--promo-heading-size, 2rem);
+    }
+  }
+
+  .collection-promo__button {
+    display: inline-block;
+    color: var(--promo-button-color);
+    letter-spacing: var(--letter-spacing--body-loose);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  .collection-promo__button--link {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  .collection-promo__button--outline {
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--promo-button-color);
+    text-decoration: none;
+  }
+
+  .collection-promo__button--solid {
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--promo-button-color);
+    background: var(--promo-button-color);
+    color: var(--promo-button-solid-text);
+    text-decoration: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection promo",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Placement"
+    },
+    {
+      "type": "collection",
+      "id": "only_collection",
+      "label": "Collection",
+      "info": "Show on this collection only. Leave empty to show on every collection."
+    },
+    {
+      "type": "range",
+      "id": "position",
+      "label": "Show after product",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 4,
+      "info": "On the first page, counting left to right. 4 puts the promo after the fourth product."
+    },
+    {
+      "type": "select",
+      "id": "desktop_width",
+      "label": "Width on desktop",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "desktop_rows",
+      "label": "Height on desktop",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 row"
+        },
+        {
+          "value": "2",
+          "label": "2 rows (tall)"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_position",
+      "label": "Show after product on mobile",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ block.settings.show_on_mobile }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_width",
+      "label": "Width on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "Full width"
+        }
+      ],
+      "default": "2",
+      "visible_if": "{{ block.settings.show_on_mobile }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_ratio",
+      "label": "Shape on mobile (full width)",
+      "options": [
+        {
+          "value": "1.25",
+          "label": "Landscape"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        }
+      ],
+      "default": "0.8",
+      "visible_if": "{{ block.settings.show_on_mobile and block.settings.mobile_width == '2' }}"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image",
+      "info": "Optional. Used on phones instead of the image."
+    },
+    {
+      "type": "url",
+      "id": "tile_link",
+      "label": "Link for the whole tile"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Darken the image",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay colour",
+      "alpha": true,
+      "default": "#0E0D0C99",
+      "visible_if": "{{ block.settings.toggle_overlay }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay style",
+      "options": [
+        {
+          "value": "gradient",
+          "label": "Gradient (from the bottom)"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ],
+      "default": "gradient",
+      "visible_if": "{{ block.settings.toggle_overlay }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "middle-left",
+          "label": "Middle left"
+        },
+        {
+          "value": "middle-center",
+          "label": "Middle center"
+        },
+        {
+          "value": "middle-right",
+          "label": "Middle right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "text_gap",
+      "label": "Space between the texts",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Space above the link",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_font_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        }
+      ],
+      "default": "0.75rem"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_case",
+      "label": "Case",
+      "options": [
+        {
+          "value": "none",
+          "label": "Default"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_text_color",
+      "label": "Colour",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Text",
+      "default": "Every piece is priced by its gold"
+    },
+    {
+      "type": "select",
+      "id": "heading_font_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        }
+      ],
+      "default": "2.25rem"
+    },
+    {
+      "type": "select",
+      "id": "heading_font_size_mobile",
+      "label": "Size on mobile",
+      "options": [
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        }
+      ],
+      "default": "1.5rem"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Weight",
+      "options": [
+        {
+          "value": "",
+          "label": "Default"
+        },
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "color",
+      "id": "heading_text_color",
+      "label": "Colour",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "text",
+      "id": "description_text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "description_font_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        }
+      ],
+      "default": "0.9375rem"
+    },
+    {
+      "type": "color",
+      "id": "description_text_color",
+      "label": "Colour",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Link"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "How we price",
+      "info": "Shows only when the link below (or the whole-tile link) is filled in."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "link",
+          "label": "Underlined text"
+        },
+        {
+          "value": "outline",
+          "label": "Outlined button"
+        },
+        {
+          "value": "solid",
+          "label": "Solid button"
+        }
+      ],
+      "default": "link"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Colour",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_solid_text",
+      "label": "Text on a solid button",
+      "default": "#4A253D",
+      "visible_if": "{{ block.settings.button_style == 'solid' }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    }
+  ]
+}
+{% endschema %}
