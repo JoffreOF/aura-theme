@@ -119,6 +119,16 @@
   if block_settings.checkbox_color != blank
     assign facets_aura_style = ' --facets-check-color: ' | append: block_settings.checkbox_color | append: ';'
   endif
+  assign value_size = block_settings.value_text_size | default: '0.875rem'
+  assign facets_aura_style = facets_aura_style | append: ' --facets-value-size: ' | append: value_size | append: ';'
+  if block_settings.box_background != blank
+    assign facets_aura_style = facets_aura_style | append: ' --facets-box-bg: ' | append: block_settings.box_background | append: ';'
+  endif
+  if block_settings.box_text != blank
+    assign box_text_hex = block_settings.box_text | append: ''
+    assign facets_aura_style = facets_aura_style | append: ' --facets-box-text: ' | append: box_text_hex | append: ';'
+    assign facets_aura_style = facets_aura_style | append: ' --facets-box-text-rgb: ' | append: block_settings.box_text.red | append: ' ' | append: block_settings.box_text.green | append: ' ' | append: block_settings.box_text.blue | append: ';'
+  endif
 -%}
 
 {%- liquid
@@ -152,7 +162,7 @@
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
       class="facets facets--horizontal facets-controls-wrapper facets-controls-wrapper--aura spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
-      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
+      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}{{ facets_aura_style }}"
     >
       {% if block_settings.enable_filtering and block_settings.show_filters_title %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
@@ -1438,6 +1448,54 @@
     }
   }
 
+  /* the colours of the sort menu and the price boxes (white by default) */
+  .facets {
+    --facets-page-text: var(--color-foreground);
+    --facets-ink: var(--facets-box-text, var(--facets-page-text));
+    --facets-ink-rgb: var(--facets-box-text-rgb, var(--color-foreground-rgb));
+  }
+
+  .facets .price-facet__input {
+    background-color: var(--facets-box-bg, #fff);
+    color: var(--facets-ink);
+    box-shadow: 0 0 0 1px rgb(var(--facets-ink-rgb) / 0.25);
+  }
+
+  .facets .price-facet__input:focus {
+    box-shadow: 0 0 0 1px var(--facets-ink);
+  }
+
+  .facets .price-facet__label,
+  .facets .price-facet__input::placeholder {
+    color: rgb(var(--facets-ink-rgb) / 0.6);
+  }
+
+  .facets--horizontal .sorting-filter .sorting-filter__options.color-custom-popover {
+    --color-background: var(--facets-box-bg, #fff);
+    --color-foreground: var(--facets-ink);
+    --color-foreground-rgb: var(--facets-ink-rgb);
+
+    background-color: var(--facets-box-bg, #fff);
+    color: var(--facets-ink);
+  }
+
+  .facets--horizontal .sorting-filter.sorting-filter--boxed .sorting-filter__box {
+    background-color: var(--facets-box-bg, #fff);
+    color: var(--facets-ink);
+  }
+
+  /* group titles: the theme's "loose" letter spacing, built in */
+  .facets--vertical .facets__summary .facets__label {
+    letter-spacing: var(--letter-spacing--body-loose);
+  }
+
+  /* text size of the choices (and their counts) */
+  .facets--vertical .checkbox__label,
+  .facets--vertical .checkbox__label-text,
+  .facets--vertical .checkbox__count {
+    font-size: var(--facets-value-size, 0.875rem);
+  }
+
   .facets--vertical.facets--title-small .facets__summary {
     font-size: var(--font-size--xs);
   }
@@ -1703,6 +1761,47 @@
       ],
       "default": "small",
       "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_text_size",
+      "label": "Choice text size",
+      "options": [
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        }
+      ],
+      "default": "0.875rem",
+      "visible_if": "{{ block.settings.filter_style == 'vertical' }}"
+    },
+    {
+      "type": "color",
+      "id": "box_background",
+      "label": "Sort menu and price box background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "box_text",
+      "label": "Sort menu and price box text",
+      "info": "Empty uses the page text colour."
     },
     {
       "type": "select",
