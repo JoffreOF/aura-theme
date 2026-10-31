@@ -65,7 +65,9 @@ export default class PaginatedList extends Component {
   }
 
   #observeViewMore() {
-    const { viewMorePrevious, viewMoreNext } = this.refs;
+    const { viewMorePrevious } = this.refs;
+    // With a "Load more" button the next page is requested by the button, not by scrolling
+    const viewMoreNext = this.hasAttribute('load-more') ? undefined : this.refs.viewMoreNext;
 
     // Return if neither element exists
     if (!viewMorePrevious && !viewMoreNext) return;
@@ -193,6 +195,7 @@ export default class PaginatedList extends Component {
     grid.append(...nextPageItemElements);
 
     this.#aspectRatioHelper.processNewElements();
+    this.#syncLoadMore();
 
     await yieldToMainThread();
 
@@ -201,6 +204,36 @@ export default class PaginatedList extends Component {
     requestIdleCallback(() => {
       this.#fetchPage('next');
     });
+  }
+
+  /**
+   * Called by the "Load more" button.
+   */
+  async loadMore() {
+    const button = this.querySelector('[data-load-more] button');
+    if (button) button.setAttribute('aria-busy', 'true');
+
+    await this.#renderNextPage();
+
+    if (button) button.removeAttribute('aria-busy');
+    this.#syncLoadMore();
+  }
+
+  /**
+   * Updates the "Showing X of Y" count and hides the button when every piece is on the page.
+   */
+  #syncLoadMore() {
+    const box = this.querySelector('[data-load-more]');
+    if (!box) return;
+
+    const shown = this.querySelectorAll('[ref="cards[]"]').length;
+    const total = Number(box.getAttribute('data-total'));
+
+    const count = box.querySelector('[data-load-more-count]');
+    if (count) count.textContent = String(shown);
+
+    const button = box.querySelector('button');
+    if (button) button.hidden = shown >= total;
   }
 
   async #renderPreviousPage() {

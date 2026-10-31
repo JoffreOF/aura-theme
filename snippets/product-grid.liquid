@@ -7,6 +7,7 @@
   @param {string} [title] - Header of the collection or search results
   @param {string} children - List or grid of product cards
   @param {boolean} [enable_infinite_scroll] - Whether to enable infinite scroll (default: true)
+  @param {boolean} [load_more] - With infinite scroll on, show a "Load more" button and a "Showing X of Y" count instead of loading on scroll
 {%- enddoc -%}
 
 {%- liquid
@@ -165,7 +166,31 @@
 
         {{ children }}
       </ul>
-      {% if enable_infinite_scroll != false %}
+      {% if enable_infinite_scroll != false and load_more %}
+        <div
+          class="load-more"
+          data-load-more
+          data-total="{{ paginate.items }}"
+        >
+          <p
+            class="load-more__status"
+            role="status"
+          >
+            {%- capture shown_html -%}<span data-load-more-count>{{ products.size }}</span>{%- endcapture -%}
+            {{- 'aura_filters.showing_html' | t: shown: shown_html, total: paginate.items -}}
+          </p>
+          <button
+            type="button"
+            class="button button-secondary load-more__button"
+            on:click="/loadMore"
+            {% if paginate.next == blank %}
+              hidden
+            {% endif %}
+          >
+            {{ 'aura_filters.load_more' | t }}
+          </button>
+        </div>
+      {% elsif enable_infinite_scroll != false %}
         <span ref="viewMoreNext"></span>
       {% else %}
         {% render 'pagination-controls', paginate: paginate %}
@@ -175,6 +200,35 @@
 </div>
 
 {% stylesheet %}
+  /* "Load more" button and count under the grid */
+  .load-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+    padding-block: var(--padding-3xl);
+  }
+
+  .load-more__status {
+    margin: 0;
+    font-size: var(--font-size--sm);
+    color: rgb(var(--color-foreground-rgb) / 0.7);
+  }
+
+  .load-more__button {
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing--body-loose);
+  }
+
+  .load-more__button[hidden] {
+    display: none;
+  }
+
+  .load-more__button[aria-busy='true'] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
   /* Product grid */
   .product-grid-container {
     display: block;
