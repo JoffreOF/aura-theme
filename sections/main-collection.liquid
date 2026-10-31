@@ -40,6 +40,9 @@
     style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
     section-id="{{ section.id }}"
     infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+    {% if section.settings.enable_infinite_scroll and section.settings.show_load_more %}
+      load-more
+    {% endif %}
   >
     {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
@@ -84,7 +87,8 @@
           children: children,
           products: collection.products,
           paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
+          enable_infinite_scroll: section.settings.enable_infinite_scroll,
+          load_more: section.settings.show_load_more
         %}
       {% endpaginate %}
     </div>
@@ -160,6 +164,14 @@
       "id": "enable_infinite_scroll",
       "label": "t:settings.auto_load_products",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_load_more",
+      "label": "Load more button instead of loading on scroll",
+      "info": "Shows \"Showing X of Y\" and a Load more button under the grid.",
+      "default": true,
+      "visible_if": "{{ section.settings.enable_infinite_scroll }}"
     },
     {
       "type": "range",
