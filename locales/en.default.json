@@ -111,6 +111,8 @@
     "sort": "Sort"
   },
   "aura_filters": {
+    "price_min": "min",
+    "price_max": "max",
     "piece_count": {
       "one": "{{ count }} piece",
       "other": "{{ count }} pieces"
