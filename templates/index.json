@@ -885,11 +885,1365 @@
         "padding-block-start": 56,
         "padding-block-end": 56
       }
+    },
+    "aura_invest": {
+      "type": "section",
+      "blocks": {
+        "group_04": {
+          "type": "group",
+          "name": "Text and steps",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "width": "custom",
+            "custom_width": 54,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_01": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>You Wear your investment</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "3rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_02": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Every Aura piece has a cost basis: the value of its gold on the day you bought it. From there it behaves like an equity position, valued at what its gold is worth right now.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 12,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "group_02": {
+              "type": "group",
+              "name": "Portfolio card (mobile) - add the card here",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 0,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "mobile",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "group_01": {
+              "type": "group",
+              "name": "Steps",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 0,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "numbered_step_01": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "",
+                    "title": "Choose your pieces",
+                    "text": "Select from our collection of solid 18k gold jewelry.",
+                    "show_line": true,
+                    "number_column": 60,
+                    "gap": 6,
+                    "number_color": "{{ settings.color_palette.background }}",
+                    "title_color": "{{ settings.color_palette.color1 }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 70,
+                    "padding-block-start": 22,
+                    "padding-block-end": 22,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "1.375rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-body--family)",
+                    "title_font_size": "1rem",
+                    "title_weight": "500",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem"
+                  },
+                  "blocks": {}
+                },
+                "numbered_step_02": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "",
+                    "title": "Know your gold value",
+                    "text": "At purchase we record two numbers: the price you paid and the gold value of your piece, its cost basis.",
+                    "show_line": true,
+                    "number_column": 60,
+                    "gap": 6,
+                    "number_color": "{{ settings.color_palette.background }}",
+                    "title_color": "{{ settings.color_palette.color1 }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 70,
+                    "padding-block-start": 22,
+                    "padding-block-end": 22,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "1.375rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-body--family)",
+                    "title_font_size": "1rem",
+                    "title_weight": "500",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem"
+                  },
+                  "blocks": {}
+                },
+                "numbered_step_03": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "",
+                    "title": "Marked to market, daily",
+                    "text": "Your portfolio revalues every piece against the gold price, so you always know what your gold is worth today.",
+                    "show_line": true,
+                    "number_column": 60,
+                    "gap": 6,
+                    "number_color": "{{ settings.color_palette.background }}",
+                    "title_color": "{{ settings.color_palette.color1 }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 70,
+                    "padding-block-start": 22,
+                    "padding-block-end": 22,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "1.375rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-body--family)",
+                    "title_font_size": "1rem",
+                    "title_weight": "500",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "numbered_step_01",
+                "numbered_step_02",
+                "numbered_step_03"
+              ]
+            },
+            "group_03": {
+              "type": "group",
+              "name": "Buttons",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 24,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 28,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "button_01": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Open my portfolio",
+                    "link": "/account",
+                    "open_in_new_tab": false,
+                    "width": "fit-content",
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 100,
+                    "visibility": "all",
+                    "style_class": "button-custom",
+                    "custom_button_background": "{{ settings.color_palette.background }}",
+                    "custom_button_text": "{{ settings.color_palette.color10 }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}"
+                  },
+                  "blocks": {}
+                },
+                "button_02": {
+                  "type": "button",
+                  "settings": {
+                    "label": "How value is calculated",
+                    "link": "",
+                    "open_in_new_tab": false,
+                    "width": "fit-content",
+                    "width_mobile": "fit-content",
+                    "custom_width_mobile": 100,
+                    "visibility": "desktop",
+                    "style_class": "button-unstyled",
+                    "link_text_color": "{{ settings.color_palette.background }}"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button_01",
+                "button_02"
+              ]
+            }
+          },
+          "block_order": [
+            "text_01",
+            "text_02",
+            "group_02",
+            "group_01",
+            "group_03"
+          ]
+        },
+        "group_05": {
+          "type": "group",
+          "name": "Portfolio card (desktop) - add the card here",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 40,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "desktop",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "group_04",
+        "group_05"
+      ],
+      "name": "You wear your investment",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 80,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 96,
+        "padding-block-end": 80
+      }
+    },
+    "aura_pricing_intro": {
+      "type": "section",
+      "blocks": {
+        "text_03": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Investment-first pricing</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color9 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_04": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Most jewelry is priced for the brand, the box and the store, with markups that can reach eight to ten times the value of the gold inside. We turned that model around.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.9375rem",
+            "weight": "",
+            "line_height": "loose",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color1 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 4,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "button_03": {
+          "type": "button",
+          "settings": {
+            "label": "Jewelry as an asset",
+            "link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "style_class": "button-unstyled",
+            "link_text_color": "{{ settings.color_palette.background }}",
+            "width": "fit-content",
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100,
+            "visibility": "all"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_03",
+        "text_04",
+        "button_03"
+      ],
+      "name": "Investment-first pricing",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 14,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "aura_buyback": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 18
+          },
+          "blocks": {
+            "text_05": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Skin in the game</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.8125rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color4 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_06": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Sell it back to us</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.75rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color2 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_07": {
+              "type": "text",
+              "settings": {
+                "text": "<p>The name doesn't transact. The gold does. That's why we price close to the value of the gold, and why you can request to sell your piece back to us at the current market value of its gold.*</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color4 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_08": {
+              "type": "text",
+              "settings": {
+                "text": "<p>*Subject to our buyback terms &amp; conditions.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.8125rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color4 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "button_04": {
+              "type": "button",
+              "settings": {
+                "label": "Read buyback terms",
+                "link": "",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "{{ settings.color_palette.color2 }}",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.color2 }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_05",
+            "text_06",
+            "text_07",
+            "text_08",
+            "button_04"
+          ]
+        }
+      },
+      "name": "Sell it back to us",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "background_color": "{{ settings.color_palette.color1 }}",
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      }
+    },
+    "aura_why_gold": {
+      "type": "section",
+      "blocks": {
+        "group_06": {
+          "type": "group",
+          "name": "Title and text",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 14,
+            "width": "custom",
+            "custom_width": 36,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_09": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Gold as an asset</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.8125rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_10": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Why gold?</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "4rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_11": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Five reasons the most informed players in the global economy hold gold, and why your jewelry can too.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "button_05": {
+              "type": "button",
+              "settings": {
+                "label": "Learn more",
+                "link": "",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "visibility": "desktop",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_09",
+            "text_10",
+            "text_11",
+            "button_05"
+          ]
+        },
+        "group_07": {
+          "type": "group",
+          "name": "Accordion",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 24,
+            "width": "custom",
+            "custom_width": 58,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "numbered_accordion_01": {
+              "type": "numbered-accordion",
+              "settings": {
+                "one_open": false,
+                "show_numbers": true,
+                "number_column": 72,
+                "number_column_mobile": 44,
+                "title_size_mobile": 22,
+                "row_padding": 22,
+                "dividers": true,
+                "icon_size": 16,
+                "icon_color": "{{ settings.color_palette.background }}",
+                "number_color": "#c4a35a",
+                "title_color": "{{ settings.color_palette.background }}",
+                "number_preset": "custom",
+                "number_font": "var(--font-heading--family)",
+                "number_font_size": "1.375rem",
+                "title_preset": "custom",
+                "title_font": "var(--font-heading--family)",
+                "title_font_size": "1.75rem",
+                "title_weight": "300",
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {
+                "numbered_accordion_row_01": {
+                  "type": "_numbered-accordion-row",
+                  "settings": {
+                    "number": "",
+                    "title": "Inflation protection",
+                    "open_by_default": true
+                  },
+                  "blocks": {
+                    "text_12": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Governments can create money without limit. Gold is a finite resource, slow and costly to extract, so your savings are measured in something that cannot be diluted at will.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_12"
+                  ]
+                },
+                "numbered_accordion_row_02": {
+                  "type": "_numbered-accordion-row",
+                  "settings": {
+                    "number": "",
+                    "title": "Crisis resilience",
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text_13": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Text for this reason.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_13"
+                  ]
+                },
+                "numbered_accordion_row_03": {
+                  "type": "_numbered-accordion-row",
+                  "settings": {
+                    "number": "",
+                    "title": "Independence",
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text_14": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Text for this reason.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_14"
+                  ]
+                },
+                "numbered_accordion_row_04": {
+                  "type": "_numbered-accordion-row",
+                  "settings": {
+                    "number": "",
+                    "title": "Institutional conviction",
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text_15": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Text for this reason.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_15"
+                  ]
+                },
+                "numbered_accordion_row_05": {
+                  "type": "_numbered-accordion-row",
+                  "settings": {
+                    "number": "",
+                    "title": "Global liquidity",
+                    "open_by_default": false
+                  },
+                  "blocks": {
+                    "text_16": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Text for this reason.</p>",
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_16"
+                  ]
+                }
+              },
+              "block_order": [
+                "numbered_accordion_row_01",
+                "numbered_accordion_row_02",
+                "numbered_accordion_row_03",
+                "numbered_accordion_row_04",
+                "numbered_accordion_row_05"
+              ]
+            },
+            "button_06": {
+              "type": "button",
+              "settings": {
+                "label": "Learn more",
+                "link": "",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "visibility": "mobile",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "numbered_accordion_01",
+            "button_06"
+          ]
+        }
+      },
+      "block_order": [
+        "group_06",
+        "group_07"
+      ],
+      "name": "Why gold?",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 60,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
+    },
+    "aura_gemstones": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 18
+          },
+          "blocks": {
+            "text_17": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our materials</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.8125rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_18": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Precious and semi-precious gemstones</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.75rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_19": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We believe that brilliance should be accessible. At Aura, we curate both natural, precious, semi-precious and laboratory-grown gemstones, expanding the entry point for fine jewelry without sacrificing the aesthetic or technical standards of our master craftsmen. This approach allows us to deliver high-quality assets across a broader financial spectrum.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_20": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Every stone, whether forged over millennia or grown with modern precision, is carefully selected for its brilliance, character, and craftsmanship. By offering both, we provide the flexibility to build a personal collection that aligns with your specific investment goals and design preferences.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_17",
+            "text_18",
+            "text_19",
+            "text_20"
+          ]
+        }
+      },
+      "name": "Precious and semi-precious gemstones",
+      "settings": {
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "60svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      }
+    },
+    "aura_people": {
+      "type": "section",
+      "blocks": {
+        "group_08": {
+          "type": "group",
+          "name": "Our artisans",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "width": "custom",
+            "custom_width": 48,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "image_01": {
+              "type": "image",
+              "settings": {
+                "image_ratio": "square",
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "border": "none",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_21": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Shaped by Peruvian jewelers who earn fair wages</p>",
+                "width": "100%",
+                "max_width": "narrow",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1.0625rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "button_07": {
+              "type": "button",
+              "settings": {
+                "label": "Our artisans",
+                "link": "",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image_01",
+            "text_21",
+            "button_07"
+          ]
+        },
+        "group_09": {
+          "type": "group",
+          "name": "About us",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "width": "custom",
+            "custom_width": 48,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "image_02": {
+              "type": "image",
+              "settings": {
+                "image_ratio": "square",
+                "width": "fill",
+                "width_mobile": "fill",
+                "height": "fit",
+                "border": "none",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_22": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Two best friends who talk about money more than anyone probably should</p>",
+                "width": "100%",
+                "max_width": "narrow",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1.0625rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "button_08": {
+              "type": "button",
+              "settings": {
+                "label": "About us",
+                "link": "",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image_02",
+            "text_22",
+            "button_08"
+          ]
+        }
+      },
+      "block_order": [
+        "group_08",
+        "group_09"
+      ],
+      "name": "Artisans and founders",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      }
     }
   },
   "order": [
     "hero_iyt6zg",
     "collection_list_tAEKmi",
-    "product_list_UwRqN4"
+    "product_list_UwRqN4",
+    "aura_invest",
+    "aura_pricing_intro",
+    "aura_buyback",
+    "aura_why_gold",
+    "aura_gemstones",
+    "aura_people"
   ]
 }
