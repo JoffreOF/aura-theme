@@ -138,7 +138,10 @@
 
   .text-block > * {
     width: var(--width, 100%);
-    max-inline-size: min(100%, var(--max-width, 100%));
+    /* No min(100%, ...) here: a percentage inside the max-width is ignored when a parent group sizes itself
+       to its content, so a narrow text still made the group as wide as the whole line. The text block above
+       already caps at 100% and width: fit-content shrinks to the space available. */
+    max-inline-size: var(--max-width, 100%);
     text-align: var(--text-align, var(--text-align-default));
     text-wrap: var(--text-wrap);
   }
