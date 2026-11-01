@@ -272,6 +272,12 @@
     "main": {
       "type": "main-collection",
       "blocks": {
+        "collection_promo_Aur4Ed": {
+          "type": "_collection-promo",
+          "name": "Collection promo",
+          "settings": {},
+          "blocks": {}
+        },
         "filters": {
           "type": "filters",
           "static": true,
@@ -557,6 +563,9 @@
           ]
         }
       },
+      "block_order": [
+        "collection_promo_Aur4Ed"
+      ],
       "settings": {
         "layout_type": "grid",
         "desktop_columns": "3",
