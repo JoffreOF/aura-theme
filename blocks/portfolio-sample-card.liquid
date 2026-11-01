@@ -1,0 +1,1110 @@
+{%- doc -%}
+  Sample portfolio card for the homepage ("My portfolio / Gold value today / $930.67 / chart / 3 pieces, cost basis").
+  Everything is worked out, nothing is typed in:
+  - the three sample pieces are bought `pN_days` days ago with `pN_weight` grams each;
+  - the price on a purchase day is the last history point on or before it (gold.price_history);
+  - cost basis = sum of weight x price on its purchase day; value today = total weight x gold.price_18k_per_g;
+  - the chart is the value over time (a step each time a piece is added), drawn as an inline SVG.
+  Same method as the real portfolio page (see sections/portfolio.liquid and assets/portfolio.js).
+  Liquid has no operator precedence (filters run left to right), so every sum and product is its own assign.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+  assign history = shop.metafields.gold.price_history.value
+  assign today_day = 'now' | date: '%s' | plus: 0 | divided_by: 86400
+
+  # the sample pieces: grams, and the day number each was bought
+  assign w1 = s.p1_weight | times: 1.0
+  assign w2 = s.p2_weight | times: 1.0
+  assign w3 = s.p3_weight | times: 1.0
+  assign d1 = today_day | minus: s.p1_days
+  assign d2 = today_day | minus: s.p2_days
+  assign d3 = today_day | minus: s.p3_days
+
+  assign total_weight = w1 | plus: w2 | plus: w3
+  assign pieces = 0
+  if w1 > 0
+    assign pieces = pieces | plus: 1
+  endif
+  if w2 > 0
+    assign pieces = pieces | plus: 1
+  endif
+  if w3 > 0
+    assign pieces = pieces | plus: 1
+  endif
+
+  assign show = false
+  if gram_price > 0 and history.size > 0 and total_weight > 0
+    assign show = true
+  endif
+
+  if show
+    # price on each purchase day = last history point on or before it (the first point if the day is earlier)
+    assign first_price = history[0][1] | times: 1.0
+    assign p_at_1 = first_price
+    assign p_at_2 = first_price
+    assign p_at_3 = first_price
+    for entry in history
+      assign entry_day = entry[0] | date: '%s' | plus: 0 | divided_by: 86400
+      if entry_day <= d1
+        assign p_at_1 = entry[1] | times: 1.0
+      endif
+      if entry_day <= d2
+        assign p_at_2 = entry[1] | times: 1.0
+      endif
+      if entry_day <= d3
+        assign p_at_3 = entry[1] | times: 1.0
+      endif
+    endfor
+
+    assign c1 = w1 | times: p_at_1
+    assign c2 = w2 | times: p_at_2
+    assign c3 = w3 | times: p_at_3
+    assign cost = c1 | plus: c2 | plus: c3
+    assign value_now = total_weight | times: gram_price
+    assign diff = value_now | minus: cost
+
+    assign sign = '+'
+    assign diff_abs = diff
+    if diff < 0
+      assign sign = '-'
+      assign diff_abs = diff | times: -1
+    endif
+    assign pct_abs = 0.0
+    if cost > 0
+      assign pct_abs = diff_abs | times: 100.0 | divided_by: cost | round: 2
+    endif
+    assign pct_text = pct_abs | append: ''
+    assign pct_parts = pct_text | split: '.'
+    if pct_parts.size == 1
+      assign pct_text = pct_text | append: '.00'
+    elsif pct_parts[1].size == 1
+      assign pct_text = pct_text | append: '0'
+    endif
+
+    assign value_money = value_now | times: 100 | round | money
+    assign diff_money = diff_abs | times: 100 | round | money
+    assign cost_money = cost | times: 100 | round | money
+    assign weight_text = total_weight | round: 1
+
+    assign footer_left = s.footer_left | replace: '{pieces}', pieces | replace: '{weight}', weight_text
+    assign footer_right = s.footer_right | replace: '{cost}', cost_money
+
+    # the chart: value over time. Days to plot = today, the first purchase, every purchase, and the history points in between.
+    assign start = today_day
+    if w1 > 0 and d1 < start
+      assign start = d1
+    endif
+    if w2 > 0 and d2 < start
+      assign start = d2
+    endif
+    if w3 > 0 and d3 < start
+      assign start = d3
+    endif
+    assign candidates = today_day | append: ',' | append: start
+    if w1 > 0
+      assign candidates = candidates | append: ',' | append: d1
+    endif
+    if w2 > 0
+      assign candidates = candidates | append: ',' | append: d2
+    endif
+    if w3 > 0
+      assign candidates = candidates | append: ',' | append: d3
+    endif
+    for entry in history
+      assign entry_day = entry[0] | date: '%s' | plus: 0 | divided_by: 86400
+      if entry_day > start and entry_day < today_day
+        assign candidates = candidates | append: ',' | append: entry_day
+      endif
+    endfor
+    # day numbers all have 5 digits, so sorting them as text sorts them as numbers
+    assign days = candidates | split: ',' | uniq | sort
+
+    assign xs = ''
+    assign vs = ''
+    assign flags = ''
+    for day_text in days
+      assign d = day_text | plus: 0
+      assign price = first_price
+      if d >= today_day
+        assign price = gram_price
+      else
+        for entry in history
+          assign entry_day = entry[0] | date: '%s' | plus: 0 | divided_by: 86400
+          if entry_day <= d
+            assign price = entry[1] | times: 1.0
+          endif
+        endfor
+      endif
+
+      assign before_w = 0.0
+      assign upto_w = 0.0
+      assign bought_today = false
+      if w1 > 0
+        if d1 < d
+          assign before_w = before_w | plus: w1
+        endif
+        if d1 <= d
+          assign upto_w = upto_w | plus: w1
+        endif
+        if d1 == d
+          assign bought_today = true
+        endif
+      endif
+      if w2 > 0
+        if d2 < d
+          assign before_w = before_w | plus: w2
+        endif
+        if d2 <= d
+          assign upto_w = upto_w | plus: w2
+        endif
+        if d2 == d
+          assign bought_today = true
+        endif
+      endif
+      if w3 > 0
+        if d3 < d
+          assign before_w = before_w | plus: w3
+        endif
+        if d3 <= d
+          assign upto_w = upto_w | plus: w3
+        endif
+        if d3 == d
+          assign bought_today = true
+        endif
+      endif
+
+      # a step: the value just before the purchase, then just after it
+      if bought_today and before_w > 0
+        assign v_before = before_w | times: price
+        assign xs = xs | append: d | append: ','
+        assign vs = vs | append: v_before | append: ','
+        assign flags = flags | append: '0,'
+      endif
+      assign v_now = upto_w | times: price
+      assign xs = xs | append: d | append: ','
+      assign vs = vs | append: v_now | append: ','
+      if bought_today
+        assign flags = flags | append: '1,'
+      else
+        assign flags = flags | append: '0,'
+      endif
+    endfor
+
+    assign x_list = xs | split: ','
+    assign v_list = vs | split: ','
+    assign f_list = flags | split: ','
+
+    assign v_min = v_list[0] | times: 1.0
+    assign v_max = v_min
+    for v_text in v_list
+      assign v = v_text | times: 1.0
+      if v < v_min
+        assign v_min = v
+      endif
+      if v > v_max
+        assign v_max = v
+      endif
+    endfor
+    assign v_span = v_max | minus: v_min
+    if v_span <= 0
+      assign v_span = 1.0
+    endif
+    assign x_first = x_list[0] | plus: 0
+    assign x_last = x_list.last | plus: 0
+    assign x_span = x_last | minus: x_first
+    if x_span <= 0
+      assign x_span = 1
+    endif
+
+    assign box_w = 420
+    assign box_h = s.chart_height
+    assign edge = 6
+    assign plot_w = box_w | minus: edge | minus: edge
+    assign plot_h = box_h | minus: edge | minus: edge
+
+    assign path = ''
+    assign dots = ''
+    for x_text in x_list
+      assign i = forloop.index0
+      assign x_off = x_text | plus: 0 | minus: x_first
+      assign x_pos = x_off | times: plot_w | divided_by: x_span | plus: edge | round: 1
+      assign v = v_list[i] | times: 1.0
+      assign v_off = v | minus: v_min
+      assign y_up = v_off | times: plot_h | divided_by: v_span
+      assign y_pos = box_h | minus: edge | minus: y_up | round: 1
+      if i == 0
+        assign path = 'M' | append: x_pos | append: ' ' | append: y_pos
+      else
+        assign path = path | append: ' L' | append: x_pos | append: ' ' | append: y_pos
+      endif
+      if f_list[i] == '1'
+        assign dots = dots | append: x_pos | append: ',' | append: y_pos | append: ';'
+      endif
+    endfor
+    assign dot_list = dots | split: ';'
+  endif
+
+  assign value_class = s.value_preset
+  assign value_style = ''
+  if s.value_preset == 'custom'
+    assign value_class = 'custom-typography'
+    if s.value_font_size != blank
+      assign value_class = value_class | append: ' custom-font-size'
+    endif
+    capture value_style
+      render 'custom-typography-style', settings: s, prefix: 'value_'
+    endcapture
+  endif
+-%}
+
+<div
+  class="portfolio-card spacing-style"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --pc-padding: {{ s.card_padding }}px;
+    --pc-radius: {{ s.corner_radius }}px;
+    --pc-eyebrow-size: {{ s.eyebrow_size }}px;
+    --pc-text-size: {{ s.text_size }}px;
+    {% if s.border_color != blank %}--pc-border: {{ s.border_color }};{% endif %}
+    {% if s.background_color != blank %}--pc-background: {{ s.background_color }};{% endif %}
+    {% if s.text_color != blank %}--pc-text: {{ s.text_color }};{% endif %}
+    {% if s.muted_color != blank %}--pc-muted: {{ s.muted_color }};{% endif %}
+    {% if s.value_color != blank %}--pc-value: {{ s.value_color }};{% endif %}
+    {% if s.line_color != blank %}--pc-line: {{ s.line_color }};{% endif %}
+    {% if s.marker_fill != blank %}--pc-marker: {{ s.marker_fill }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <div class="portfolio-card__top">
+      <span class="portfolio-card__eyebrow">{{ s.eyebrow }}</span>
+      {%- if s.tag != blank -%}
+        <span class="portfolio-card__tag">{{ s.tag }}</span>
+      {%- endif -%}
+    </div>
+    <p class="portfolio-card__label">{{ s.value_label }}</p>
+    <p class="portfolio-card__value {{ value_class }}"{% if value_style != blank %} style="{{ value_style }}"{% endif %}>{{ value_money }}</p>
+    <p class="portfolio-card__change">{{ sign }}{{ diff_money }} ({{ sign }}{{ pct_text }}%) {{ s.change_suffix }}</p>
+    {%- if s.show_chart -%}
+      <svg
+        class="portfolio-card__chart"
+        viewBox="0 0 {{ box_w }} {{ box_h }}"
+        role="img"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="portfolio-card__line" d="{{ path }}" fill="none" />
+        {%- for dot in dot_list -%}
+          {%- assign xy = dot | split: ',' -%}
+          <circle class="portfolio-card__dot" cx="{{ xy[0] }}" cy="{{ xy[1] }}" r="4" />
+        {%- endfor -%}
+      </svg>
+    {%- endif -%}
+    <div class="portfolio-card__footer">
+      <span>{{ footer_left }}</span>
+      <span>{{ footer_right }}</span>
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class="portfolio-card__hint">Sample portfolio hidden: the shop needs gold.price_18k_per_g and gold.price_history, and at least one piece weight above 0.</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .portfolio-card {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: var(--pc-padding, 28px);
+    color: var(--pc-text, var(--color-foreground));
+    background: var(--pc-background, transparent);
+    border: 1px solid var(--pc-border, var(--color-border));
+    border-radius: var(--pc-radius, 0);
+  }
+
+  .portfolio-card:not(:has(.portfolio-card__top)) {
+    padding: 0;
+    border: 0;
+  }
+
+  .portfolio-card__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .portfolio-card__eyebrow {
+    font-size: var(--pc-eyebrow-size, 12px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pc-muted, currentColor);
+  }
+
+  .portfolio-card__tag {
+    font-size: var(--pc-text-size, 13px);
+    color: var(--pc-muted, currentColor);
+  }
+
+  .portfolio-card__label {
+    margin: 16px 0 0;
+    font-size: var(--pc-text-size, 13px);
+    color: var(--pc-muted, currentColor);
+  }
+
+  .portfolio-card__value {
+    margin: 4px 0 0;
+    color: var(--pc-value, currentColor);
+  }
+
+  .portfolio-card__change {
+    margin: 6px 0 0;
+    font-size: var(--pc-text-size, 13px);
+    color: var(--pc-value, currentColor);
+  }
+
+  .portfolio-card__chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-block: 20px 16px;
+    overflow: visible;
+  }
+
+  .portfolio-card__line {
+    stroke: var(--pc-line, var(--pc-value, currentColor));
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+
+  .portfolio-card__dot {
+    fill: var(--pc-marker, var(--pc-background, #fff));
+    stroke: var(--pc-line, var(--pc-value, currentColor));
+    stroke-width: 1.5;
+  }
+
+  .portfolio-card__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--pc-border, var(--color-border));
+    font-size: var(--pc-text-size, 13px);
+    color: var(--pc-muted, currentColor);
+  }
+
+  .portfolio-card__hint {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Portfolio sample card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A sample portfolio: three pieces bought on the days you set, valued at today's gold price (shop metafield gold.price_18k_per_g) and charted with the stored price history (gold.price_history). The cost basis is worked out from the price on each purchase day, the same way the real portfolio does it. Nothing here is a fixed number."
+    },
+    {
+      "type": "header",
+      "content": "Words"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Top label",
+      "default": "My portfolio"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag (top right)",
+      "default": "Sample",
+      "info": "Leave empty to hide."
+    },
+    {
+      "type": "text",
+      "id": "value_label",
+      "label": "Label above the value",
+      "default": "Gold value today"
+    },
+    {
+      "type": "text",
+      "id": "change_suffix",
+      "label": "After the change",
+      "default": "since purchase"
+    },
+    {
+      "type": "text",
+      "id": "footer_left",
+      "label": "Footer, left",
+      "default": "{pieces} pieces · {weight} g of 18k gold",
+      "info": "{pieces} and {weight} are filled in for you."
+    },
+    {
+      "type": "text",
+      "id": "footer_right",
+      "label": "Footer, right",
+      "default": "Cost basis {cost}",
+      "info": "{cost} is filled in for you."
+    },
+    {
+      "type": "header",
+      "content": "Sample pieces"
+    },
+    {
+      "type": "range",
+      "id": "p1_days",
+      "label": "Piece 1 bought (days ago)",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "d",
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "p1_weight",
+      "label": "Piece 1 gold weight",
+      "min": 0,
+      "max": 10,
+      "step": 0.1,
+      "unit": "g",
+      "default": 2.9
+    },
+    {
+      "type": "range",
+      "id": "p2_days",
+      "label": "Piece 2 bought (days ago)",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "d",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "p2_weight",
+      "label": "Piece 2 gold weight",
+      "min": 0,
+      "max": 10,
+      "step": 0.1,
+      "unit": "g",
+      "default": 3.4
+    },
+    {
+      "type": "range",
+      "id": "p3_days",
+      "label": "Piece 3 bought (days ago)",
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "d",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "p3_weight",
+      "label": "Piece 3 gold weight",
+      "min": 0,
+      "max": 10,
+      "step": 0.1,
+      "unit": "g",
+      "default": 2.6
+    },
+    {
+      "type": "header",
+      "content": "Chart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_chart",
+      "label": "Show the chart",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "chart_height",
+      "label": "Chart height",
+      "min": 60,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ block.settings.show_chart }}"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line colour",
+      "visible_if": "{{ block.settings.show_chart }}"
+    },
+    {
+      "type": "color",
+      "id": "marker_fill",
+      "label": "Purchase dot fill",
+      "visible_if": "{{ block.settings.show_chart }}"
+    },
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border colour"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background colour"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Padding inside",
+      "min": 8,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Small text colour"
+    },
+    {
+      "type": "color",
+      "id": "value_color",
+      "label": "Value colour"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Top label size",
+      "min": 9,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Small text size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Value"
+    },
+    {
+      "type": "select",
+      "id": "value_preset",
+      "label": "Value preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "value_font",
+      "label": "Value font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-heading--family)",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_font_size",
+      "label": "Value size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "3rem",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_weight",
+      "label": "Value weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "300",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_line_height",
+      "label": "Value line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_letter_spacing",
+      "label": "Value letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "value_case",
+      "label": "Value case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.value_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Portfolio sample card",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

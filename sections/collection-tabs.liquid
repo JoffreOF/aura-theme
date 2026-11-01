@@ -1,0 +1,320 @@
+{% comment %}
+  Row of links to collections (All jewelry, Best sellers, Rings, ...) under the collection banner.
+  The links come from a menu chosen in the theme editor; the tab for the collection being viewed is underlined.
+{% endcomment %}
+
+{%- liquid
+  assign tabs_menu = section.settings.menu
+  assign use_sample = false
+  if tabs_menu.links.size == 0 and request.design_mode
+    assign use_sample = true
+  endif
+
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+
+  assign tab_font = 'var(--font-body--family)'
+  if section.settings.font == 'subheading'
+    assign tab_font = 'var(--font-subheading--family)'
+  endif
+-%}
+
+<div
+  class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+></div>
+
+<div
+  class="section section--{{ section.settings.section_width }}{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  data-testid="collection-tabs-{{ section.id }}"
+>
+  {%- if tabs_menu.links.size > 0 or use_sample -%}
+    <nav
+      class="collection-tabs collection-tabs--{{ section.settings.alignment }}"
+      aria-label="{{ tabs_menu.title | default: 'Collections' | escape }}"
+      style="
+        --tabs-font: {{ tab_font }};
+        --tabs-size: {{ section.settings.font_size }};
+        --tabs-spacing: var(--letter-spacing--body-{{ section.settings.letter_spacing }});
+        --tabs-gap: {{ section.settings.gap }}px;
+        --tabs-transform: {% if section.settings.uppercase %}uppercase{% else %}none{% endif %};
+        {% if section.settings.text_color != blank %}--tabs-color: {{ section.settings.text_color }};{% endif %}
+      "
+    >
+      <ul class="collection-tabs__list">
+        {%- if use_sample -%}
+          {%- assign sample_tabs = 'All jewelry,Best sellers,Rings,Necklaces,Earrings,Bracelets,Charms' | split: ',' -%}
+          {%- for sample_tab in sample_tabs -%}
+            <li class="collection-tabs__item">
+              <a
+                class="collection-tabs__link"
+                href="#"
+                {% if forloop.index == 3 %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- sample_tab -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for link in tabs_menu.links -%}
+            {%- liquid
+              assign is_current = false
+              if link.type == 'collection_link' and collection != blank and link.object.id == collection.id
+                assign is_current = true
+              elsif link.current
+                assign is_current = true
+              endif
+            -%}
+            <li class="collection-tabs__item">
+              <a
+                class="collection-tabs__link"
+                href="{{ link.url }}"
+                {% if is_current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .collection-tabs {
+    --tabs-color: var(--color-foreground);
+
+    color: var(--tabs-color);
+    font-family: var(--tabs-font);
+    font-size: var(--tabs-size);
+    letter-spacing: var(--tabs-spacing);
+    text-transform: var(--tabs-transform);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .collection-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collection-tabs__list {
+    display: flex;
+    gap: var(--tabs-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  .collection-tabs--center .collection-tabs__list {
+    justify-content: center;
+  }
+
+  .collection-tabs__link {
+    display: inline-block;
+    padding-block: var(--padding-xs);
+    color: inherit;
+    text-decoration: none;
+    text-underline-offset: 0.5em;
+    text-decoration-thickness: 1px;
+  }
+
+  .collection-tabs__link:hover,
+  .collection-tabs__link[aria-current='page'] {
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection tabs",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A row of links to collections. The tab for the collection being viewed is underlined."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Make a menu in Online Store > Navigation whose links point to your collections."
+    },
+    {
+      "type": "header",
+      "content": "t:content.layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:options.direction_start"
+        },
+        {
+          "value": "center",
+          "label": "t:options.direction_center"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Space between tabs",
+      "min": 8,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "t:settings.font",
+      "options": [
+        {
+          "value": "body",
+          "label": "t:options.body"
+        },
+        {
+          "value": "subheading",
+          "label": "t:options.subheading"
+        }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings.size",
+      "options": [
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        }
+      ],
+      "default": "0.8125rem"
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "t:settings.letter_spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "loose"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:settings.text_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tabs",
+      "category": "t:categories.layout"
+    }
+  ]
+}
+{% endschema %}

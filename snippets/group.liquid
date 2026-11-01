@@ -80,6 +80,13 @@
 </div>
 
 {% stylesheet %}
+  /* "Show first on mobile" setting of the group block */
+  @media screen and (max-width: 749px) {
+    .group-block--mobile-first {
+      order: -1;
+    }
+  }
+
   .group-block__link {
     position: absolute;
     inset: 0;

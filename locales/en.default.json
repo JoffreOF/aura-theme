@@ -110,6 +110,16 @@
     "view_store_information": "View store information",
     "sort": "Sort"
   },
+  "aura_filters": {
+    "load_more": "Load more",
+    "showing_html": "Showing {{ shown }} of {{ total }}",
+    "price_min": "min",
+    "price_max": "max",
+    "piece_count": {
+      "one": "{{ count }} piece",
+      "other": "{{ count }} pieces"
+    }
+  },
   "cart_aura": {
     "pieces": {
       "one": "{{ count }} piece",

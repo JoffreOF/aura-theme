@@ -68,11 +68,14 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_kRE69b": {
-              "type": "text",
-              "name": "t:names.text",
+            "breadcrumbs_CykMAi": {
+              "type": "breadcrumbs",
+              "name": "Breadcrumbs",
               "settings": {
-                "text": "<p><a href=\"/\" title=\"/\">Home</a> /&nbsp;</p>",
+                "home_label": "Home",
+                "separator": "/",
+                "parent_collection": "",
+                "underline_links": true,
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -691,7 +694,7 @@
             }
           },
           "block_order": [
-            "text_kRE69b",
+            "breadcrumbs_CykMAi",
             "group_eYNJTz",
             "group_8WbQwM",
             "product_pricing_panel_7T6VqD",

@@ -92,4 +92,16 @@
   .checkbox__input:disabled + .checkbox__label {
     color: var(--input-disabled-text-color);
   }
+
+  .checkbox__count {
+    margin-inline-start: auto;
+    padding-inline-start: var(--padding-md);
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .checkbox:has(.checkbox__count) .checkbox__label {
+    flex: 1;
+    min-width: 0;
+  }
 {% endstylesheet %}

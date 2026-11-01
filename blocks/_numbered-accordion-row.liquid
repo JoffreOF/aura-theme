@@ -1,0 +1,175 @@
+{%- doc -%}
+  One row of the numbered accordion: number (typed, or counted by itself), title, plus / minus, and content
+  blocks inside. Styles come from the parent numbered-accordion through CSS variables.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+-%}
+
+{%- capture row_children -%}
+  <details
+    class="numbered-accordion__details"
+    {% if s.open_by_default %}open{% endif %}
+    {{ block.shopify_attributes }}
+  >
+    <summary class="numbered-accordion__summary">
+      <span class="numbered-accordion__number{% if s.number == blank %} numbered-accordion__number--auto{% endif %}" aria-hidden="true">
+        {{- s.number -}}
+      </span>
+      <span class="numbered-accordion__title">{{ s.title }}</span>
+      <span class="svg-wrapper icon-plus">
+        {{- 'icon-plus.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+
+    <div class="details-content numbered-accordion__content">
+      {% content_for 'blocks' %}
+    </div>
+  </details>
+{%- endcapture -%}
+
+{% render 'accordion-custom-component',
+  children: row_children,
+  class: 'numbered-accordion__row',
+  open_by_default_on_desktop: s.open_by_default,
+  open_by_default_on_mobile: s.open_by_default
+%}
+
+{% stylesheet %}
+  .numbered-accordion__summary {
+    display: grid;
+    grid-template-columns: var(--acc-number-column, 72px) minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0;
+    padding-block: var(--acc-row-padding, 22px);
+    padding-inline: 0;
+    color: var(--acc-title-color, var(--color-foreground));
+  }
+
+  .numbered-accordion--no-numbers .numbered-accordion__number {
+    display: none;
+  }
+
+  /* With the numbers off there are only two columns: title and plus / minus. */
+  .numbered-accordion--no-numbers .numbered-accordion__summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .numbered-accordion__number {
+    font-family: var(--acc-number-font-family, var(--font-heading--family));
+    font-size: var(--acc-number-font-size, 1.375rem);
+    font-weight: var(--acc-number-font-weight, 400);
+    line-height: var(--acc-number-line-height, 1.2);
+    letter-spacing: var(--acc-number-letter-spacing, normal);
+    text-transform: var(--acc-number-text-transform, none);
+    color: var(--acc-number-color, currentColor);
+  }
+
+  .numbered-accordion__number--auto::before {
+    content: counter(aura-acc, decimal-leading-zero);
+  }
+
+  .numbered-accordion__title {
+    font-family: var(--acc-title-font-family, var(--font-heading--family));
+    font-size: var(--acc-title-font-size, 1.75rem);
+    font-weight: var(--acc-title-font-weight, 300);
+    line-height: var(--acc-title-line-height, 1.2);
+    letter-spacing: var(--acc-title-letter-spacing, normal);
+    text-transform: var(--acc-title-text-transform, none);
+    color: var(--acc-title-color, currentColor);
+  }
+
+  .numbered-accordion__summary .svg-wrapper {
+    width: var(--acc-icon-size, 16px);
+    height: var(--acc-icon-size, 16px);
+    margin-inline-start: 16px;
+    color: var(--acc-icon-color, currentColor);
+  }
+
+  .numbered-accordion__summary .svg-wrapper svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The body lines up with the title, not with the number. */
+  .numbered-accordion__content {
+    padding-inline-start: var(--acc-number-column, 72px);
+    padding-inline-end: calc(var(--acc-icon-size, 16px) + 16px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .numbered-accordion__summary {
+      grid-template-columns: var(--acc-number-column-mobile, 44px) minmax(0, 1fr) auto;
+    }
+
+    .numbered-accordion--no-numbers .numbered-accordion__summary {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .numbered-accordion__title {
+      font-size: var(--acc-title-size-mobile, 22px);
+    }
+
+    .numbered-accordion__content {
+      padding-inline-start: var(--acc-number-column-mobile, 44px);
+    }
+  }
+
+  .numbered-accordion__details[open] > .numbered-accordion__content {
+    padding-block-end: var(--acc-row-padding, 22px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion row",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "number",
+      "label": "Number",
+      "info": "Leave empty to count automatically (01, 02, 03)."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Inflation protection"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion row",
+      "blocks": {
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Text for this reason.</p>",
+            "width": "100%",
+            "max_width": "normal"
+          }
+        }
+      },
+      "block_order": [
+        "text_1"
+      ]
+    }
+  ]
+}
+{% endschema %}

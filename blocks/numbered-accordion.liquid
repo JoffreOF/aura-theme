@@ -1,0 +1,1208 @@
+{%- doc -%}
+  Accordion with a number, a title and a plus / minus on every row ("01  Inflation protection  +").
+  Rows are blocks (see _numbered-accordion-row). Number and title styles are set here and read by the rows
+  through CSS variables, like the theme's own accordion does.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign number_column = s.number_column
+  assign number_column_mobile = s.number_column_mobile
+  if s.show_numbers == false
+    assign number_column = 0
+    assign number_column_mobile = 0
+  endif
+-%}
+
+<numbered-accordion
+  class="numbered-accordion spacing-style{% if s.dividers %} numbered-accordion--dividers{% endif %}{% if s.show_numbers == false %} numbered-accordion--no-numbers{% endif %}"
+  {% if s.one_open %}data-one-open{% endif %}
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --acc-number-column: {{ number_column }}px;
+    --acc-number-column-mobile: {{ number_column_mobile }}px;
+    --acc-title-size-mobile: {{ s.title_size_mobile }}px;
+    --acc-row-padding: {{ s.row_padding }}px;
+    --acc-icon-size: {{ s.icon_size }}px;
+    {% if s.divider_color != blank %}--acc-divider-color: {{ s.divider_color }};{% endif %}
+    {% if s.icon_color != blank %}--acc-icon-color: {{ s.icon_color }};{% endif %}
+    {% if s.number_color != blank %}--acc-number-color: {{ s.number_color }};{% endif %}
+    {% if s.title_color != blank %}--acc-title-color: {{ s.title_color }};{% endif %}
+    {% render 'typography-vars', settings: s, prefix: 'number_', name: 'acc-number' %}
+    {% render 'typography-vars', settings: s, prefix: 'title_', name: 'acc-title' %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</numbered-accordion>
+
+{% stylesheet %}
+  numbered-accordion {
+    display: block;
+    width: 100%;
+  }
+
+  .numbered-accordion__row {
+    display: block;
+    /* Rows that sit next to each other share one counter (01, 02, 03). */
+    counter-increment: aura-acc;
+  }
+
+  .numbered-accordion--dividers .numbered-accordion__row {
+    border-block-start: 1px solid var(--acc-divider-color, var(--color-border));
+  }
+
+  .numbered-accordion--dividers .numbered-accordion__row:last-child {
+    border-block-end: 1px solid var(--acc-divider-color, var(--color-border));
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Numbered accordion",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_numbered-accordion-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Rows with a number, a title and a plus / minus. Add rows inside; each row holds text or other blocks. With the number left empty in a row, rows count 01, 02, 03 by themselves."
+    },
+    {
+      "type": "checkbox",
+      "id": "one_open",
+      "label": "Only one row open at a time",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_numbers",
+      "label": "Show numbers",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "number_column",
+      "label": "Number column width",
+      "min": 24,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 72,
+      "visible_if": "{{ block.settings.show_numbers }}"
+    },
+    {
+      "type": "range",
+      "id": "number_column_mobile",
+      "label": "Number column width on mobile",
+      "min": 24,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 44,
+      "visible_if": "{{ block.settings.show_numbers }}"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Title size on mobile",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "row_padding",
+      "label": "Row height (space above and below the title)",
+      "min": 4,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "checkbox",
+      "id": "dividers",
+      "label": "Lines between rows",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Line colour",
+      "visible_if": "{{ block.settings.dividers }}"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Plus / minus size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Plus / minus colour"
+    },
+    {
+      "type": "header",
+      "content": "Number"
+    },
+    {
+      "type": "select",
+      "id": "number_preset",
+      "label": "Number preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "number_font",
+      "label": "Number font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-heading--family)",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "number_font_size",
+      "label": "Number size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1.375rem",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "number_weight",
+      "label": "Number weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "number_line_height",
+      "label": "Number line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "number_letter_spacing",
+      "label": "Number letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "number_case",
+      "label": "Number case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.number_preset == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "number_color",
+      "label": "Number colour"
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_preset",
+      "label": "Title preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "title_font",
+      "label": "Title font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-heading--family)",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size",
+      "label": "Title size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1.75rem",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "300",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_line_height",
+      "label": "Title line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_letter_spacing",
+      "label": "Title letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_case",
+      "label": "Title case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title colour"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Numbered accordion",
+      "category": "t:categories.basic",
+      "blocks": {
+        "row_1": {
+          "type": "_numbered-accordion-row",
+          "settings": {
+            "title": "Inflation protection",
+            "open_by_default": true
+          },
+          "blocks": {
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Governments can create money without limit. Gold is a finite resource, slow and costly to extract, so your savings are measured in something that cannot be diluted at will.</p>",
+                "width": "100%",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "text_1"
+          ]
+        },
+        "row_2": {
+          "type": "_numbered-accordion-row",
+          "settings": {
+            "title": "Crisis resilience",
+            "open_by_default": false
+          },
+          "blocks": {
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Text for this reason.</p>",
+                "width": "100%",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "text_1"
+          ]
+        },
+        "row_3": {
+          "type": "_numbered-accordion-row",
+          "settings": {
+            "title": "Independence",
+            "open_by_default": false
+          },
+          "blocks": {
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Text for this reason.</p>",
+                "width": "100%",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "text_1"
+          ]
+        },
+        "row_4": {
+          "type": "_numbered-accordion-row",
+          "settings": {
+            "title": "Institutional conviction",
+            "open_by_default": false
+          },
+          "blocks": {
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Text for this reason.</p>",
+                "width": "100%",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "text_1"
+          ]
+        },
+        "row_5": {
+          "type": "_numbered-accordion-row",
+          "settings": {
+            "title": "Global liquidity",
+            "open_by_default": false
+          },
+          "blocks": {
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Text for this reason.</p>",
+                "width": "100%",
+                "max_width": "normal"
+              }
+            }
+          },
+          "block_order": [
+            "text_1"
+          ]
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ]
+    }
+  ]
+}
+{% endschema %}

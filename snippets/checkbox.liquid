@@ -13,6 +13,7 @@
   @param {string} [inputRef] - input ref attribute for use with component framework
   @param {string} [labelRef] - label ref attribute for use with component framework
   @param {boolean} [autofocus] - whether the input should be autofocused
+  @param {number} [count] - number shown at the end of the row (for filters)
 {%- enddoc -%}
 
 {% render 'checkbox-styles' %}
@@ -56,5 +57,8 @@
   >
     {{ 'icon-checkmark.svg' | inline_asset_content }}
     <span class="checkbox__label-text">{{- label -}}</span>
+    {%- if count != nil -%}
+      <span class="checkbox__count">{{ count }}</span>
+    {%- endif -%}
   </label>
 </div>

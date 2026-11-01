@@ -52,17 +52,20 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_VjLW4Y": {
-              "type": "text",
-              "name": "t:names.text",
+            "breadcrumbs_KGVkfM": {
+              "type": "breadcrumbs",
+              "name": "Breadcrumbs",
               "settings": {
-                "text": "<p><a href=\"/\" title=\"/\">Home</a> / Jewelry</p>",
+                "home_label": "Home",
+                "separator": "/",
+                "parent_collection": "all-jewelry",
+                "underline_links": true,
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "0.8125rem",
                 "weight": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
@@ -108,7 +111,7 @@
             }
           },
           "block_order": [
-            "text_VjLW4Y",
+            "breadcrumbs_KGVkfM",
             "text_eWciJR"
           ]
         },
@@ -124,7 +127,7 @@
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
-            "width": "custom",
+            "width": "fit-content",
             "custom_width": 25,
             "width_mobile": "fit-content",
             "custom_width_mobile": 100,
@@ -220,9 +223,72 @@
         "padding-block-end": 36
       }
     },
+    "collection_tabs_WtnAWt": {
+      "type": "collection-tabs",
+      "name": "Collection tabs",
+      "settings": {
+        "menu": "collections",
+        "section_width": "page-width",
+        "alignment": "start",
+        "gap": 32,
+        "font": "body",
+        "font_size": "0.9375rem",
+        "letter_spacing": "loose",
+        "uppercase": true,
+        "background_color": "{{ settings.color_palette.color2 }}",
+        "text_color": "{{ settings.color_palette.color1 }}",
+        "padding-block-start": 12,
+        "padding-block-end": 12
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
+        "collection_promo_Aur4Ed": {
+          "type": "_collection-promo",
+          "name": "Collection promo",
+          "settings": {
+            "only_collection": "",
+            "position": 4,
+            "desktop_width": "2",
+            "desktop_rows": "1",
+            "show_on_mobile": true,
+            "mobile_position": 4,
+            "mobile_width": "2",
+            "mobile_ratio": "0.8",
+            "tile_link": "",
+            "toggle_overlay": true,
+            "overlay_color": "#0e0d0c99",
+            "overlay_style": "gradient",
+            "border_radius": 0,
+            "content_position": "bottom-left",
+            "content_alignment": "left",
+            "text_gap": 8,
+            "gap": 16,
+            "eyebrow_text": "",
+            "eyebrow_font_size": "0.75rem",
+            "eyebrow_case": "uppercase",
+            "eyebrow_text_color": "#ffffff",
+            "heading_text": "Every piece is priced by its gold",
+            "heading_font_size": "2.25rem",
+            "heading_font_size_mobile": "1.5rem",
+            "heading_weight": "300",
+            "heading_text_color": "#ffffff",
+            "description_text": "",
+            "description_font_size": "0.9375rem",
+            "description_text_color": "#ffffff",
+            "label": "How we price",
+            "link": "/",
+            "button_style": "link",
+            "button_color": "#ffffff",
+            "button_solid_text": "#4a253d",
+            "padding-block-start": 28,
+            "padding-block-end": 28,
+            "padding-inline-start": 28,
+            "padding-inline-end": 28
+          },
+          "blocks": {}
+        },
         "filters": {
           "type": "filters",
           "static": true,
@@ -235,6 +301,28 @@
             "show_filter_label": false,
             "enable_sorting": true,
             "enable_grid_density": false,
+            "show_filters_title": false,
+            "show_results_count": true,
+            "chips_in_toolbar": true,
+            "sort_style": "boxed",
+            "show_sort_label": true,
+            "show_sort_title_ascending": true,
+            "show_sort_title_descending": true,
+            "show_sort_created_ascending": true,
+            "show_sort_created_descending": true,
+            "sidebar_width": "standard",
+            "sidebar_sticky": true,
+            "category_group": "auto",
+            "price_compact": true,
+            "show_value_counts": true,
+            "show_group_dividers": true,
+            "collapsible_groups": true,
+            "group_title_size": "medium",
+            "value_text_size": "0.875rem",
+            "box_background": "#ffffff",
+            "box_text": "",
+            "checkbox_shape": "square",
+            "checkbox_color": "",
             "background_color": "",
             "text_color": "",
             "padding-block-start": 8,
@@ -454,7 +542,7 @@
                       "settings": {
                         "show_weight": true,
                         "weight_decimals": "1",
-                        "gold_color": "#C4A35A",
+                        "gold_color": "#c4a35a",
                         "track_color": "",
                         "bar_height": 4,
                         "row_gap": 6,
@@ -486,12 +574,17 @@
           ]
         }
       },
+      "block_order": [
+        "collection_promo_Aur4Ed"
+      ],
       "settings": {
         "layout_type": "grid",
+        "desktop_columns": "3",
         "product_card_size": "large",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": true,
-        "products_per_page": 24,
+        "show_load_more": true,
+        "products_per_page": 16,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 16,
@@ -506,6 +599,7 @@
   },
   "order": [
     "section",
+    "collection_tabs_WtnAWt",
     "main"
   ]
 }

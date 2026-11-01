@@ -1,0 +1,39 @@
+{%- doc -%}
+  Typography of one text group as CSS variables with your own name, for blocks that style several texts from
+  the parent (for example an accordion whose rows read the title style set on the accordion). Works with the
+  settings made for custom-typography-style (<prefix>preset, font, font_size, weight, line_height,
+  letter_spacing, case). With a preset it points at that preset instead.
+
+  Output: --<name>-font-family, -font-size, -font-weight, -line-height, -letter-spacing, -text-transform
+  (-font-size is left out when "Default" size is chosen, so the stylesheet's own fallback applies).
+
+  @param {object} settings - the block settings
+  @param {string} prefix - for example 'title_'
+  @param {string} name - for example 'acc-title'
+
+  @example
+  style="{% render 'typography-vars', settings: block.settings, prefix: 'title_', name: 'acc-title' %}"
+{%- enddoc -%}
+
+{%- liquid
+  assign preset_key = prefix | append: 'preset'
+  assign preset = settings[preset_key] | default: 'paragraph'
+  assign var_start = '--' | append: name | append: '-'
+-%}
+{%- if preset == 'custom' -%}
+  {%- capture raw -%}{%- render 'custom-typography-style', settings: settings, prefix: prefix -%}{%- endcapture -%}
+  {%- assign pieces = raw | split: ';' -%}
+  {%- for piece in pieces -%}
+    {%- assign piece = piece | strip -%}
+    {%- if piece != blank -%}
+      {%- assign renamed = piece | replace_first: '--', var_start -%}
+      {{- renamed -}};
+    {%- endif -%}
+  {%- endfor -%}
+{%- else -%}
+  {{- var_start }}font-family: var(--font-{{ preset }}--family);
+  {{- var_start }}font-size: var(--font-{{ preset }}--size);
+  {{- var_start }}font-weight: var(--font-{{ preset }}--weight);
+  {{- var_start }}line-height: var(--font-{{ preset }}--line-height);
+  {{- var_start }}text-transform: var(--font-{{ preset }}--case);
+{%- endif -%}

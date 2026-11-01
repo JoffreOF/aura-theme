@@ -4,7 +4,14 @@
   {% content_for 'blocks' %}
 {% endcapture %}
 
+{%- capture visibility_class -%}
+  {%- if block.settings.visibility == 'desktop' %} hidden--mobile{% endif -%}
+  {%- if block.settings.visibility == 'mobile' %} hidden--desktop{% endif -%}
+  {%- if block.settings.mobile_first %} group-block--mobile-first{% endif -%}
+{%- endcapture -%}
+
 {% render 'group',
+  class: visibility_class,
   children: children,
   settings: block.settings,
   shopify_attributes: block.shopify_attributes,
@@ -464,6 +471,37 @@
       "id": "placeholder",
       "label": "t:settings.image",
       "visible_if": "{{ false }}"
+    },
+    {
+      "type": "header",
+      "content": "Visibility and order"
+    },
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show on",
+      "options": [
+        {
+          "value": "all",
+          "label": "Desktop and mobile"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_first",
+      "label": "Show first on mobile",
+      "info": "On phones this group moves above its neighbours in the same container.",
+      "default": false
     },
     {
       "type": "header",
