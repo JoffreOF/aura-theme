@@ -58,7 +58,7 @@
               "settings": {
                 "home_label": "Home",
                 "separator": "/",
-                "parent_collection": "best-sellers",
+                "parent_collection": "all-jewelry",
                 "underline_links": true,
                 "width": "fit-content",
                 "max_width": "normal",
@@ -66,33 +66,6 @@
                 "type_preset": "custom",
                 "font": "var(--font-body--family)",
                 "font_size": "0.8125rem",
-                "weight": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.color10 }}",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_VjLW4Y": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p><a href=\"/\" title=\"/\">Home</a> / Jewelry</p>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
                 "weight": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
@@ -139,7 +112,6 @@
           },
           "block_order": [
             "breadcrumbs_KGVkfM",
-            "text_VjLW4Y",
             "text_eWciJR"
           ]
         },
