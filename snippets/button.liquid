@@ -23,6 +23,7 @@
     {{ block_settings.style_class }}
     {{ block_settings.style_class }}--{{ block.id }}
     {% if block_settings.style_class == 'button-unstyled' %}button-link{% endif %}
+    {% if block_settings.visibility == 'desktop' %}hidden--mobile{% elsif block_settings.visibility == 'mobile' %}hidden--desktop{% endif %}
   "
   style="{% render 'size-style', settings: block_settings %}"
   {%- if block_settings.open_in_new_tab -%}
