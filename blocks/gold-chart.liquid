@@ -1,0 +1,570 @@
+{%- doc -%}
+  XAU/USD gold chart for the homepage. The data is the shop's 18k gram price history (gold.price_history, [date, price]),
+  turned into ounces of pure gold: ounce price = gram price x 31.1035 / 0.75. The picture, the range tabs and the
+  hover / drag read-out are drawn by assets/gold-chart.js. Pre-launch history is monthly (back-fill), daily after
+  2026-10-24, so a range tab only shows once the history really covers it. It is the daily 10:00 AM PET price.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign history = shop.metafields.gold.price_history.value
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+
+  assign show = false
+  if history.size >= 2 and gram_price > 0
+    assign show = true
+  endif
+
+  if show
+    comment
+      The newest history entry is the latest price. If today's gram price is not in the history yet (the page is
+      served before the daily job wrote it), today's price is added as the last point.
+    endcomment
+    assign last_entry = history | last
+    assign last_gram = last_entry[1] | times: 1.0
+    assign today_iso = 'now' | date: '%Y-%m-%d'
+    assign add_today = false
+    if last_entry[0] != today_iso and last_gram != gram_price
+      assign add_today = true
+    endif
+
+    capture points_json
+      echo '['
+      for entry in history
+        assign ounce = entry[1] | times: 31.1035 | divided_by: 0.75 | round: 2
+        echo '["' | append: entry[0] | append: '",' | append: ounce | append: ']'
+        unless forloop.last
+          echo ','
+        endunless
+      endfor
+      if add_today
+        assign ounce_today = gram_price | times: 31.1035 | divided_by: 0.75 | round: 2
+        echo ',["' | append: today_iso | append: '",' | append: ounce_today | append: ']'
+      endif
+      echo ']'
+    endcapture
+
+    assign keys = 'w1,m1,m3,m6,y1,y5,max' | split: ','
+    capture strings_json
+      echo '{"label":'
+      echo 'blocks.gold_chart.label' | t | json
+      echo ',"hint":'
+      echo 'blocks.gold_chart.hint' | t | json
+      for key in keys
+        assign long_key = 'blocks.gold_chart.long_' | append: key
+        assign short_key = 'blocks.gold_chart.short_' | append: key
+        assign past_key = 'blocks.gold_chart.past_' | append: key
+        echo ',"long_' | append: key | append: '":'
+        echo long_key | t | json
+        echo ',"short_' | append: key | append: '":'
+        echo short_key | t | json
+        echo ',"past_' | append: key | append: '":'
+        echo past_key | t | json
+      endfor
+      echo '}'
+    endcapture
+  endif
+-%}
+
+<gold-chart
+  class="gold-chart spacing-style"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --gc-height: {{ s.chart_height }}px;
+    --gc-height-mobile: {{ s.chart_height_mobile }}px;
+    --gc-axis-size: {{ s.axis_size }}px;
+    --gc-price-size: {{ s.header_price_size }}px;
+    --gc-line-width: {{ s.line_width }}px;
+    {% if s.line_color != blank %}--gc-line: {{ s.line_color }};{% endif %}
+    {% if s.fill_color != blank %}--gc-fill: {{ s.fill_color }};{% endif %}
+    {% if s.grid_color != blank %}--gc-grid: {{ s.grid_color }};{% endif %}
+    {% if s.dash_color != blank %}--gc-dash: {{ s.dash_color }};{% endif %}
+    {% if s.tag_background != blank %}--gc-tag-bg: {{ s.tag_background }};{% endif %}
+    {% if s.tag_text != blank %}--gc-tag-text: {{ s.tag_text }};{% endif %}
+    {% if s.text_color != blank %}--gc-text: {{ s.text_color }};{% endif %}
+    {% if s.muted_color != blank %}--gc-muted: {{ s.muted_color }};{% endif %}
+    {% if s.tab_border_color != blank %}--gc-border: {{ s.tab_border_color }};{% endif %}
+    {% if s.active_tab_background != blank %}--gc-active-bg: {{ s.active_tab_background }};{% endif %}
+    {% if s.active_tab_text != blank %}--gc-active-text: {{ s.active_tab_text }};{% endif %}
+    {% if s.pill_background != blank %}--gc-pill-bg: {{ s.pill_background }};{% endif %}
+    {% if s.pill_text != blank %}--gc-pill-text: {{ s.pill_text }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <script type="application/json" data-config>
+      {
+        "points": {{ points_json }},
+        "defaultRange": {{ s.default_range | json }},
+        "hideShort": {{ s.hide_short_ranges | json }},
+        "symbol": {{ s.currency_symbol | json }},
+        "strings": {{ strings_json }}
+      }
+    </script>
+    <div class="gold-chart__header{% if s.show_header_desktop %} gold-chart__header--always{% endif %}">
+      <p class="gold-chart__price" data-price></p>
+      <p class="gold-chart__sub" data-sub></p>
+    </div>
+    <div class="gold-chart__plot" data-plot>
+      <div class="gold-chart__tooltip" data-tooltip hidden></div>
+    </div>
+    <div class="gold-chart__tabs" role="group" aria-label="{{ 'blocks.gold_chart.label' | t }}" data-tabs></div>
+    {%- if s.show_hint -%}
+      <p class="gold-chart__hint">{{ 'blocks.gold_chart.hint' | t }}</p>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="gold-chart__empty">Gold chart hidden: the shop needs gold.price_18k_per_g and at least two entries in gold.price_history.</p>
+  {%- endif -%}
+</gold-chart>
+
+{% stylesheet %}
+  gold-chart {
+    display: block;
+    width: 100%;
+    color: var(--gc-text, var(--color-foreground));
+  }
+
+  .gold-chart__header {
+    display: none;
+    margin-bottom: 12px;
+  }
+
+  .gold-chart__header--always {
+    display: block;
+  }
+
+  @media screen and (max-width: 749px) {
+    .gold-chart__header {
+      display: block;
+    }
+  }
+
+  .gold-chart__price {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: var(--gc-price-size, 44px);
+    font-weight: 300;
+    line-height: 1.1;
+  }
+
+  .gold-chart__sub {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--gc-muted, currentColor);
+  }
+
+  .gold-chart__plot {
+    position: relative;
+    width: 100%;
+    min-width: 240px;
+    height: var(--gc-height, 340px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .gold-chart__plot {
+      height: var(--gc-height-mobile, 230px);
+    }
+  }
+
+  /* The drawing sits on top of the plot box, so the box (the container's width) decides the chart's width, never the drawing */
+  .gold-chart__plot svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: visible;
+    font-family: var(--font-body--family);
+  }
+
+  .gc-grid {
+    stroke: var(--gc-grid, rgb(0 0 0 / 0.14));
+    stroke-width: 1;
+  }
+
+  .gc-axis {
+    font-size: var(--gc-axis-size, 12px);
+    fill: var(--gc-muted, currentColor);
+  }
+
+  .gc-line {
+    fill: none;
+    stroke: var(--gc-line, currentColor);
+    stroke-width: var(--gc-line-width, 1.5px);
+    stroke-linejoin: round;
+  }
+
+  .gc-area {
+    fill: var(--gc-fill, rgb(74 37 61 / 0.08));
+    stroke: none;
+  }
+
+  .gc-dash {
+    stroke: var(--gc-dash, currentColor);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0.7;
+  }
+
+  .gc-tag {
+    fill: var(--gc-tag-bg, #3c2e23);
+  }
+
+  .gc-tag-text {
+    fill: var(--gc-tag-text, #fff);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .gc-cursor {
+    stroke: var(--gc-muted, currentColor);
+    stroke-width: 1;
+  }
+
+  .gc-dot {
+    fill: var(--color-background, #fff);
+    stroke: var(--gc-line, currentColor);
+    stroke-width: 1.5;
+  }
+
+  .gc-surface {
+    fill: transparent;
+    cursor: crosshair;
+    /* a vertical swipe still scrolls the page; a sideways drag reads the chart */
+    touch-action: pan-y;
+  }
+
+  .gold-chart__tooltip {
+    position: absolute;
+    z-index: 1;
+    padding: 4px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    color: var(--gc-tag-text, #fff);
+    background: var(--gc-tag-bg, #3c2e23);
+  }
+
+  .gold-chart__tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    margin-top: 20px;
+    border: 1px solid var(--gc-border, var(--color-border));
+  }
+
+  .gold-chart__tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 6px;
+    font: inherit;
+    font-size: 14px;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-inline-start: 1px solid var(--gc-border, var(--color-border));
+    cursor: pointer;
+  }
+
+  .gold-chart__tab:first-child {
+    border-inline-start: 0;
+  }
+
+  .gold-chart__tab[aria-pressed='true'] {
+    background: var(--gc-active-bg, rgb(0 0 0 / 0.06));
+    color: var(--gc-active-text, inherit);
+  }
+
+  .gold-chart__tab-short {
+    display: none;
+  }
+
+  .gold-chart__tab-change {
+    font-size: 12px;
+    color: var(--gc-muted, currentColor);
+  }
+
+  /* Phones: round buttons with the short names, no change under them */
+  @media screen and (max-width: 749px) {
+    .gold-chart__tabs {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      margin-top: 16px;
+      border: 0;
+    }
+
+    .gold-chart__tab {
+      flex: 0 0 auto;
+      min-width: 40px;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 999px;
+    }
+
+    .gold-chart__tab:first-child {
+      border: 0;
+    }
+
+    .gold-chart__tab-long,
+    .gold-chart__tab-change {
+      display: none;
+    }
+
+    .gold-chart__tab-short {
+      display: inline;
+    }
+
+    .gold-chart__tab[aria-pressed='true'] {
+      background: var(--gc-pill-bg, #4a253d);
+      color: var(--gc-pill-text, #fff);
+    }
+  }
+
+  .gold-chart__hint {
+    display: none;
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--gc-muted, currentColor);
+  }
+
+  @media screen and (max-width: 749px) {
+    .gold-chart__hint {
+      display: block;
+    }
+  }
+
+  .gold-chart__empty {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold chart",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Gold price chart (XAU/USD, US dollars per troy ounce) from the shop's price history (gold.price_history): ounce price = 18k gram price x 31.1035 / 0.75. Pre-launch history is monthly, daily after the price job started, so a range tab (1 Week ... Max) only shows once the history really covers it. On phones the big price shows above the chart and you drag across the chart to read any day."
+    },
+    {
+      "type": "select",
+      "id": "default_range",
+      "label": "Range shown first",
+      "options": [
+        {
+          "value": "w1",
+          "label": "1 Week"
+        },
+        {
+          "value": "m1",
+          "label": "1 Month"
+        },
+        {
+          "value": "m3",
+          "label": "3 Months"
+        },
+        {
+          "value": "m6",
+          "label": "6 Months"
+        },
+        {
+          "value": "y1",
+          "label": "1 Year"
+        },
+        {
+          "value": "y5",
+          "label": "5 Years"
+        },
+        {
+          "value": "max",
+          "label": "Max"
+        }
+      ],
+      "default": "y1"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_short_ranges",
+      "label": "Hide ranges the history does not cover yet",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "currency_symbol",
+      "label": "Currency symbol",
+      "default": "$"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_desktop",
+      "label": "Show the big price above the chart on desktop too",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hint",
+      "label": "Show the drag hint on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "chart_height",
+      "label": "Chart height",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "chart_height_mobile",
+      "label": "Chart height on mobile",
+      "min": 160,
+      "max": 360,
+      "step": 10,
+      "unit": "px",
+      "default": 230
+    },
+    {
+      "type": "range",
+      "id": "axis_size",
+      "label": "Axis text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "header_price_size",
+      "label": "Big price size (mobile)",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "label": "Line thickness",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1.5
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line"
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Area under the line"
+    },
+    {
+      "type": "color",
+      "id": "grid_color",
+      "label": "Grid lines"
+    },
+    {
+      "type": "color",
+      "id": "dash_color",
+      "label": "Today's price line"
+    },
+    {
+      "type": "color",
+      "id": "tag_background",
+      "label": "Price tag and tooltip background"
+    },
+    {
+      "type": "color",
+      "id": "tag_text",
+      "label": "Price tag and tooltip text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Small text"
+    },
+    {
+      "type": "color",
+      "id": "tab_border_color",
+      "label": "Range tabs border"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_background",
+      "label": "Active tab background"
+    },
+    {
+      "type": "color",
+      "id": "active_tab_text",
+      "label": "Active tab text"
+    },
+    {
+      "type": "color",
+      "id": "pill_background",
+      "label": "Active button background (mobile)"
+    },
+    {
+      "type": "color",
+      "id": "pill_text",
+      "label": "Active button text (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold chart",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

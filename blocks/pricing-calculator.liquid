@@ -1,0 +1,654 @@
+{%- doc -%}
+  Homepage pricing calculator: purity x gold weight x today's gold price per gram x disclosed markup = price.
+  The shop's numbers come from gold.price_18k_per_g and gold.markup (storefront-readable); the visitor types a weight and
+  assets/pricing-calculator.js recalculates with the same formula as the price job:
+    price = round(weight x 18k gram price x markup, 2),  gold value = round(weight x 18k gram price, 2).
+  The 18k gram price already holds the 75% purity, so purity is shown, not multiplied again. The spot price shown is the ounce
+  price of pure gold (gram price x 31.1035 / 0.75) over 31.1 grams. One markup for every piece (no stones toggle, decided 2026-10-31).
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+  assign markup = shop.metafields.gold.markup.value | times: 1.0
+
+  assign show = false
+  if gram_price > 0 and markup > 0
+    assign show = true
+    assign ounce = gram_price | times: 31.1035 | divided_by: 0.75
+    assign ounce_tenths = ounce | times: 10 | round
+    assign ounce_tenth_digit = ounce_tenths | modulo: 10
+    assign ounce_whole = ounce_tenths | minus: ounce_tenth_digit | divided_by: 10 | floor
+    assign ounce_text = ounce_whole | times: 100 | money_without_currency | split: '.' | first
+    assign ounce_text = ounce_text | append: '.' | append: ounce_tenth_digit
+
+    comment
+      Markup printed the way it is stored (1.75 stays 1.75, 2 stays 2.00): whole hundredths.
+    endcomment
+    assign markup_hundredths = markup | times: 100 | round
+    assign markup_frac = markup_hundredths | modulo: 100
+    assign markup_whole = markup_hundredths | divided_by: 100 | floor
+    assign markup_frac_text = markup_frac | append: ''
+    if markup_frac < 10
+      assign markup_frac_text = '0' | append: markup_frac_text
+    endif
+    assign markup_text = markup_whole | append: '.' | append: markup_frac_text
+
+    assign weight_start = s.weight_default | replace: ',', '.' | times: 1.0
+    if weight_start <= 0
+      assign weight_start = 4.1
+    endif
+    assign start_price_cents = weight_start | times: gram_price | times: markup | times: 100 | round
+    assign start_gold_cents = weight_start | times: gram_price | times: 100 | round
+    assign start_price_text = start_price_cents | money_without_currency
+    assign start_gold_text = start_gold_cents | money_without_currency
+    assign gold_html = '<strong>' | append: s.currency_symbol | append: start_gold_text | append: '</strong>'
+    assign note_html = s.note | escape | replace: '{gold_value}', gold_html
+  endif
+-%}
+
+<pricing-calculator
+  class="pricing-calculator spacing-style"
+  {% if show %}
+    data-gram="{{ gram_price }}"
+    data-markup="{{ markup }}"
+    data-min="{{ s.weight_min }}"
+    data-max="{{ s.weight_max }}"
+    data-step="{{ s.weight_step }}"
+    data-symbol="{{ s.currency_symbol }}"
+  {% endif %}
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --pc-value-font: {{ s.value_font }};
+    --pc-value-size: {{ s.value_size }}px;
+    --pc-price-size: {{ s.price_size }}px;
+    --pc-caption-size: {{ s.caption_size }}px;
+    --pc-row-height: {{ s.row_height }}px;
+    {% if s.text_color != blank %}--pc-text: {{ s.text_color }};{% endif %}
+    {% if s.value_color != blank %}--pc-value: {{ s.value_color }};{% endif %}
+    {% if s.operator_color != blank %}--pc-op: {{ s.operator_color }};{% endif %}
+    {% if s.input_border_color != blank %}--pc-input-border: {{ s.input_border_color }};{% endif %}
+    {% if s.input_background != blank %}--pc-input-bg: {{ s.input_background }};{% endif %}
+    {% if s.price_background != blank %}--pc-price-bg: {{ s.price_background }};{% endif %}
+    {% if s.price_text != blank %}--pc-price-text: {{ s.price_text }};{% endif %}
+    {% if s.caption_color != blank %}--pc-caption: {{ s.caption_color }};{% endif %}
+    {% if s.card_border_color != blank %}--pc-card-border: {{ s.card_border_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    {%- if s.eyebrow != blank -%}
+      <p class="pc__eyebrow">{{ s.eyebrow }}</p>
+    {%- endif -%}
+    <div class="pc__row">
+      <div class="pc__factor">
+        <p class="pc__value">{{ s.purity_text }}</p>
+        <p class="pc__caption">{{ s.purity_label }}</p>
+      </div>
+      <span class="pc__op" aria-hidden="true">&times;</span>
+      <div class="pc__factor pc__factor--weight">
+        <div class="pc__weight">
+          <button type="button" class="pc__step" data-step="-1" aria-label="{{ s.weight_label | escape }} (-)">&minus;</button>
+          <input
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            class="pc__input"
+            data-weight
+            value="{{ s.weight_default }}"
+            aria-label="{{ s.weight_label | escape }}"
+          >
+          <button type="button" class="pc__step" data-step="1" aria-label="{{ s.weight_label | escape }} (+)">+</button>
+          <span class="pc__unit">{{ s.unit }}</span>
+        </div>
+        <p class="pc__caption">{{ s.weight_label }}</p>
+      </div>
+      <span class="pc__op" aria-hidden="true">&times;</span>
+      <div class="pc__factor">
+        <p class="pc__fraction">
+          <span class="pc__fraction-top">{{ s.currency_symbol }}{{ ounce_text }}</span>
+          <span class="pc__fraction-bottom">31.1</span>
+        </p>
+        <p class="pc__caption">{{ s.spot_label }}</p>
+      </div>
+      <span class="pc__op" aria-hidden="true">&times;</span>
+      <div class="pc__factor">
+        <p class="pc__value">{{ markup_text }}</p>
+        <p class="pc__caption">{{ s.markup_label }}</p>
+      </div>
+      <span class="pc__op pc__op--equals" aria-hidden="true">=</span>
+      <div class="pc__factor pc__factor--price">
+        <p class="pc__price" data-price aria-live="polite">{{ s.currency_symbol }}{{ start_price_text }}</p>
+        <p class="pc__caption">{{ s.price_label }}</p>
+      </div>
+    </div>
+    {%- if s.note != blank -%}
+      <p class="pc__note" data-note data-template="{{ s.note | escape }}">{{ note_html }}</p>
+    {%- endif -%}
+    {%- if s.fine_print != blank -%}
+      <p class="pc__fine">{{ s.fine_print }}</p>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="pc__hint">Pricing calculator hidden: the shop needs the metafields gold.price_18k_per_g and gold.markup.</p>
+  {%- endif -%}
+</pricing-calculator>
+
+{% stylesheet %}
+  .pricing-calculator {
+    display: block;
+    width: 100%;
+    color: var(--pc-text, var(--color-foreground));
+  }
+
+  .pc__eyebrow {
+    margin: 0 0 32px;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--pc-caption, currentColor);
+  }
+
+  .pc__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px 28px;
+  }
+
+  .pc__factor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .pc__value,
+  .pc__price,
+  .pc__fraction {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--pc-row-height, 72px);
+    font-family: var(--pc-value-font, var(--font-heading--family));
+    font-size: var(--pc-value-size, 64px);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--pc-value, currentColor);
+  }
+
+  .pc__caption {
+    margin: 0;
+    max-width: 150px;
+    text-align: center;
+    font-size: var(--pc-caption-size, 12px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: var(--pc-caption, currentColor);
+  }
+
+  .pc__op {
+    display: flex;
+    align-items: center;
+    height: var(--pc-row-height, 72px);
+    font-size: 28px;
+    color: var(--pc-op, #c4a35a);
+  }
+
+  .pc__weight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--pc-row-height, 72px);
+  }
+
+  /* ".pricing-calculator .pc__input": the theme colours every text input (background and border), and that rule
+     would win over a plain class, so the box would turn the theme's input colour and hide the number. */
+  .pricing-calculator .pc__input {
+    box-sizing: border-box;
+    width: 150px;
+    height: var(--pc-row-height, 72px);
+    padding: 0 8px;
+    text-align: center;
+    font-family: var(--pc-value-font, var(--font-heading--family));
+    font-size: var(--pc-value-size, 64px);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--pc-value, currentColor);
+    background-color: var(--pc-input-bg, transparent);
+    border: 2px solid;
+    border-color: var(--pc-input-border, currentColor);
+    border-radius: 0;
+  }
+
+  .pc__unit {
+    font-family: var(--pc-value-font, var(--font-heading--family));
+    font-size: var(--pc-value-size, 64px);
+    font-weight: 300;
+    color: var(--pc-value, currentColor);
+  }
+
+  /* the - and + buttons are for phones */
+  .pc__step {
+    display: none;
+  }
+
+  .pc__fraction {
+    flex-direction: column;
+    gap: 2px;
+    font-size: calc(var(--pc-value-size, 64px) * 0.5);
+    line-height: 1.1;
+  }
+
+  .pc__fraction-top {
+    padding-bottom: 2px;
+    border-bottom: 2px solid currentColor;
+  }
+
+  .pc__price {
+    min-width: 190px;
+    padding-inline: 20px;
+    font-size: var(--pc-price-size, 52px);
+    color: var(--pc-price-text, #fff);
+    background: var(--pc-price-bg, #4a253d);
+  }
+
+  .pc__note {
+    margin: 36px 0 0;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .pc__note strong {
+    font-weight: 600;
+    color: var(--pc-value, currentColor);
+  }
+
+  .pc__fine {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--pc-caption, currentColor);
+  }
+
+  .pc__hint {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+
+  /* Phones: one bordered card, one line per factor (caption left, value right) */
+  @media screen and (max-width: 749px) {
+    .pricing-calculator:has(.pc__row) {
+      padding-inline: 20px;
+      padding-block: 24px;
+      border: 1px solid var(--pc-card-border, currentColor);
+    }
+
+    .pc__eyebrow {
+      margin: 0 0 20px;
+      text-align: start;
+      font-size: 12px;
+    }
+
+    .pc__row {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .pc__factor {
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .pc__factor .pc__caption {
+      flex: 1 1 0;
+      max-width: none;
+      text-align: start;
+    }
+
+    .pc__value,
+    .pc__fraction {
+      min-height: 0;
+      font-size: 44px;
+    }
+
+    .pc__fraction {
+      font-size: 22px;
+    }
+
+    .pc__op {
+      justify-content: center;
+      height: 26px;
+      font-size: 18px;
+    }
+
+    .pc__weight {
+      min-height: 0;
+    }
+
+    .pricing-calculator .pc__input {
+      width: 64px;
+      height: 56px;
+      font-size: 32px;
+    }
+
+    .pc__unit {
+      font-size: 28px;
+    }
+
+    .pc__step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 56px;
+      padding: 0;
+      font-size: 22px;
+      line-height: 1;
+      color: inherit;
+      background: transparent;
+      border: 1px solid var(--pc-card-border, currentColor);
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    .pc__factor--price {
+      margin-top: 4px;
+      padding: 16px 18px;
+      background: var(--pc-price-bg, #4a253d);
+    }
+
+    .pc__factor--price .pc__caption {
+      color: var(--pc-price-text, #fff);
+    }
+
+    .pc__factor--price .pc__price {
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      font-size: 36px;
+    }
+
+    .pc__note,
+    .pc__fine {
+      text-align: start;
+      font-size: 14px;
+    }
+
+    .pc__note {
+      margin-top: 18px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pricing calculator",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Calculator: purity x gold weight x today's gold price per gram x disclosed markup = price. The gold price and the markup come from the shop (gold.price_18k_per_g and gold.markup); the visitor types a weight. Same formula as the price job: price = round(weight x 18k gram price x markup, 2). One markup for every piece."
+    },
+    {
+      "type": "header",
+      "content": "Words"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Top label",
+      "default": "Try it · Aura's investment-based pricing"
+    },
+    {
+      "type": "text",
+      "id": "purity_text",
+      "label": "Purity",
+      "default": "75%"
+    },
+    {
+      "type": "text",
+      "id": "purity_label",
+      "label": "Purity caption",
+      "default": "18k gold purity"
+    },
+    {
+      "type": "text",
+      "id": "weight_label",
+      "label": "Weight caption",
+      "default": "Type your dream jewel's gold weight"
+    },
+    {
+      "type": "text",
+      "id": "spot_label",
+      "label": "Gold price caption",
+      "default": "Today's gold spot price per gram"
+    },
+    {
+      "type": "text",
+      "id": "markup_label",
+      "label": "Markup caption",
+      "default": "Disclosed craftsmanship markup"
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "Price caption",
+      "default": "Your price"
+    },
+    {
+      "type": "text",
+      "id": "unit",
+      "label": "Weight unit",
+      "default": "g"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Line under the calculation",
+      "default": "Of this price, {gold_value} is gold value, and that is what goes into your portfolio.",
+      "info": "{gold_value} is filled in for you."
+    },
+    {
+      "type": "text",
+      "id": "fine_print",
+      "label": "Small print",
+      "default": "Prices follow the gold price, updated daily at 10:00 AM PET."
+    },
+    {
+      "type": "text",
+      "id": "currency_symbol",
+      "label": "Currency symbol",
+      "default": "$"
+    },
+    {
+      "type": "header",
+      "content": "Weight"
+    },
+    {
+      "type": "text",
+      "id": "weight_default",
+      "label": "Starting weight (grams)",
+      "default": "4.1"
+    },
+    {
+      "type": "range",
+      "id": "weight_min",
+      "label": "Smallest weight",
+      "min": 0.1,
+      "max": 5,
+      "step": 0.1,
+      "unit": "g",
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "weight_max",
+      "label": "Largest weight",
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "unit": "g",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "weight_step",
+      "label": "Step of the - and + buttons",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "unit": "g",
+      "default": 0.1
+    },
+    {
+      "type": "header",
+      "content": "Look"
+    },
+    {
+      "type": "select",
+      "id": "value_font",
+      "label": "Numbers font",
+      "options": [
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        }
+      ],
+      "default": "var(--font-heading--family)"
+    },
+    {
+      "type": "range",
+      "id": "value_size",
+      "label": "Numbers size",
+      "min": 32,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 28,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "caption_size",
+      "label": "Caption size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "row_height",
+      "label": "Height of the numbers row",
+      "min": 48,
+      "max": 110,
+      "step": 2,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "value_color",
+      "label": "Numbers"
+    },
+    {
+      "type": "color",
+      "id": "operator_color",
+      "label": "x and = signs"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Weight box border"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Weight box background"
+    },
+    {
+      "type": "color",
+      "id": "price_background",
+      "label": "Price background"
+    },
+    {
+      "type": "color",
+      "id": "price_text",
+      "label": "Price text"
+    },
+    {
+      "type": "color",
+      "id": "caption_color",
+      "label": "Captions"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pricing calculator",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

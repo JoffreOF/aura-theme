@@ -22,6 +22,10 @@
     {%- render 'spacing-style', settings: section.settings %};
     {% render 'gap-style', value: gap_between_elements, name: 'marquee-gap' %}
     --marquee-direction: {{ section.settings.movement_direction }};
+    {% if section.settings.show_lines %}
+      --marquee-line: {{ section.settings.line_thickness }}px;
+      {% if section.settings.line_color != blank %}--marquee-line-color: {{ section.settings.line_color }};{% endif %}
+    {% endif %}
   "
   data-speed-factor="25"
   data-movement-direction="{{ section.settings.movement_direction }}"
@@ -49,6 +53,8 @@
     display: block;
     width: 100%;
     overflow: hidden;
+    /* "Lines above and below" setting */
+    border-block: var(--marquee-line, 0) solid var(--marquee-line-color, currentColor);
   }
 
   .marquee__wrapper {
@@ -105,6 +111,9 @@
   },
   "blocks": [
     {
+      "type": "gold-price"
+    },
+    {
       "type": "text"
     },
     {
@@ -139,6 +148,29 @@
       "id": "background_color",
       "label": "t:settings.background_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_lines",
+      "label": "Lines above and below",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "line_thickness",
+      "label": "Line thickness",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 2,
+      "visible_if": "{{ section.settings.show_lines }}"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line colour",
+      "visible_if": "{{ section.settings.show_lines }}"
     },
     {
       "type": "header",

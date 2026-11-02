@@ -1,0 +1,736 @@
+{%- doc -%}
+  One ticker item for the Marquee section: "XAU/USD  4,336.70  ▲ 28.90 (+0.67%)  ◆".
+  XAU is pure gold per troy ounce. The shop stores the 18k price per gram, so:
+    ounce price = 18k gram price x 31.1035 / 0.75
+  The change compares the two latest entries of gold.price_history, only when they are 5 days apart or less
+  (older entries are monthly back-fill points and would give a false change), the same rule as the announcement bar.
+  It is the daily 10:00 AM PET price, not a live feed. Liquid has no operator precedence, so each step is its own assign.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+
+  assign show = false
+  if gram_price > 0
+    assign show = true
+    assign oz_now = gram_price | times: 31.1035 | divided_by: 0.75
+    assign oz_cents = oz_now | times: 100 | round
+    assign price_text = oz_cents | money_without_currency
+  endif
+
+  assign show_change = false
+  if show and s.show_change
+    assign history = shop.metafields.gold.price_history.value
+    if history.size >= 2
+      assign newest_first = history | reverse
+      assign latest = newest_first[0]
+      assign previous = newest_first[1]
+      assign latest_day = latest[0] | date: '%s' | plus: 0
+      assign previous_day = previous[0] | date: '%s' | plus: 0
+      assign gap_days = latest_day | minus: previous_day | divided_by: 86400.0
+      assign previous_gram = previous[1] | times: 1.0
+      if gap_days >= 0 and gap_days <= 5 and previous_gram > 0
+        assign show_change = true
+        assign latest_gram = latest[1] | times: 1.0
+        assign oz_latest = latest_gram | times: 31.1035 | divided_by: 0.75
+        assign oz_previous = previous_gram | times: 31.1035 | divided_by: 0.75
+        assign diff = oz_latest | minus: oz_previous
+        assign diff_abs = diff
+        if diff < 0
+          assign diff_abs = diff | times: -1
+        endif
+        assign diff_cents = diff_abs | times: 100 | round
+        assign diff_text = diff_cents | money_without_currency
+
+        assign pct_abs = diff_abs | times: 100.0 | divided_by: oz_previous
+        assign pct_hundredths = pct_abs | times: 100 | round
+        assign pct_whole = pct_hundredths | divided_by: 100 | floor
+        assign pct_frac = pct_hundredths | modulo: 100
+        assign pct_frac_text = pct_frac | append: ''
+        if pct_frac < 10
+          assign pct_frac_text = '0' | append: pct_frac_text
+        endif
+        assign pct_text = pct_whole | append: '.' | append: pct_frac_text
+
+        assign direction = 'flat'
+        assign sign = ''
+        if pct_hundredths > 0
+          if diff > 0
+            assign direction = 'up'
+            assign sign = '+'
+          else
+            assign direction = 'down'
+            assign sign = '-'
+          endif
+        endif
+      endif
+    endif
+  endif
+
+  assign item_class = s.item_preset
+  assign item_style = ''
+  if s.item_preset == 'custom'
+    assign item_class = 'custom-typography'
+    if s.item_font_size != blank
+      assign item_class = item_class | append: ' custom-font-size'
+    endif
+    capture item_style
+      render 'custom-typography-style', settings: s, prefix: 'item_'
+    endcapture
+  endif
+-%}
+
+{%- if show -%}
+  <div
+    class="gold-ticker {{ item_class }}"
+    style="
+      {{ item_style }}
+      --ticker-gap: {{ s.part_gap }}px;
+      --ticker-label-weight: {{ s.label_weight }};
+      --ticker-change-scale: {{ s.change_scale | divided_by: 100.0 }};
+      {% if s.text_color != blank %}--ticker-color: {{ s.text_color }};{% endif %}
+      {% if s.change_color != blank %}--ticker-change-color: {{ s.change_color }};{% endif %}
+      {% if s.diamond_color != blank %}--ticker-diamond: {{ s.diamond_color }};{% endif %}
+      --ticker-diamond-size: {{ s.diamond_size }}px;
+      --ticker-diamond-space: {{ s.diamond_space }}px;
+    "
+    {{ block.shopify_attributes }}
+  >
+    <span class="gold-ticker__label">{{ s.label }}</span>
+    <span class="gold-ticker__price">{{ price_text }}</span>
+    {%- if show_change -%}
+      <span class="gold-ticker__change gold-ticker__change--{{ direction }}">
+        {%- if direction == 'up' -%}
+          <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 2l4 6.5H1z" fill="currentColor"/></svg>
+        {%- elsif direction == 'down' -%}
+          <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 8L1 1.5h8z" fill="currentColor"/></svg>
+        {%- endif -%}
+        {{ diff_text }} ({{ sign }}{{ pct_text }}%)
+      </span>
+    {%- endif -%}
+    {%- if s.show_diamond -%}
+      <span class="gold-ticker__diamond" aria-hidden="true"></span>
+    {%- endif -%}
+  </div>
+{%- elsif request.design_mode -%}
+  <p class="gold-ticker__hint">Gold price hidden: the shop metafield gold.price_18k_per_g is missing.</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .gold-ticker {
+    display: inline-flex;
+    flex: none;
+    align-items: baseline;
+    gap: var(--ticker-gap, 16px);
+    white-space: nowrap;
+    color: var(--ticker-color, currentColor);
+  }
+
+  .gold-ticker__label {
+    font-weight: var(--ticker-label-weight, 600);
+    letter-spacing: 0.04em;
+  }
+
+  .gold-ticker__change {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    white-space: nowrap;
+    font-size: calc(1em * var(--ticker-change-scale, 0.9));
+    color: var(--ticker-change-color, currentColor);
+  }
+
+  .gold-ticker__change svg {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
+  /* A small gold diamond after each item, so the repeats in the strip are separated */
+  .gold-ticker__diamond {
+    align-self: center;
+    flex: none;
+    width: var(--ticker-diamond-size, 8px);
+    height: var(--ticker-diamond-size, 8px);
+    margin-inline: var(--ticker-diamond-space, 24px);
+    background: var(--ticker-diamond, #c4a35a);
+    transform: rotate(45deg);
+  }
+
+  .gold-ticker__hint {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold price",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "One item of the gold price strip: the price of pure gold per troy ounce (XAU/USD) and its change since the previous day. It is worked out from the shop's 18k gram price (gold.price_18k_per_g) and its history (gold.price_history): ounce price = gram price x 31.1035 / 0.75. It is the daily 10:00 AM price, not a live feed. Add it once; the strip repeats it."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "XAU/USD"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_change",
+      "label": "Show the change since the previous price",
+      "default": true,
+      "info": "Only shown when the last two stored prices are 5 days apart or less."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_diamond",
+      "label": "Show a diamond after the item",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "diamond_color",
+      "label": "Diamond colour",
+      "visible_if": "{{ block.settings.show_diamond }}"
+    },
+    {
+      "type": "range",
+      "id": "diamond_size",
+      "label": "Diamond size",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ block.settings.show_diamond }}"
+    },
+    {
+      "type": "range",
+      "id": "diamond_space",
+      "label": "Space around the diamond",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.show_diamond }}"
+    },
+    {
+      "type": "range",
+      "id": "part_gap",
+      "label": "Space between label, price and change",
+      "min": 4,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "label_weight",
+      "label": "Label weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "change_scale",
+      "label": "Change text size (% of the price)",
+      "min": 60,
+      "max": 120,
+      "step": 5,
+      "unit": "%",
+      "default": 90
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour"
+    },
+    {
+      "type": "color",
+      "id": "change_color",
+      "label": "Change colour"
+    },
+    {
+      "type": "header",
+      "content": "t:content.typography"
+    },
+    {
+      "type": "select",
+      "id": "item_preset",
+      "label": "Text preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "item_font",
+      "label": "Text font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "item_font_size",
+      "label": "Text size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1.125rem",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "item_weight",
+      "label": "Text weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "item_line_height",
+      "label": "Text line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "item_letter_spacing",
+      "label": "Text letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "item_case",
+      "label": "Text case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.item_preset == 'custom' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold price",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

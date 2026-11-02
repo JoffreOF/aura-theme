@@ -1,0 +1,367 @@
+{%- doc -%}
+  Gold type card for "Not all gold is an asset": a drawing of the metal, title, line, and a "Gold content" bar.
+  Cards that sit next to each other in a group share the width equally on desktop; on mobile they take half the
+  row each (2 x 2) when the group has "Stack on mobile" turned off.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign bg = s.background_color
+  assign fg = s.text_color
+  assign edge = s.border_color
+  if s.highlighted
+    assign bg = s.highlight_background
+    assign fg = s.highlight_text
+    assign edge = s.highlight_background
+  endif
+-%}
+
+<div
+  class="gold-type-card{% if s.highlighted %} gold-type-card--highlight{% endif %}"
+  style="
+    --gt-padding: {{ s.card_padding }}px;
+    --gt-radius: {{ s.corner_radius }}px;
+    --gt-title-font: {{ s.title_font }};
+    --gt-title-size: {{ s.title_size }}px;
+    --gt-text-size: {{ s.text_size }}px;
+    --gt-circle-size: {{ s.circle_size }}px;
+    --gt-ring-width: {{ s.ring_width }}px;
+    {% if s.circle_fill != blank %}--gt-circle-fill: {{ s.circle_fill }};{% endif %}
+    {% if s.ring_color != blank %}--gt-ring-color: {{ s.ring_color }};{% endif %}
+    {% if s.circle_text_color != blank %}--gt-circle-text: {{ s.circle_text_color }};{% endif %}
+    {% if bg != blank %}--gt-bg: {{ bg }};{% endif %}
+    {% if fg != blank %}--gt-text: {{ fg }};{% endif %}
+    {% if edge != blank %}--gt-border: {{ edge }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="gold-type-card__circle"><span>{{ s.circle_label }}</span></div>
+  <h3 class="gold-type-card__title">{{ s.title }}</h3>
+  {%- if s.subtitle != blank -%}
+    <p class="gold-type-card__subtitle">{{ s.subtitle }}</p>
+  {%- endif -%}
+  <div class="gold-type-card__content">
+    {%- if s.content_label != blank -%}
+      <p class="gold-type-card__label">{{ s.content_label }}</p>
+    {%- endif -%}
+    {% render 'gold-bar', percent: s.percent, fill: s.bar_color, height: s.bar_height %}
+    {%- if s.headline != blank -%}
+      <p class="gold-type-card__headline">{{ s.headline }}</p>
+    {%- endif -%}
+    {%- if s.detail != blank -%}
+      <p class="gold-type-card__detail">{{ s.detail }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .gold-type-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    align-self: stretch;
+    padding: var(--gt-padding, 28px);
+    color: var(--gt-text, var(--color-foreground));
+    background: var(--gt-bg, transparent);
+    border: 1px solid var(--gt-border, var(--color-border));
+    border-radius: var(--gt-radius, 0);
+  }
+
+  @media screen and (min-width: 750px) {
+    .gold-type-card {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .gold-type-card {
+      flex: 0 0 calc((100% - var(--gap, 16px)) / 2);
+      min-width: 0;
+      padding: calc(var(--gt-padding, 28px) * 0.6);
+    }
+
+    .gold-type-card .gold-type-card__title {
+      font-size: calc(var(--gt-title-size, 28px) * 0.7);
+    }
+  }
+
+  .gold-type-card__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    align-self: center;
+    width: var(--gt-circle-size, 120px);
+    height: var(--gt-circle-size, 120px);
+    margin-bottom: 8px;
+    border-radius: 50%;
+    border: var(--gt-ring-width, 3px) solid var(--gt-ring-color, #c4a35a);
+    background: var(--gt-circle-fill, #bdb4ae);
+    color: var(--gt-circle-text, #3c2e23);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .gold-type-card__title {
+    margin: 0;
+    text-align: center;
+    font-family: var(--gt-title-font, var(--font-heading--family));
+    font-size: var(--gt-title-size, 28px);
+    font-weight: 300;
+    line-height: 1.15;
+  }
+
+  /* room for two lines, so the "Gold content" parts line up across cards side by side */
+  .gold-type-card__subtitle {
+    margin: 0;
+    min-height: 3em;
+    text-align: center;
+    font-size: var(--gt-text-size, 14px);
+    line-height: 1.5;
+  }
+
+  .gold-type-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+  }
+
+  .gold-type-card__label {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .gold-type-card__headline {
+    margin: 0;
+    font-size: var(--gt-text-size, 14px);
+    font-weight: 600;
+  }
+
+  .gold-type-card__detail {
+    margin: 0;
+    font-size: var(--gt-text-size, 14px);
+    line-height: 1.5;
+    opacity: 0.75;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold type card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "One gold type card: a drawing of the metal (a circle with a gold ring), a title, a short line, and how much gold it holds. Turn on Highlight for the dark card."
+    },
+    {
+      "type": "header",
+      "content": "Drawing"
+    },
+    {
+      "type": "text",
+      "id": "circle_label",
+      "label": "Text inside the circle",
+      "default": "Base metal"
+    },
+    {
+      "type": "range",
+      "id": "circle_size",
+      "label": "Circle size",
+      "min": 60,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "color",
+      "id": "circle_fill",
+      "label": "Circle colour"
+    },
+    {
+      "type": "color",
+      "id": "ring_color",
+      "label": "Ring colour"
+    },
+    {
+      "type": "range",
+      "id": "ring_width",
+      "label": "Ring thickness",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "circle_text_color",
+      "label": "Circle text colour"
+    },
+    {
+      "type": "header",
+      "content": "Words"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Gold-plated"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Line under the title",
+      "default": "A thin layer of gold electroplated over a base metal."
+    },
+    {
+      "type": "text",
+      "id": "content_label",
+      "label": "Label above the bar",
+      "default": "Gold content"
+    },
+    {
+      "type": "text",
+      "id": "percent",
+      "label": "Gold percentage",
+      "default": "2",
+      "info": "Numbers only. Fills the bar."
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Bold line",
+      "default": "A trace on the surface"
+    },
+    {
+      "type": "textarea",
+      "id": "detail",
+      "label": "Small text",
+      "default": "Wears off within months."
+    },
+    {
+      "type": "checkbox",
+      "id": "highlighted",
+      "label": "Highlight (dark card)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Look"
+    },
+    {
+      "type": "select",
+      "id": "title_font",
+      "label": "Title font",
+      "options": [
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        }
+      ],
+      "default": "var(--font-heading--family)"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 16,
+      "max": 44,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 11,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "bar_color",
+      "label": "Bar colour"
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Padding inside",
+      "min": 8,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "highlight_background",
+      "label": "Highlight background"
+    },
+    {
+      "type": "color",
+      "id": "highlight_text",
+      "label": "Highlight text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold type card",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

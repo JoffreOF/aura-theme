@@ -230,7 +230,7 @@
     for x_text in x_list
       assign i = forloop.index0
       assign x_off = x_text | plus: 0 | minus: x_first
-      assign x_pos = x_off | times: plot_w | divided_by: x_span | plus: edge | round: 1
+      assign x_pos = x_off | times: 1.0 | times: plot_w | divided_by: x_span | plus: edge | round: 1
       assign v = v_list[i] | times: 1.0
       assign v_off = v | minus: v_min
       assign y_up = v_off | times: plot_h | divided_by: v_span
