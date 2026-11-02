@@ -1,5 +1,7 @@
 
 
+{%- assign s = block.settings -%}
+
 {% capture submit_button %}
   {% content_for 'block', type: 'contact-form-submit-button', id: 'submit-button' %}
 {% endcapture %}
@@ -10,6 +12,8 @@
     {% render 'spacing-style', settings: block.settings %}
     {% render 'size-style', settings: block.settings %}
     {% if block.settings.background_color != blank %}background-color: {{ block.settings.background_color }};{% endif %}
+    --cf-label-size: {{ s.label_size }}px;
+    {% if s.label_color != blank %}--cf-label-color: {{ s.label_color }};{% endif %}
     {% if block.settings.input_style == 'custom' %}
       {% render 'input-custom-styles', block_settings: block.settings %}
       --style-border-width-inputs: {{ block.settings.border_width }}px;
@@ -57,80 +61,116 @@
       </div>
     {%- endif -%}
 
-    <div class="contact-form__form-row">
-      <label
-        class="visually-hidden"
-        for="ContactForm-name"
-      >
-        {{- 'blocks.contact_form.name' | t -}}
-      </label>
-      <input
-        type="text"
-        id="ContactForm-name"
-        class="contact-form__input"
-        autocomplete="name"
-        name="contact[name]"
-        value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
-        placeholder="{{ 'blocks.contact_form.name' | t }}"
-      >
+    {% liquid
+      assign name_text = s.name_label
+      if name_text == blank
+        assign name_text = 'blocks.contact_form.name' | t
+      endif
+      assign email_text = s.email_label
+      if email_text == blank
+        assign email_text = 'blocks.contact_form.email' | t
+      endif
+      assign phone_text = s.phone_label
+      if phone_text == blank
+        assign phone_text = 'blocks.contact_form.phone' | t
+      endif
+      assign message_text = s.message_label
+      if message_text == blank
+        assign message_text = 'blocks.contact_form.comment' | t
+      endif
 
-      <label
-        class="visually-hidden"
-        for="ContactForm-email"
-      >
-        {{- 'blocks.contact_form.email' | t -}}
-        <span aria-hidden="true">*</span></label
-      >
-      <input
-        type="email"
-        id="ContactForm-email"
-        class="contact-form__input"
-        autocomplete="email"
-        name="contact[email]"
-        spellcheck="false"
-        autocapitalize="off"
-        value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
-        aria-required="true"
-        {% if form.errors contains 'email' and form_matches %}
-          aria-invalid="true"
-          aria-describedby="ContactForm-email-error"
-        {% endif %}
-        placeholder="{{ 'blocks.contact_form.email' | t }}"
-      >
+      # Labels stay hidden (the words show inside the fields) unless "Show labels above the fields" is on.
+      assign label_class = 'visually-hidden'
+      if s.show_labels
+        assign label_class = 'contact-form__label'
+      endif
+    %}
+
+    <div class="contact-form__form-row{% if s.stack_fields %} contact-form__form-row--stacked{% endif %}">
+      <div class="contact-form__field">
+        <label
+          class="{{ label_class }}"
+          for="ContactForm-name"
+        >
+          {{- name_text -}}
+        </label>
+        <input
+          type="text"
+          id="ContactForm-name"
+          class="contact-form__input"
+          autocomplete="name"
+          name="contact[name]"
+          value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+          {% unless s.show_labels %}placeholder="{{ name_text | escape }}"{% endunless %}
+        >
+      </div>
+
+      <div class="contact-form__field">
+        <label
+          class="{{ label_class }}"
+          for="ContactForm-email"
+        >
+          {{- email_text -}}
+          <span aria-hidden="true">*</span></label
+        >
+        <input
+          type="email"
+          id="ContactForm-email"
+          class="contact-form__input"
+          autocomplete="email"
+          name="contact[email]"
+          spellcheck="false"
+          autocapitalize="off"
+          value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+          aria-required="true"
+          {% if form.errors contains 'email' and form_matches %}
+            aria-invalid="true"
+            aria-describedby="ContactForm-email-error"
+          {% endif %}
+          {% unless s.show_labels %}placeholder="{{ email_text | escape }}"{% endunless %}
+        >
+      </div>
     </div>
 
-    <label
-      class="visually-hidden"
-      for="ContactForm-phone"
-    >
-      {{- 'blocks.contact_form.phone' | t -}}
-    </label>
-    <input
-      type="tel"
-      id="ContactForm-phone"
-      class="contact-form__input"
-      autocomplete="tel"
-      name="contact[phone]"
-      pattern="[0-9\-]*"
-      value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-      placeholder="{{ 'blocks.contact_form.phone' | t }}"
-    >
+    {%- if s.show_phone -%}
+      <div class="contact-form__field">
+        <label
+          class="{{ label_class }}"
+          for="ContactForm-phone"
+        >
+          {{- phone_text -}}
+        </label>
+        <input
+          type="tel"
+          id="ContactForm-phone"
+          class="contact-form__input"
+          autocomplete="tel"
+          name="contact[phone]"
+          pattern="[0-9\-]*"
+          value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+          {% unless s.show_labels %}placeholder="{{ phone_text | escape }}"{% endunless %}
+        >
+      </div>
+    {%- endif -%}
 
-    <label
-      class="visually-hidden"
-      for="ContactForm-body"
-    >
-      {{- 'blocks.contact_form.comment' | t -}}
-    </label>
-    <textarea
-      rows="10"
-      id="ContactForm-body"
-      class="contact-form__input contact-form__input--textarea"
-      name="contact[body]"
-      placeholder="{{ 'blocks.contact_form.comment' | t }}"
-    >
-      {{- form.body -}}
-    </textarea>
+    <div class="contact-form__field">
+      <label
+        class="{{ label_class }}"
+        for="ContactForm-body"
+      >
+        {{- message_text -}}
+      </label>
+      <textarea
+        rows="{{ s.message_rows }}"
+        id="ContactForm-body"
+        class="contact-form__input contact-form__input--textarea"
+        name="contact[body]"
+        {% if s.message_rows != 10 %}style="min-height: 0"{% endif %}
+        {% unless s.show_labels %}placeholder="{{ message_text | escape }}"{% endunless %}
+      >
+        {{- form.body -}}
+      </textarea>
+    </div>
 
     {{ submit_button }}
   {%- endform -%}
@@ -152,6 +192,33 @@
       flex-direction: row;
       align-items: center;
     }
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+
+    @media screen and (min-width: 750px) {
+      flex: 1 1 0;
+    }
+  }
+
+  /* Name and email one under the other (the "Stack name and email" setting) */
+  .contact-form__form-row--stacked {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-form__form-row--stacked .contact-form__field {
+    flex: none;
+  }
+
+  /* Visible labels (the "Show labels above the fields" setting) */
+  .contact-form__label {
+    font-size: var(--cf-label-size, 13px);
+    color: var(--cf-label-color, inherit);
   }
 
   .contact-form__input {
@@ -247,6 +314,76 @@
       "id": "background_color",
       "label": "t:settings.background_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "Fields"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_labels",
+      "label": "Show labels above the fields",
+      "info": "Off: the words show inside the fields.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "stack_fields",
+      "label": "Name and email one under the other",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show the phone field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name field words",
+      "info": "Empty uses the theme's word."
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email field words"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone field words"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Message field words"
+    },
+    {
+      "type": "range",
+      "id": "message_rows",
+      "label": "Message box height (lines)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13,
+      "visible_if": "{{ block.settings.show_labels }}"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label colour",
+      "visible_if": "{{ block.settings.show_labels }}"
     },
     {
       "type": "header",
