@@ -19,21 +19,30 @@
 
   # Change since the previous price: only when the two latest history entries are 5 days apart or less,
   # a weekend or a holiday. Older entries are monthly backfill points and would give a false change.
+  # Days are counted from the date text (year, month, day) so no date parsing is involved.
   assign show_change = false
-  assign change_hint = 'fewer than 2 history entries'
   if has_price and block_settings.show_change
     assign history = shop.metafields.gold.price_history.value
     if history.size >= 2
-      assign change_hint = 'the two latest history entries are more than 5 days apart'
-      assign newest_first = history | reverse
-      assign latest = newest_first[0]
-      assign previous = newest_first[1]
-      assign latest_day = latest[0] | date: '%s' | plus: 0
-      assign previous_day = previous[0] | date: '%s' | plus: 0
-      assign gap_days = latest_day | minus: previous_day | divided_by: 86400.0
-      if gap_days >= 0 and gap_days <= 5 and previous[1] > 0
+      assign previous_index = history.size | minus: 2
+      assign latest = history | last
+      assign previous = history[previous_index]
+      assign latest_parts = latest[0] | split: '-'
+      assign previous_parts = previous[0] | split: '-'
+      assign latest_day = latest_parts[0] | times: 372 | plus: 0
+      assign latest_month = latest_parts[1] | times: 31
+      assign latest_date = latest_parts[2] | times: 1
+      assign latest_day = latest_day | plus: latest_month | plus: latest_date
+      assign previous_day = previous_parts[0] | times: 372 | plus: 0
+      assign previous_month = previous_parts[1] | times: 31
+      assign previous_date = previous_parts[2] | times: 1
+      assign previous_day = previous_day | plus: previous_month | plus: previous_date
+      assign gap_days = latest_day | minus: previous_day
+      assign latest_value = latest[1] | times: 1.0
+      assign previous_value = previous[1] | times: 1.0
+      if gap_days >= 0 and gap_days <= 5 and previous_value > 0
         assign show_change = true
-        assign change_percent = latest[1] | minus: previous[1] | times: 100.0 | divided_by: previous[1]
+        assign change_percent = latest_value | minus: previous_value | times: 100.0 | divided_by: previous_value
         assign change_abs = change_percent
         if change_percent < 0
           assign change_abs = change_percent | times: -1
@@ -100,8 +109,6 @@
             {%- endif -%}
             {{ change_text }}%
           </span>
-        {%- elsif request.design_mode and block_settings.show_change -%}
-          <span class="gold-announcement__change">(editor only: change hidden, {{ change_hint }})</span>
         {%- endif -%}
       </span>
       {%- if block_settings.show_note -%}
