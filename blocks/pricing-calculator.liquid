@@ -68,6 +68,7 @@
     {% if s.value_color != blank %}--pc-value: {{ s.value_color }};{% endif %}
     {% if s.operator_color != blank %}--pc-op: {{ s.operator_color }};{% endif %}
     {% if s.input_border_color != blank %}--pc-input-border: {{ s.input_border_color }};{% endif %}
+    {% if s.input_background != blank %}--pc-input-bg: {{ s.input_background }};{% endif %}
     {% if s.price_background != blank %}--pc-price-bg: {{ s.price_background }};{% endif %}
     {% if s.price_text != blank %}--pc-price-text: {{ s.price_text }};{% endif %}
     {% if s.caption_color != blank %}--pc-caption: {{ s.caption_color }};{% endif %}
@@ -205,7 +206,9 @@
     min-height: var(--pc-row-height, 72px);
   }
 
-  .pc__input {
+  /* ".pricing-calculator .pc__input": the theme colours every text input (background and border), and that rule
+     would win over a plain class, so the box would turn the theme's input colour and hide the number. */
+  .pricing-calculator .pc__input {
     box-sizing: border-box;
     width: 150px;
     height: var(--pc-row-height, 72px);
@@ -216,8 +219,9 @@
     font-weight: 300;
     line-height: 1;
     color: var(--pc-value, currentColor);
-    background: transparent;
-    border: 2px solid var(--pc-input-border, currentColor);
+    background-color: var(--pc-input-bg, transparent);
+    border: 2px solid;
+    border-color: var(--pc-input-border, currentColor);
     border-radius: 0;
   }
 
@@ -331,7 +335,7 @@
       min-height: 0;
     }
 
-    .pc__input {
+    .pricing-calculator .pc__input {
       width: 64px;
       height: 56px;
       font-size: 32px;
@@ -589,6 +593,11 @@
       "type": "color",
       "id": "input_border_color",
       "label": "Weight box border"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Weight box background"
     },
     {
       "type": "color",
