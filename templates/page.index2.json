@@ -1449,14 +1449,14 @@
             "max_width": "normal",
             "alignment": "left",
             "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
+            "font": "var(--font-heading--family)",
+            "font_size": "3.5rem",
             "weight": "",
             "line_height": "normal",
-            "letter_spacing": "loose",
-            "case": "uppercase",
+            "letter_spacing": "normal",
+            "case": "none",
             "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.color9 }}",
+            "text_color": "{{ settings.color_palette.color1 }}",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
@@ -1525,7 +1525,7 @@
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "flex-start",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
+        "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 14,
         "section_width": "page-width",
@@ -1546,6 +1546,49 @@
         "border_radius": 0,
         "padding-block-start": 40,
         "padding-block-end": 40
+      }
+    },
+    "aura_ticker": {
+      "type": "marquee",
+      "blocks": {
+        "gold_price_01": {
+          "type": "gold-price",
+          "settings": {
+            "label": "XAU/USD",
+            "show_change": true,
+            "show_diamond": true,
+            "diamond_color": "#c4a35a",
+            "diamond_size": 8,
+            "diamond_space": 24,
+            "part_gap": 16,
+            "label_weight": "600",
+            "change_scale": 90,
+            "text_color": "{{ settings.color_palette.color1 }}",
+            "change_color": "{{ settings.color_palette.background }}",
+            "item_preset": "custom",
+            "item_font": "var(--font-body--family)",
+            "item_font_size": "1.125rem",
+            "item_weight": "",
+            "item_line_height": "normal",
+            "item_letter_spacing": "normal",
+            "item_case": "none"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "gold_price_01"
+      ],
+      "name": "Gold price ticker",
+      "settings": {
+        "movement_direction": "normal",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "show_lines": true,
+        "line_thickness": 2,
+        "line_color": "{{ settings.color_palette.color1 }}",
+        "padding-block-start": 14,
+        "padding-block-end": 14,
+        "gap_between_elements": 0
       }
     },
     "aura_buyback": {
@@ -3121,6 +3164,7 @@
     "product_list_UwRqN4",
     "aura_invest",
     "aura_pricing_intro",
+    "aura_ticker",
     "aura_buyback",
     "aura_why_gold",
     "aura_purity",
