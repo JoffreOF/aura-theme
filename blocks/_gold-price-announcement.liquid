@@ -87,6 +87,7 @@
       --text-align: center;
       --line-height: 1;
       --gold-bar-gap: {{ block_settings.part_gap }}px;
+      --gold-bar-mobile-size: {{ block_settings.mobile_size }}px;
       --gold-bar-main-gap: {{ block_settings.main_gap }}px;
       --gold-bar-price-weight: {{ block_settings.price_weight }};
       --gold-bar-label-case: {% if block_settings.label_caps %}uppercase{% else %}none{% endif %};
@@ -128,6 +129,11 @@
   /* The bar normally caps its width at 680px; the gold line is longer than that. */
   .announcement-bar__slides:has(.gold-announcement) {
     max-width: none;
+  }
+
+  /* The bar keeps room for the arrows on both sides; with a single slide there are no arrows, so use the full width. */
+  .announcement-bar__slider:not(:has(slideshow-arrows)) .announcement-bar__slides:has(.gold-announcement) {
+    width: 100%;
   }
 
   .gold-announcement {
@@ -173,6 +179,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    .gold-announcement.announcement-bar__text {
+      font-size: var(--gold-bar-mobile-size, 12px);
+    }
+
     .gold-announcement__note--hide-mobile {
       display: none;
     }
@@ -237,6 +247,17 @@
       "step": 1,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "range",
+      "id": "mobile_size",
+      "label": "Size on mobile",
+      "info": "The size on desktop is under Typography.",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     },
     {
       "type": "checkbox",
