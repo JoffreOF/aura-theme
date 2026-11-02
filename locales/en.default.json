@@ -281,7 +281,7 @@
     "gold_price_bar": {
       "label": "Today's gold price",
       "price": "18k · {{ price }} / g",
-      "note": "Updated daily at 10:00 AM PET · Based on the international 18k gold equivalent"
+      "note": "Updated daily at 10:00 AM PET"
     },
     "gold_chart": {
       "label": "Gold spot price chart, US dollars per troy ounce",
