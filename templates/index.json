@@ -2349,7 +2349,7 @@
                 "card_padding": 28,
                 "corner_radius": 0,
                 "background_color": "",
-                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_color": "{{ settings.color_palette.background }}",
                 "text_color": "{{ settings.color_palette.color1 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
@@ -2546,7 +2546,7 @@
                 "card_padding": 28,
                 "corner_radius": 0,
                 "background_color": "",
-                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_color": "#DCCFD3",
                 "text_color": "{{ settings.color_palette.color1 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
@@ -2577,7 +2577,7 @@
                 "card_padding": 28,
                 "corner_radius": 0,
                 "background_color": "",
-                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_color": "#DCCFD3",
                 "text_color": "{{ settings.color_palette.color1 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
@@ -2608,7 +2608,7 @@
                 "card_padding": 28,
                 "corner_radius": 0,
                 "background_color": "",
-                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_color": "#DCCFD3",
                 "text_color": "{{ settings.color_palette.color1 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
@@ -2639,7 +2639,7 @@
                 "card_padding": 28,
                 "corner_radius": 0,
                 "background_color": "",
-                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_color": "{{ settings.color_palette.background }}",
                 "text_color": "{{ settings.color_palette.color10 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
