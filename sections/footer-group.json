@@ -14,6 +14,49 @@
     "footer": {
       "type": "footer",
       "blocks": {
+        "group_LMkCUP": {
+          "type": "group",
+          "name": "t:names.group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "background_media": "none",
+            "background_color": "",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "group_acXtYY": {
           "type": "group",
           "name": "t:names.group",
@@ -58,7 +101,7 @@
           "blocks": {
             "group_yqBhyR": {
               "type": "group",
-              "name": "t:names.group",
+              "name": "Logo",
               "settings": {
                 "content_direction": "column",
                 "vertical_on_mobile": true,
@@ -68,7 +111,7 @@
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "center",
                 "gap": 18,
-                "width": "custom",
+                "width": "fit-content",
                 "custom_width": 40,
                 "width_mobile": "fit-content",
                 "custom_width_mobile": 100,
@@ -239,8 +282,8 @@
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "center",
                 "gap": 48,
-                "width": "fill",
-                "custom_width": 50,
+                "width": "custom",
+                "custom_width": 60,
                 "width_mobile": "fill",
                 "custom_width_mobile": 100,
                 "height": "fit",
@@ -421,6 +464,7 @@
         }
       },
       "block_order": [
+        "group_LMkCUP",
         "group_acXtYY"
       ],
       "settings": {
