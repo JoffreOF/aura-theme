@@ -19,17 +19,20 @@
           "name": "Gold price",
           "settings": {
             "show_change": true,
-            "bold_price": true,
             "show_note": true,
             "hide_note_on_mobile": true,
             "note_opacity": 80,
             "part_gap": 24,
+            "main_gap": 10,
+            "label_caps": true,
+            "label_spacing": 10,
+            "price_weight": "500",
             "font": "var(--font-body--family)",
             "font_size": "0.8125rem",
             "weight": "",
             "letter_spacing": "normal",
             "case": "none",
-            "text_color": ""
+            "text_color": "{{ settings.color_palette.color10 }}"
           },
           "blocks": {}
         }
@@ -65,7 +68,7 @@
           "type": "_header-menu",
           "static": true,
           "settings": {
-            "menu": "main-menu",
+            "menu": "header-menu",
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "",
             "type_font_primary_size": "0.875rem",

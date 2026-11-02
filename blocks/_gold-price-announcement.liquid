@@ -17,32 +17,39 @@
     assign price_text = price_cents | money
   endif
 
-  comment
-    Change since the previous price: only when the two latest history entries are 5 days apart or less
-    (a weekend or a holiday). Older entries are monthly backfill points and would give a false change.
-  endcomment
+  # Change since the previous price: only when the two latest history entries are 5 days apart or less,
+  # a weekend or a holiday. Older entries are monthly backfill points and would give a false change.
+  # Days are counted from the date text (year, month, day) so no date parsing is involved.
   assign show_change = false
   if has_price and block_settings.show_change
     assign history = shop.metafields.gold.price_history.value
     if history.size >= 2
-      assign newest_first = history | reverse
-      assign latest = newest_first[0]
-      assign previous = newest_first[1]
-      assign latest_day = latest[0] | date: '%s' | plus: 0
-      assign previous_day = previous[0] | date: '%s' | plus: 0
-      assign gap_days = latest_day | minus: previous_day | divided_by: 86400.0
-      if gap_days >= 0 and gap_days <= 5 and previous[1] > 0
+      assign previous_index = history.size | minus: 2
+      assign latest = history | last
+      assign previous = history[previous_index]
+      assign latest_parts = latest[0] | split: '-'
+      assign previous_parts = previous[0] | split: '-'
+      assign latest_day = latest_parts[0] | times: 372 | plus: 0
+      assign latest_month = latest_parts[1] | times: 31
+      assign latest_date = latest_parts[2] | times: 1
+      assign latest_day = latest_day | plus: latest_month | plus: latest_date
+      assign previous_day = previous_parts[0] | times: 372 | plus: 0
+      assign previous_month = previous_parts[1] | times: 31
+      assign previous_date = previous_parts[2] | times: 1
+      assign previous_day = previous_day | plus: previous_month | plus: previous_date
+      assign gap_days = latest_day | minus: previous_day
+      assign latest_value = latest[1] | times: 1.0
+      assign previous_value = previous[1] | times: 1.0
+      if gap_days >= 0 and gap_days <= 5 and previous_value > 0
         assign show_change = true
-        assign change_percent = latest[1] | minus: previous[1] | times: 100.0 | divided_by: previous[1]
+        assign change_percent = latest_value | minus: previous_value | times: 100.0 | divided_by: previous_value
         assign change_abs = change_percent
         if change_percent < 0
           assign change_abs = change_percent | times: -1
         endif
 
-        comment
-          One decimal built from whole tenths, so 1.0 never prints as 1 and a zero change is detected
-          by a number comparison, not by comparing text.
-        endcomment
+        # One decimal built from whole tenths, so 1.0 never prints as 1 and a zero change is detected
+        # by a number comparison, not by comparing text.
         assign tenths = change_abs | times: 10 | round
         assign tenth_digit = tenths | modulo: 10
         assign whole_percent = tenths | minus: tenth_digit | divided_by: 10
@@ -80,17 +87,19 @@
       --text-align: center;
       --line-height: 1;
       --gold-bar-gap: {{ block_settings.part_gap }}px;
+      --gold-bar-main-gap: {{ block_settings.main_gap }}px;
+      --gold-bar-price-weight: {{ block_settings.price_weight }};
+      --gold-bar-label-case: {% if block_settings.label_caps %}uppercase{% else %}none{% endif %};
+      --gold-bar-label-spacing: {{ block_settings.label_spacing | divided_by: 100.0 }}em;
       --gold-bar-note-opacity: {{ block_settings.note_opacity | divided_by: 100.0 }};
     "
     {{ block.shopify_attributes }}
     aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
   >
     <div class="announcement-bar__text gold-announcement">
-      <span class="gold-announcement__label">{{ 'blocks.gold_price_bar.label' | t }}</span>
-      <span class="gold-announcement__price">
-        <span{% if block_settings.bold_price %} class="gold-announcement__price-value"{% endif %}>
-          {{- 'blocks.gold_price_bar.price' | t: price: price_text -}}
-        </span>
+      <span class="gold-announcement__main">
+        <span class="gold-announcement__label">{{ 'blocks.gold_price_bar.label' | t }}</span>
+        <span class="gold-announcement__price">{{ 'blocks.gold_price_bar.price' | t: price: price_text }}</span>
         {%- if show_change -%}
           <span class="gold-announcement__change gold-announcement__change--{{ direction }}">
             {%- if direction == 'up' -%}
@@ -126,18 +135,26 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: baseline;
-    column-gap: var(--gold-bar-gap, 24px);
+    column-gap: var(--gold-bar-gap, 28px);
     row-gap: 4px;
   }
 
-  .gold-announcement__price {
+  .gold-announcement__main {
     display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: baseline;
-    gap: 0.5em;
+    column-gap: var(--gold-bar-main-gap, 10px);
+    row-gap: 2px;
   }
 
-  .gold-announcement__price-value {
-    font-weight: 500;
+  .gold-announcement .gold-announcement__label {
+    text-transform: var(--gold-bar-label-case, none);
+    letter-spacing: var(--gold-bar-label-spacing, 0);
+  }
+
+  .gold-announcement .gold-announcement__price {
+    font-weight: var(--gold-bar-price-weight, 500);
   }
 
   .gold-announcement__change {
@@ -179,12 +196,6 @@
     },
     {
       "type": "checkbox",
-      "id": "bold_price",
-      "label": "Bold price",
-      "default": true
-    },
-    {
-      "type": "checkbox",
       "id": "show_note",
       "label": "Show the update note",
       "default": true
@@ -210,12 +221,50 @@
     {
       "type": "range",
       "id": "part_gap",
-      "label": "Space between the parts",
+      "label": "Space between the price and the note",
       "min": 8,
       "max": 60,
       "step": 2,
       "unit": "px",
-      "default": 24
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "main_gap",
+      "label": "Space between label, price and change",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "label_caps",
+      "label": "Label in capitals",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "label_spacing",
+      "label": "Label letter spacing",
+      "info": "10 = 0.1em, the wide capitals of the wireframe.",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "price_weight",
+      "label": "Price weight",
+      "options": [
+        { "value": "400", "label": "t:options.regular" },
+        { "value": "500", "label": "t:options.medium" },
+        { "value": "600", "label": "t:options.semibold" },
+        { "value": "700", "label": "t:options.bold" }
+      ],
+      "default": "500"
     },
     {
       "type": "header",
@@ -545,7 +594,7 @@
       "name": "Gold price",
       "settings": {
         "font": "var(--font-subheading--family)",
-        "font_size": "0.75rem"
+        "font_size": "0.8125rem"
       }
     }
   ]
