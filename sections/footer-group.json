@@ -302,7 +302,7 @@
                   },
                   "blocks": {}
                 },
-                "menu_H4cHLN": {
+                "menu_mkdcVx": {
                   "type": "menu",
                   "name": "t:names.menu",
                   "settings": {
@@ -314,17 +314,17 @@
                     "accordion_dividers": false,
                     "background_color": "",
                     "text_color": "{{ settings.color_palette.color10 }}",
-                    "heading_preset": "h4",
+                    "heading_preset": "custom",
                     "heading_font": "var(--font-body--family)",
-                    "heading_font_size": "1rem",
+                    "heading_font_size": "0.75rem",
                     "heading_weight": "500",
                     "heading_line_height": "normal",
-                    "heading_letter_spacing": "normal",
-                    "heading_case": "none",
-                    "link_preset": "h5",
+                    "heading_letter_spacing": "loose",
+                    "heading_case": "uppercase",
+                    "link_preset": "custom",
                     "link_font": "var(--font-body--family)",
-                    "link_font_size": "1rem",
-                    "link_weight": "500",
+                    "link_font_size": "0.875rem",
+                    "link_weight": "300",
                     "link_line_height": "normal",
                     "link_letter_spacing": "normal",
                     "link_case": "none",
@@ -335,7 +335,7 @@
                   },
                   "blocks": {}
                 },
-                "menu_HFzgCj": {
+                "menu_HnCMkJ": {
                   "type": "menu",
                   "name": "t:names.menu",
                   "settings": {
@@ -347,17 +347,17 @@
                     "accordion_dividers": false,
                     "background_color": "",
                     "text_color": "{{ settings.color_palette.color10 }}",
-                    "heading_preset": "h4",
+                    "heading_preset": "custom",
                     "heading_font": "var(--font-body--family)",
-                    "heading_font_size": "1rem",
+                    "heading_font_size": "0.75rem",
                     "heading_weight": "500",
                     "heading_line_height": "normal",
-                    "heading_letter_spacing": "normal",
-                    "heading_case": "none",
-                    "link_preset": "h5",
+                    "heading_letter_spacing": "loose",
+                    "heading_case": "uppercase",
+                    "link_preset": "custom",
                     "link_font": "var(--font-body--family)",
-                    "link_font_size": "1rem",
-                    "link_weight": "500",
+                    "link_font_size": "0.875rem",
+                    "link_weight": "300",
                     "link_line_height": "normal",
                     "link_letter_spacing": "normal",
                     "link_case": "none",
@@ -368,7 +368,7 @@
                   },
                   "blocks": {}
                 },
-                "menu_VJjBch": {
+                "menu_rWdFTt": {
                   "type": "menu",
                   "name": "t:names.menu",
                   "settings": {
@@ -380,17 +380,17 @@
                     "accordion_dividers": false,
                     "background_color": "",
                     "text_color": "{{ settings.color_palette.color10 }}",
-                    "heading_preset": "h4",
+                    "heading_preset": "custom",
                     "heading_font": "var(--font-body--family)",
-                    "heading_font_size": "1rem",
+                    "heading_font_size": "0.75rem",
                     "heading_weight": "500",
                     "heading_line_height": "normal",
-                    "heading_letter_spacing": "normal",
-                    "heading_case": "none",
-                    "link_preset": "h5",
+                    "heading_letter_spacing": "loose",
+                    "heading_case": "uppercase",
+                    "link_preset": "custom",
                     "link_font": "var(--font-body--family)",
-                    "link_font_size": "1rem",
-                    "link_weight": "500",
+                    "link_font_size": "0.875rem",
+                    "link_weight": "300",
                     "link_line_height": "normal",
                     "link_letter_spacing": "normal",
                     "link_case": "none",
@@ -404,9 +404,9 @@
               },
               "block_order": [
                 "menu_zf63TX",
-                "menu_H4cHLN",
-                "menu_HFzgCj",
-                "menu_VJjBch"
+                "menu_mkdcVx",
+                "menu_HnCMkJ",
+                "menu_rWdFTt"
               ]
             }
           },
