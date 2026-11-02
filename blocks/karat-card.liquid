@@ -1,0 +1,282 @@
+{%- doc -%}
+  Karat card for "How purity is measured": 14k / 18k / 24k with a bar filled to the gold percentage.
+  Cards that sit next to each other in a group share the width equally on desktop and stack on mobile.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign bg = s.background_color
+  assign fg = s.text_color
+  assign edge = s.border_color
+  if s.highlighted
+    assign bg = s.highlight_background
+    assign fg = s.highlight_text
+    assign edge = s.highlight_background
+  endif
+-%}
+
+<div
+  class="karat-card{% if s.highlighted %} karat-card--highlight{% endif %}"
+  style="
+    --kc-padding: {{ s.card_padding }}px;
+    --kc-radius: {{ s.corner_radius }}px;
+    --kc-label-font: {{ s.label_font }};
+    --kc-label-size: {{ s.label_size }}px;
+    --kc-percent-size: {{ s.percent_size }}px;
+    --kc-text-size: {{ s.text_size }}px;
+    {% if bg != blank %}--kc-bg: {{ bg }};{% endif %}
+    {% if fg != blank %}--kc-text: {{ fg }};{% endif %}
+    {% if edge != blank %}--kc-border: {{ edge }};{% endif %}
+    {% if s.tag_color != blank %}--kc-tag: {{ s.tag_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="karat-card__top">
+    <span class="karat-card__label">{{ s.label }}</span>
+    {%- if s.tag != blank -%}
+      <span class="karat-card__tag">{{ s.tag }}</span>
+    {%- endif -%}
+  </div>
+  {% render 'gold-bar', percent: s.percent, fill: s.bar_color, height: s.bar_height %}
+  <p class="karat-card__percent">{{ s.percent }}{{ s.percent_suffix }}</p>
+  {%- if s.text != blank -%}
+    <p class="karat-card__text">{{ s.text }}</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .karat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-sizing: border-box;
+    align-self: stretch;
+    padding: var(--kc-padding, 28px);
+    color: var(--kc-text, var(--color-foreground));
+    background: var(--kc-bg, transparent);
+    border: 1px solid var(--kc-border, var(--color-border));
+    border-radius: var(--kc-radius, 0);
+  }
+
+  @media screen and (min-width: 750px) {
+    .karat-card {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .karat-card {
+      width: 100%;
+    }
+  }
+
+  .karat-card__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .karat-card__label {
+    font-family: var(--kc-label-font, var(--font-heading--family));
+    font-size: var(--kc-label-size, 48px);
+    font-weight: 300;
+    line-height: 1.1;
+  }
+
+  .karat-card__tag {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--kc-tag, #c4a35a);
+  }
+
+  .karat-card__percent {
+    margin: 0;
+    font-size: var(--kc-percent-size, 15px);
+    font-weight: 600;
+  }
+
+  .karat-card__text {
+    margin: 0;
+    font-size: var(--kc-text-size, 14px);
+    line-height: 1.6;
+    opacity: 0.75;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Karat card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "One karat card: a big label, a bar filled to the gold percentage, and a short text. Turn on Highlight for the dark card."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "18k"
+    },
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tag (top right)",
+      "info": "For example AURA. Leave empty to hide."
+    },
+    {
+      "type": "text",
+      "id": "percent",
+      "label": "Gold percentage",
+      "default": "75.0",
+      "info": "Numbers only. Fills the bar."
+    },
+    {
+      "type": "text",
+      "id": "percent_suffix",
+      "label": "After the percentage",
+      "default": "% gold"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "The perfect balance: enough gold to hold real, lasting value, enough strength to wear every day for decades."
+    },
+    {
+      "type": "checkbox",
+      "id": "highlighted",
+      "label": "Highlight (dark card)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Look"
+    },
+    {
+      "type": "select",
+      "id": "label_font",
+      "label": "Label font",
+      "options": [
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        }
+      ],
+      "default": "var(--font-heading--family)"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "percent_size",
+      "label": "Percentage size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 11,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "bar_color",
+      "label": "Bar colour"
+    },
+    {
+      "type": "color",
+      "id": "tag_color",
+      "label": "Tag colour"
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Padding inside",
+      "min": 8,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "highlight_background",
+      "label": "Highlight background"
+    },
+    {
+      "type": "color",
+      "id": "highlight_text",
+      "label": "Highlight text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Karat card",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}
