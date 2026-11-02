@@ -74,7 +74,9 @@
     >
       <summary
         class="menu__heading{% if heading == blank and menu.title == blank %} menu__heading--empty{% endif %} {{ heading_class }}"
-        {% if heading_style != blank %}style="{{ heading_style }}"{% endif %}
+        {% if heading_style != blank or block_settings.heading_color != blank %}
+          style="{{ heading_style }}{% if block_settings.heading_color != blank %} color: {{ block_settings.heading_color }};{% endif %}"
+        {% endif %}
       >
         <span class="menu__heading__default">{{ heading | default: menu.title }}</span>
         <span class="menu__heading__accordion">
@@ -704,6 +706,12 @@
       ],
       "default": "none",
       "visible_if": "{{ block.settings.heading_preset == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading colour",
+      "placeholder": "t:settings.default"
     },
     {
       "type": "select",
