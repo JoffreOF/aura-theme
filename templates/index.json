@@ -2768,7 +2768,7 @@
               "settings": {
                 "circle_label": "Base metal",
                 "circle_size": 120,
-                "circle_fill": "#bdb4ae",
+                "circle_fill": "{{ settings.color_palette.color2 }}",
                 "ring_color": "#c4a35a",
                 "ring_width": 2,
                 "circle_text_color": "{{ settings.color_palette.color1 }}",
@@ -2799,7 +2799,7 @@
               "settings": {
                 "circle_label": "Sterling silver",
                 "circle_size": 120,
-                "circle_fill": "#dcdce0",
+                "circle_fill": "{{ settings.color_palette.color2 }}",
                 "ring_color": "#c4a35a",
                 "ring_width": 4,
                 "circle_text_color": "{{ settings.color_palette.color1 }}",
@@ -2830,7 +2830,7 @@
               "settings": {
                 "circle_label": "Base metal",
                 "circle_size": 120,
-                "circle_fill": "#bdb4ae",
+                "circle_fill": "{{ settings.color_palette.color2 }}",
                 "ring_color": "#c4a35a",
                 "ring_width": 8,
                 "circle_text_color": "{{ settings.color_palette.color1 }}",
