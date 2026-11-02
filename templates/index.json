@@ -3352,6 +3352,169 @@
         "padding-block-start": 80,
         "padding-block-end": 80
       }
+    },
+    "aura_bespoke": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 16
+          },
+          "blocks": {
+            "text_29": {
+              "type": "text",
+              "settings": {
+                "text": "<p><em>Bespoke</em></p>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "3rem",
+                "weight": "400",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_30": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Bring us a sketch, a fleeting idea or simply a feeling</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.25rem",
+                "weight": "400",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_31": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Whether you know exactly what you want or need complete creative guidance, we'll craft your piece together, in solid 18k gold.</p>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 8,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "contact_form_01": {
+              "type": "contact-form",
+              "settings": {
+                "width": "custom",
+                "custom_width": 100,
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "show_labels": true,
+                "stack_fields": true,
+                "show_phone": true,
+                "name_label": "Name",
+                "email_label": "Email",
+                "phone_label": "Phone (optional)",
+                "message_label": "Tell us about your piece",
+                "message_rows": 4,
+                "label_size": 13,
+                "label_color": "{{ settings.color_palette.color1 }}",
+                "input_style": "custom",
+                "input_background_color": "{{ settings.color_palette.color10 }}",
+                "input_text_color": "{{ settings.color_palette.color1 }}",
+                "input_border_color": "#dccfd3",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "submit-button": {
+                  "type": "contact-form-submit-button",
+                  "static": true,
+                  "settings": {
+                    "label": "Send request",
+                    "style_class": "button-custom",
+                    "custom_button_background": "{{ settings.color_palette.background }}",
+                    "custom_button_text": "{{ settings.color_palette.color10 }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}",
+                    "width": "fit-content",
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 100
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": [
+            "text_29",
+            "text_30",
+            "text_31",
+            "contact_form_01"
+          ]
+        }
+      },
+      "name": "Bespoke",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "80svh",
+        "section_width": "page-width",
+        "extend_media": false,
+        "media_gap": 64,
+        "media_gap_mobile": 16,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 96,
+        "padding-block-end": 96
+      }
     }
   },
   "order": [
@@ -3368,6 +3531,7 @@
     "aura_purity",
     "aura_gold_types",
     "aura_gemstones",
-    "aura_people"
+    "aura_people",
+    "aura_bespoke"
   ]
 }
