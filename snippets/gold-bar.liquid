@@ -1,0 +1,46 @@
+{%- doc -%}
+  A thin bar filled to a percentage ("58.3% gold"), shared by the karat card and the gold type card.
+
+  @param {string} percent - number from 0 to 100, as text so 58.3 stays 58.3 (anything else counts as 0)
+  @param {string} [fill] - colour of the filled part (default gold)
+  @param {number} [height] - bar height in px (default 8)
+
+  @example
+  {% render 'gold-bar', percent: '75', fill: '#c4a35a', height: 8 %}
+{%- enddoc -%}
+
+{%- liquid
+  assign amount = percent | times: 1.0
+  if amount < 0
+    assign amount = 0.0
+  endif
+  if amount > 100
+    assign amount = 100.0
+  endif
+-%}
+<div
+  class="gold-bar"
+  role="img"
+  aria-label="{{ amount }}%"
+  style="--bar-percent: {{ amount }}%; --bar-height: {{ height | default: 8 }}px;{% if fill != blank %} --bar-fill: {{ fill }};{% endif %}"
+>
+  <span class="gold-bar__fill"></span>
+</div>
+
+{% stylesheet %}
+  .gold-bar {
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--bar-height, 8px);
+    border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  }
+
+  .gold-bar__fill {
+    display: block;
+    height: 100%;
+    width: var(--bar-percent, 0%);
+    /* a trace of gold stays visible even at 1% */
+    min-width: 2px;
+    background: var(--bar-fill, #c4a35a);
+  }
+{% endstylesheet %}
