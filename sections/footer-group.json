@@ -14,49 +14,6 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "group_LMkCUP": {
-          "type": "group",
-          "name": "t:names.group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "",
-            "border_radius": 0,
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "visibility": "all",
-            "mobile_first": false,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
         "group_acXtYY": {
           "type": "group",
           "name": "t:names.group",
@@ -461,18 +418,119 @@
             "group_yqBhyR",
             "group_MTNPDR"
           ]
+        },
+        "divider_qi3xUh": {
+          "type": "_divider",
+          "name": "t:names.divider",
+          "settings": {
+            "thickness": 1,
+            "corner_radius": "square",
+            "divider_color": "{{ settings.color_palette.color3 }}",
+            "width_percent": 100,
+            "padding-block-start": 0,
+            "padding-block-end": 0
+          },
+          "blocks": {}
+        },
+        "group_LMkCUP": {
+          "type": "group",
+          "name": "t:names.group",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "background_media": "none",
+            "background_color": "",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 20,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "footer_copyright_DBXDcK": {
+              "type": "footer-copyright",
+              "name": "t:names.copyright",
+              "settings": {
+                "show_powered_by": false,
+                "text_color": "{{ settings.color_palette.foreground }}",
+                "font_size": "0.8125rem",
+                "case": "none"
+              },
+              "blocks": {}
+            },
+            "button_FzG6BX": {
+              "type": "button",
+              "name": "t:names.button",
+              "settings": {
+                "label": "Libro de Reclamaciones",
+                "link": "shopify://collections/all",
+                "open_in_new_tab": false,
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.color2 }}",
+                "custom_button_border": "{{ settings.color_palette.color2 }}",
+                "link_text_color": "",
+                "visibility": "all",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "footer_copyright_DBXDcK",
+            "button_FzG6BX"
+          ]
         }
       },
       "block_order": [
-        "group_LMkCUP",
-        "group_acXtYY"
+        "group_acXtYY",
+        "divider_qi3xUh",
+        "group_LMkCUP"
       ],
       "settings": {
-        "section_width": "page-width",
+        "layout": "flex",
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "flex-start",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-start",
         "gap": 0,
+        "section_width": "page-width",
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 56,
-        "padding-block-end": 56
+        "padding-block-end": 32
       }
     }
   },
