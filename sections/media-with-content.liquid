@@ -28,6 +28,8 @@
     {%- render 'spacing-style', settings: section.settings %}
     {% render 'border-override', settings: section.settings %}
     --media-height: {{ section.settings.media_height }};
+    --media-gap: {{ section.settings.media_gap }}px;
+    --media-gap-mobile: {{ section.settings.media_gap_mobile }}px;
     {%- case section.settings.media_height %}
       {% when '50svh' %}
         --media-height-mobile: 30svh;
@@ -179,8 +181,22 @@
       padding-inline: var(--page-margin);
       padding-block: calc(2 * var(--page-margin));
 
+      /* Phones: the image is above the text, this is the space between them */
+      padding-block-start: var(--media-gap-mobile, calc(2 * var(--page-margin)));
+
       @media screen and (min-width: 750px) {
         padding-block: var(--page-margin);
+
+        /* Image on the left: the gap is the start side of the text column */
+        padding-inline-start: var(--media-gap, var(--page-margin));
+      }
+    }
+
+    /* Image on the right: the gap is the end side of the text column */
+    &.media-with-content--media-right .media-with-content__content > .group-block-content {
+      @media screen and (min-width: 750px) {
+        padding-inline-start: var(--page-margin);
+        padding-inline-end: var(--media-gap, var(--page-margin));
       }
     }
 
@@ -188,12 +204,12 @@
       padding-inline: 0;
 
       @media screen and (min-width: 750px) {
-        padding-inline-start: var(--page-margin);
+        padding-inline-start: var(--media-gap, var(--page-margin));
       }
     }
 
     &.section--page-width.media-with-content--media-right .media-with-content__content > .group-block-content {
-      padding-inline-end: var(--page-margin);
+      padding-inline-end: var(--media-gap, var(--page-margin));
       padding-inline-start: 0;
     }
   }
@@ -298,6 +314,28 @@
       "label": "t:settings.extend_media_to_screen_edge",
       "default": true,
       "visible_if": "{{ section.settings.section_width == 'page-width' }}"
+    },
+    {
+      "type": "range",
+      "id": "media_gap",
+      "label": "Space between image and text",
+      "info": "On desktop. 40px is what the theme used before this setting.",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "media_gap_mobile",
+      "label": "Space between image and text on mobile",
+      "info": "On phones the image sits above the text.",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 32
     },
     {
       "type": "color",
