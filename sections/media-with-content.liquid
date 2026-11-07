@@ -10,6 +10,10 @@
   if section.settings.media_position == 'right'
     assign media_class_modifier = media_class_modifier | append: ' media-with-content--media-right'
   endif
+
+  if section.settings.mobile_media_bleed
+    assign media_class_modifier = media_class_modifier | append: ' media-with-content--mobile-bleed'
+  endif
 %}
 
 {% liquid
@@ -18,8 +22,16 @@
   endif
 %}
 
+{%- liquid
+  assign anchor_id = section.settings.anchor | handleize
+  assign line_width = section.settings.line_width | default: 0
+-%}
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+  {% if anchor_id != blank %}id="{{ anchor_id }}"{% endif %}
+  {% if line_width > 0 %}
+    style="border-block-end: {{ line_width }}px solid {% if section.settings.line_color != blank %}{{ section.settings.line_color }}{% else %}var(--color-border){% endif %};"
+  {% endif %}
 ></div>
 <div
   class="section section--{{ section.settings.section_width }} disable-section-top-offset media-with-content{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %} spacing-style {{ media_class_modifier }}"
@@ -214,6 +226,14 @@
     }
   }
 
+  /* "Image edge to edge on phones" setting: the image runs to both screen edges, the text keeps the page margins */
+  @media screen and (max-width: 749px) {
+    .media-with-content.media-with-content--mobile-bleed {
+      grid-template-columns: var(--full-page-grid-with-margins);
+      grid-template-areas: 'media media media' 'margin-left content margin-right';
+    }
+  }
+
   .media-with-content[data-shopify-visual-preview] {
     --hero-min-height: 500px;
 
@@ -338,10 +358,46 @@
       "default": 32
     },
     {
+      "type": "checkbox",
+      "id": "mobile_media_bleed",
+      "label": "Image edge to edge on phones",
+      "info": "Only when the section width is Page.",
+      "default": false,
+      "visible_if": "{{ section.settings.section_width == 'page-width' }}"
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "t:settings.background_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "Anchor and line"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor name",
+      "info": "A link to #name jumps to this section, for example materials. Letters, numbers and hyphens."
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "label": "Line under the section",
+      "info": "A thin line across the full width.",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line colour",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ section.settings.line_width > 0 }}"
     },
     {
       "type": "header",
