@@ -1,0 +1,1072 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "bespoke_hero": {
+      "type": "hero",
+      "blocks": {
+        "text_01": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Made only for you</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color2 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_02": {
+          "type": "text",
+          "settings": {
+            "text": "<h1><em>Bespoke</em></h1>",
+            "width": "fit-content",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "6rem",
+            "weight": "400",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color2 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "font_size_mobile": "3.5rem"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_01",
+        "text_02"
+      ],
+      "name": "Bespoke",
+      "settings": {
+        "media_type_1": "image",
+        "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "media_type_2_mobile": "image",
+        "link": "",
+        "open_in_new_tab": false,
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-end",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-end",
+        "gap": 14,
+        "section_width": "page-width",
+        "section_height": "large",
+        "background_color": "rgba(0,0,0,0)",
+        "toggle_overlay": true,
+        "overlay_color": "#00000099",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 56
+      }
+    },
+    "bespoke_intro": {
+      "type": "section",
+      "blocks": {
+        "group_01": {
+          "type": "group",
+          "name": "Title",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 46,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_03": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>An open invitation to create something uniquely yours</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.75rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "font_size_mobile": "2rem"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_03"
+          ]
+        },
+        "group_02": {
+          "type": "group",
+          "name": "Text",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 14,
+            "width": "custom",
+            "custom_width": 46,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_04": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our bespoke service is an open invitation to create something uniquely yours. Bring us a design you've fallen in love with, a sketch, a fleeting idea or simply a feeling you'd like to turn into jewelry.</p>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1.0625rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_05": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Whether you know exactly what you want or are looking for complete creative guidance, we'll craft your piece together with intention, exceptional craftsmanship, and uncompromising attention to detail.</p>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_04",
+            "text_05"
+          ]
+        }
+      },
+      "block_order": [
+        "group_01",
+        "group_02"
+      ],
+      "name": "Open invitation",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "space-between",
+        "vertical_alignment": "center",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 48,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "anchor": "",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "bespoke_process": {
+      "type": "section",
+      "blocks": {
+        "group_04": {
+          "type": "group",
+          "name": "Heading row",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-end",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 24,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_03": {
+              "type": "group",
+              "name": "Title",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 8,
+                "width": "custom",
+                "custom_width": 60,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_06": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>The process</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_07": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h2>From idea to heirloom</h2>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "2.75rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "font_size_mobile": "2rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_06",
+                "text_07"
+              ]
+            },
+            "text_08": {
+              "type": "text",
+              "settings": {
+                "text": "<p>About 30 business days, start to finish</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "right",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "group_03",
+            "text_08"
+          ]
+        },
+        "group_09": {
+          "type": "group",
+          "name": "Four steps",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_05": {
+              "type": "group",
+              "name": "Design consultation",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 23,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "numbered_step_01": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "01",
+                    "title": "Design consultation",
+                    "text": "A personal conversation about the piece you have in mind: a design you've fallen in love with, a sketch, a fleeting idea or simply a feeling.",
+                    "show_line": true,
+                    "number_column": 44,
+                    "gap": 8,
+                    "number_color": "#c4a35a",
+                    "title_color": "{{ settings.color_palette.background }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 80,
+                    "padding-block-start": 18,
+                    "padding-block-end": 18,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "2rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-heading--family)",
+                    "title_font_size": "1.75rem",
+                    "title_weight": "300",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem",
+                    "number_above": true,
+                    "line_color": "{{ settings.color_palette.background }}",
+                    "number_font_size_mobile": "1.5rem",
+                    "title_font_size_mobile": "1.5rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "numbered_step_01"
+              ]
+            },
+            "group_06": {
+              "type": "group",
+              "name": "Sourcing your gemstones",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 23,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "numbered_step_02": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "02",
+                    "title": "Sourcing your gemstones",
+                    "text": "We select the stones for your piece, whether natural, precious, semi-precious or laboratory-grown.",
+                    "show_line": true,
+                    "number_column": 44,
+                    "gap": 8,
+                    "number_color": "#c4a35a",
+                    "title_color": "{{ settings.color_palette.background }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 80,
+                    "padding-block-start": 18,
+                    "padding-block-end": 18,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "2rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-heading--family)",
+                    "title_font_size": "1.75rem",
+                    "title_weight": "300",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem",
+                    "number_above": true,
+                    "line_color": "{{ settings.color_palette.background }}",
+                    "number_font_size_mobile": "1.5rem",
+                    "title_font_size_mobile": "1.5rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "numbered_step_02"
+              ]
+            },
+            "group_07": {
+              "type": "group",
+              "name": "Custom CAD render",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 23,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "numbered_step_03": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "03",
+                    "title": "Custom CAD render",
+                    "text": "You see your piece in 3D and approve it before anything is cast.",
+                    "show_line": true,
+                    "number_column": 44,
+                    "gap": 8,
+                    "number_color": "#c4a35a",
+                    "title_color": "{{ settings.color_palette.background }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 80,
+                    "padding-block-start": 18,
+                    "padding-block-end": 18,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "2rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-heading--family)",
+                    "title_font_size": "1.75rem",
+                    "title_weight": "300",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem",
+                    "number_above": true,
+                    "line_color": "{{ settings.color_palette.background }}",
+                    "number_font_size_mobile": "1.5rem",
+                    "title_font_size_mobile": "1.5rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "numbered_step_03"
+              ]
+            },
+            "group_08": {
+              "type": "group",
+              "name": "Handcrafted in solid 18k gold",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 23,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "numbered_step_04": {
+                  "type": "numbered-step",
+                  "settings": {
+                    "number": "04",
+                    "title": "Handcrafted in solid 18k gold",
+                    "text": "Our Peruvian artisans craft the final piece, with exceptional craftsmanship and attention to detail.",
+                    "show_line": true,
+                    "number_column": 44,
+                    "gap": 8,
+                    "number_color": "#c4a35a",
+                    "title_color": "{{ settings.color_palette.background }}",
+                    "body_color": "{{ settings.color_palette.color1 }}",
+                    "body_opacity": 80,
+                    "padding-block-start": 18,
+                    "padding-block-end": 18,
+                    "number_preset": "custom",
+                    "number_font": "var(--font-heading--family)",
+                    "number_font_size": "2rem",
+                    "title_preset": "custom",
+                    "title_font": "var(--font-heading--family)",
+                    "title_font_size": "1.75rem",
+                    "title_weight": "300",
+                    "body_preset": "custom",
+                    "body_font": "var(--font-body--family)",
+                    "body_font_size": "0.9375rem",
+                    "number_above": true,
+                    "line_color": "{{ settings.color_palette.background }}",
+                    "number_font_size_mobile": "1.5rem",
+                    "title_font_size_mobile": "1.5rem"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "numbered_step_04"
+              ]
+            }
+          },
+          "block_order": [
+            "group_05",
+            "group_06",
+            "group_07",
+            "group_08"
+          ]
+        },
+        "group_12": {
+          "type": "group",
+          "name": "Two boxes",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_10": {
+              "type": "group",
+              "name": "Transparent pricing",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 10,
+                "width": "custom",
+                "custom_width": 49,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 28,
+                "padding-block-end": 28,
+                "padding-inline-start": 28,
+                "padding-inline-end": 28,
+                "border": "solid",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_radius": 0
+              },
+              "blocks": {
+                "text_09": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Transparent pricing</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_10": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Bespoke pieces follow the same open formula as our collection: gold weight × today's gold price × a disclosed ×1.9 craftsmanship markup.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_09",
+                "text_10"
+              ]
+            },
+            "group_11": {
+              "type": "group",
+              "name": "Good to know",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 10,
+                "width": "custom",
+                "custom_width": 49,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 28,
+                "padding-block-end": 28,
+                "padding-inline-start": 28,
+                "padding-inline-end": 28,
+                "border": "solid",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "{{ settings.color_palette.color7 }}",
+                "border_radius": 0
+              },
+              "blocks": {
+                "text_11": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Good to know</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_12": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Bespoke pieces are made exclusively for you and are final sale, except for a verified manufacturing defect. Like every Aura piece, they join your portfolio.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_11",
+                "text_12"
+              ]
+            }
+          },
+          "block_order": [
+            "group_10",
+            "group_11"
+          ]
+        }
+      },
+      "block_order": [
+        "group_04",
+        "group_09",
+        "group_12"
+      ],
+      "name": "From idea to heirloom",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 40,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "anchor": "process",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "bespoke_form": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 14
+          },
+          "blocks": {
+            "text_13": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Start your piece</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_14": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>Tell us what you have in mind</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.75rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0,
+                "font_size_mobile": "2rem"
+              },
+              "blocks": {}
+            },
+            "text_15": {
+              "type": "text",
+              "settings": {
+                "text": "<p>We'll write back to set up your design consultation.</p>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "contact_form_01": {
+              "type": "contact-form",
+              "settings": {
+                "width": "custom",
+                "custom_width": 100,
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "show_labels": true,
+                "stack_fields": true,
+                "show_phone": false,
+                "name_label": "Name",
+                "email_label": "Email",
+                "phone_label": "Phone (optional)",
+                "message_label": "Tell us about your piece",
+                "message_rows": 5,
+                "label_size": 13,
+                "label_color": "{{ settings.color_palette.color1 }}",
+                "input_style": "custom",
+                "input_background_color": "{{ settings.color_palette.color10 }}",
+                "input_text_color": "{{ settings.color_palette.color1 }}",
+                "input_border_color": "#dccfd3",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "submit-button": {
+                  "type": "contact-form-submit-button",
+                  "static": true,
+                  "settings": {
+                    "label": "Send request",
+                    "style_class": "button-custom",
+                    "custom_button_background": "{{ settings.color_palette.background }}",
+                    "custom_button_text": "{{ settings.color_palette.color10 }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}",
+                    "width": "fit-content",
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 100
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": []
+            }
+          },
+          "block_order": [
+            "text_13",
+            "text_14",
+            "text_15",
+            "contact_form_01"
+          ]
+        }
+      },
+      "name": "Start your piece",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "mobile_media_bleed": false,
+        "media_gap": 64,
+        "media_gap_mobile": 24,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 88,
+        "padding-block-end": 96,
+        "anchor": "form",
+        "line_width": 0
+      }
+    }
+  },
+  "order": [
+    "bespoke_hero",
+    "bespoke_intro",
+    "bespoke_process",
+    "bespoke_form"
+  ]
+}
