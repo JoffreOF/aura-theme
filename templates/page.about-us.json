@@ -374,7 +374,7 @@
             "height": "fit",
             "custom_height": 100,
             "background_media": "none",
-            "background_color": "",
+            "background_color": "rgba(0,0,0,0)",
             "video_position": "cover",
             "background_image_position": "cover",
             "toggle_overlay": false,
