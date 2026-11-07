@@ -221,8 +221,12 @@
     }
 
     &.section--page-width.media-with-content--media-right .media-with-content__content > .group-block-content {
-      padding-inline-end: var(--media-gap, var(--page-margin));
       padding-inline-start: 0;
+
+      /* Desktop only: on phones the image is above the text and the text uses the full width */
+      @media screen and (min-width: 750px) {
+        padding-inline-end: var(--media-gap, var(--page-margin));
+      }
     }
   }
 
