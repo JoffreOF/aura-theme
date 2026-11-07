@@ -414,6 +414,34 @@
     },
     {
       "type": "header",
+      "content": "Anchor and line"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor name",
+      "info": "A link to #name jumps to this section, for example materials. Letters, numbers and hyphens."
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "label": "Line under the section",
+      "info": "A thin line across the full width.",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line colour",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ section.settings.line_width > 0 }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.padding"
     },
     {
