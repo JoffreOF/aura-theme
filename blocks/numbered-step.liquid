@@ -44,7 +44,7 @@
 -%}
 
 <div
-  class="numbered-step spacing-style{% if s.show_line %} numbered-step--line{% endif %}"
+  class="numbered-step spacing-style{% if s.show_line %} numbered-step--line{% endif %}{% if s.number_above %} numbered-step--number-above{% endif %}"
   style="
     {% render 'spacing-padding', settings: s %}
     --step-number-column: {{ s.number_column }}px;
@@ -92,6 +92,14 @@
   .numbered-step__number {
     color: var(--step-number-color, var(--color-foreground));
     line-height: 1.2;
+  }
+
+  /* Number above the title on desktop; phones keep the number on the left. */
+  @media screen and (min-width: 750px) {
+    .numbered-step--number-above {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--step-gap, 6px);
+    }
   }
 
   .numbered-step__number--auto::before {
@@ -170,6 +178,13 @@
       "step": 1,
       "unit": "px",
       "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "number_above",
+      "label": "Number above the title on desktop",
+      "info": "Phones keep the number on the left.",
+      "default": false
     },
     {
       "type": "checkbox",
