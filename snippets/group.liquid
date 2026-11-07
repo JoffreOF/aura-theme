@@ -87,6 +87,21 @@
     }
   }
 
+  /* "Scroll sideways on mobile" setting: one line that scrolls instead of wrapping */
+  @media screen and (max-width: 749px) {
+    .group-block.group-block--scroll-mobile > .group-block-content.layout-panel-flex--row {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-block-end: 8px;
+    }
+
+    .group-block--scroll-mobile > .group-block-content > * {
+      flex: none;
+    }
+  }
+
   .group-block__link {
     position: absolute;
     inset: 0;

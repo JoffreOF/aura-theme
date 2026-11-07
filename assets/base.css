@@ -355,6 +355,11 @@ p:empty {
   position: relative;
 }
 
+/* Section "Anchor name" setting: an in-page link lands below the sticky header */
+.shopify-section:not(.header-section) .section-background[id] {
+  scroll-margin-block-start: var(--header-height, 0px);
+}
+
 .shopify-section:not(.header-section) .section-background {
   content: '';
   position: absolute;
