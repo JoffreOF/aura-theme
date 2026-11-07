@@ -1595,6 +1595,14 @@ summary:hover {
   font-size: var(--font-size);
 }
 
+/* "Size on mobile" settings: --font-size-mobile is always the same as --font-size unless a mobile size is chosen */
+@media screen and (max-width: 749px) {
+  .custom-font-size,
+  .custom-font-size > * {
+    font-size: var(--font-size-mobile, var(--font-size));
+  }
+}
+
 .custom-font-weight,
 .custom-font-weight > * {
   font-weight: var(--font-weight);
