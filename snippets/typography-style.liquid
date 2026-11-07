@@ -55,6 +55,7 @@
       {%- else -%}
         --font-size: {{ settings.font_size }};
       {%- endif -%}
+      --font-size-mobile: {% if settings.font_size_mobile != blank %}{{ settings.font_size_mobile }}{% else %}var(--font-size){% endif %};
     {%- endif -%}
     {%- if settings.weight != blank -%}
       --font-weight: {{ settings.weight }};

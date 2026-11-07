@@ -11,6 +11,8 @@
 {%- liquid
   assign key_font = prefix | append: 'font'
   assign key_size = prefix | append: 'font_size'
+  assign key_size_mobile = prefix | append: 'font_size_mobile'
+  assign custom_size_mobile = settings[key_size_mobile]
   assign key_weight = prefix | append: 'weight'
   assign key_line = prefix | append: 'line_height'
   assign key_spacing = prefix | append: 'letter_spacing'
@@ -47,6 +49,7 @@
     {%- else -%}
       --font-size: {{ custom_size }};
     {%- endif -%}
+    --font-size-mobile: {% if custom_size_mobile != blank %}{{ custom_size_mobile }}{% else %}var(--font-size){% endif %};
   {%- endif -%}
   --font-weight: {% if custom_weight != blank %}{{ custom_weight }}{% else %}{{ custom_font | replace: 'family', 'weight' }}{% endif %};
   --font-family: {{ custom_font }};
