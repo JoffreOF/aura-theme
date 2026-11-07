@@ -1,0 +1,1495 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "about_hero": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 20
+          },
+          "blocks": {
+            "text_01": {
+              "type": "text",
+              "settings": {
+                "text": "<p>About us</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_02": {
+              "type": "text",
+              "settings": {
+                "text": "<h1>Invest well, look better</h1>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "4rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_03": {
+              "type": "text",
+              "settings": {
+                "text": "<p>The best accessory? Knowing exactly what it's worth. Every Aura piece works like an investment: it's backed by real gold and its value moves with the market, every day. So treating yourself and building your future finally go hand in hand. Being a woman who understands her money has never looked this good!</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_04": {
+              "type": "text",
+              "settings": {
+                "text": "<p>This might be your first step into the financial world. We hope it isn't your last. Learn, ask, grow, invest, you deserve to understand every tool that builds the future you want. We're so excited to be part of your journey!</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.875rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_01",
+            "text_02",
+            "text_03",
+            "text_04"
+          ]
+        }
+      },
+      "name": "Invest well, look better",
+      "settings": {
+        "media_position": "right",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "mobile_media_bleed": true,
+        "media_gap": 64,
+        "media_gap_mobile": 24,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 72,
+        "padding-block-end": 72,
+        "anchor": "",
+        "line_width": 0
+      }
+    },
+    "about_links": {
+      "type": "section",
+      "blocks": {
+        "group_03": {
+          "type": "group",
+          "name": "Top line (desktop)",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 12,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "desktop",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "divider_01": {
+              "type": "_divider",
+              "settings": {
+                "thickness": 1,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "width_percent": 100,
+                "corner_radius": "square",
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "divider_01"
+          ]
+        },
+        "group_01": {
+          "type": "group",
+          "name": "Links (desktop)",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 32,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "desktop",
+            "mobile_first": false,
+            "padding-block-start": 18,
+            "padding-block-end": 18,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "button_01": {
+              "type": "button",
+              "settings": {
+                "label": "Our materials",
+                "link": "#materials",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-unstyled",
+                "link_text_color": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_02": {
+              "type": "button",
+              "settings": {
+                "label": "Our artisans",
+                "link": "#artisans",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-unstyled",
+                "link_text_color": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_03": {
+              "type": "button",
+              "settings": {
+                "label": "Founders",
+                "link": "#founders",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-unstyled",
+                "link_text_color": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_04": {
+              "type": "button",
+              "settings": {
+                "label": "Talk to us",
+                "link": "#talk",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-unstyled",
+                "link_text_color": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "button_01",
+            "button_02",
+            "button_03",
+            "button_04"
+          ]
+        },
+        "group_02": {
+          "type": "group",
+          "name": "Links (mobile, scrolls sideways)",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 8,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "mobile",
+            "mobile_first": false,
+            "padding-block-start": 16,
+            "padding-block-end": 16,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "scroll_on_mobile": true
+          },
+          "blocks": {
+            "button_05": {
+              "type": "button",
+              "settings": {
+                "label": "Our materials",
+                "link": "#materials",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_06": {
+              "type": "button",
+              "settings": {
+                "label": "Our artisans",
+                "link": "#artisans",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_07": {
+              "type": "button",
+              "settings": {
+                "label": "Founders",
+                "link": "#founders",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            },
+            "button_08": {
+              "type": "button",
+              "settings": {
+                "label": "Talk to us",
+                "link": "#talk",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "rgba(0,0,0,0)",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "button_05",
+            "button_06",
+            "button_07",
+            "button_08"
+          ]
+        }
+      },
+      "block_order": [
+        "group_03",
+        "group_01",
+        "group_02"
+      ],
+      "name": "Links to the sections",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 0,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "anchor": "",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "about_materials": {
+      "type": "section",
+      "blocks": {
+        "text_10": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Artisans &amp; materials</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color9 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_11": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Our materials</h2>",
+            "width": "fit-content",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "2.75rem",
+            "weight": "300",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.background }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 16,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_06": {
+          "type": "group",
+          "name": "Two materials",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 32,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_04": {
+              "type": "group",
+              "name": "Solid 18k gold",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 14,
+                "width": "custom",
+                "custom_width": 48,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_01": {
+                  "type": "image",
+                  "settings": {
+                    "image_ratio": "landscape",
+                    "width": "fill",
+                    "width_mobile": "fill",
+                    "height": "fit",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_05": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>Solid 18k gold</h3>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.75rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 12,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_06": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>At Aura, we believe that true luxury is also responsible. That is why we work exclusively with responsibly sourced 18k gold, obtained from traceable sources through processes committed to environmental stewardship. This same philosophy guides every one of our pieces, high-quality creations, handcrafted by master jewelers who have dedicated years to perfecting their exceptional craft.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_01",
+                "text_05",
+                "text_06"
+              ]
+            },
+            "group_05": {
+              "type": "group",
+              "name": "Precious and semi-precious gemstones",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 14,
+                "width": "custom",
+                "custom_width": 48,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_02": {
+                  "type": "image",
+                  "settings": {
+                    "image_ratio": "landscape",
+                    "width": "fill",
+                    "width_mobile": "fill",
+                    "height": "fit",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_07": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>Precious and semi-precious gemstones</h3>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.75rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 12,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_08": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>We believe that brilliance should be accessible. At Aura, we curate both natural, precious, semi-precious and laboratory-grown gemstones, expanding the entry point for fine jewelry without sacrificing the aesthetic or technical standards of our master craftsmen. This approach allows us to deliver high-quality assets across a broader financial spectrum.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_09": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Every stone, whether forged over millennia or grown with modern precision, is carefully selected for its brilliance, character, and craftsmanship. By offering both, we provide the flexibility to build a personal collection that aligns with your specific investment goals and design preferences.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_02",
+                "text_07",
+                "text_08",
+                "text_09"
+              ]
+            }
+          },
+          "block_order": [
+            "group_04",
+            "group_05"
+          ]
+        }
+      },
+      "block_order": [
+        "text_10",
+        "text_11",
+        "group_06"
+      ],
+      "name": "Our materials",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "anchor": "materials",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "about_artisans": {
+      "type": "media-with-content",
+      "blocks": {
+        "media": {
+          "type": "_media-without-appearance",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        },
+        "content": {
+          "type": "_content-without-appearance",
+          "static": true,
+          "settings": {
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 18
+          },
+          "blocks": {
+            "text_12": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our artisans</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.75rem",
+                "weight": "",
+                "line_height": "normal",
+                "letter_spacing": "loose",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color9 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_13": {
+              "type": "text",
+              "settings": {
+                "text": "<h2>The hands that shape it give it its soul</h2>",
+                "width": "fit-content",
+                "max_width": "none",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "2.75rem",
+                "weight": "300",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.background }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_14": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Every Aura piece is shaped by our team of Peruvian jewelers, artisans with years of experience working in gold. Each one is crafted with the precision that an investment deserves.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_15": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our care goes beyond design and materials. It reaches the workshop and every person involved in the process, all of whom work under fair conditions and earn fair wages. The gold gives each piece its lasting value; the hands that shape it give it its soul. That's why we look after every link in the chain, from start to finish.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "custom",
+                "font": "var(--font-body--family)",
+                "font_size": "0.9375rem",
+                "weight": "",
+                "line_height": "loose",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color1 }}",
+                "background": false,
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_12",
+            "text_13",
+            "text_14",
+            "text_15"
+          ]
+        }
+      },
+      "name": "Our artisans",
+      "settings": {
+        "media_position": "left",
+        "media_width": "medium",
+        "media_height": "auto",
+        "section_width": "page-width",
+        "extend_media": false,
+        "mobile_media_bleed": false,
+        "media_gap": 64,
+        "media_gap_mobile": 24,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "anchor": "artisans",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "about_founders": {
+      "type": "section",
+      "blocks": {
+        "text_22": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Founders</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color9 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_23": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Two best friends who talk about money more than anyone probably should</h2>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "2.75rem",
+            "weight": "300",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.background }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_24": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Aura was built by two best friends who hope to keep the conversation going with you.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.9375rem",
+            "weight": "",
+            "line_height": "loose",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color1 }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_09": {
+          "type": "group",
+          "name": "Two founders",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 32,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_07": {
+              "type": "group",
+              "name": "Alessandra",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 10,
+                "width": "custom",
+                "custom_width": 48,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_03": {
+                  "type": "image",
+                  "settings": {
+                    "image_ratio": "portrait",
+                    "width": "fill",
+                    "width_mobile": "fill",
+                    "height": "fit",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_16": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>Alessandra</h3>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.75rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 12,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_17": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Economist · Finance &amp; growth</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.6875rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_18": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>She runs finance and growth strategy end to end, pricing, margins, go-to-market, making sure the business only grows in ways the numbers can actually back up.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_03",
+                "text_16",
+                "text_17",
+                "text_18"
+              ]
+            },
+            "group_08": {
+              "type": "group",
+              "name": "Zulema",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 10,
+                "width": "custom",
+                "custom_width": 48,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "image_04": {
+                  "type": "image",
+                  "settings": {
+                    "image_ratio": "portrait",
+                    "width": "fill",
+                    "width_mobile": "fill",
+                    "height": "fit",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_19": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h3>Zulema</h3>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "1.75rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 12,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_20": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>International business · Sourcing &amp; production</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.6875rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_21": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>She runs sourcing and production end to end, gold, stones, manufacturing, quality control, making sure every piece that reaches you matches exactly what was promised on paper.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "image_04",
+                "text_19",
+                "text_20",
+                "text_21"
+              ]
+            }
+          },
+          "block_order": [
+            "group_07",
+            "group_08"
+          ]
+        },
+        "text_25": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>Together, they run every part of the business themselves.</em></p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "1.5rem",
+            "weight": "300",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.background }}",
+            "background": false,
+            "corner_radius": 0,
+            "padding-block-start": 24,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_22",
+        "text_23",
+        "text_24",
+        "group_09",
+        "text_25"
+      ],
+      "name": "Founders",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 88,
+        "anchor": "founders",
+        "line_width": 1,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    },
+    "about_talk": {
+      "type": "section",
+      "blocks": {
+        "group_11": {
+          "type": "group",
+          "name": "Contact box",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "center",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 32,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "visibility": "all",
+            "mobile_first": false,
+            "padding-block-start": 40,
+            "padding-block-end": 40,
+            "padding-inline-start": 40,
+            "padding-inline-end": 40,
+            "border": "solid",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "{{ settings.color_palette.background }}",
+            "border_radius": 0
+          },
+          "blocks": {
+            "group_10": {
+              "type": "group",
+              "name": "Text",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 14,
+                "width": "custom",
+                "custom_width": 70,
+                "width_mobile": "fill",
+                "height": "fit",
+                "visibility": "all",
+                "mobile_first": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_26": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Talk to us</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "weight": "",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_27": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h2>Financial literacy for women isn't a tagline here</h2>",
+                    "width": "fit-content",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "2rem",
+                    "weight": "300",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_28": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>If you have a question about gold, about investing, about any part of this, write to us directly. It's the actual reason Aura exists.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "weight": "",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_26",
+                "text_27",
+                "text_28"
+              ]
+            },
+            "button_09": {
+              "type": "button",
+              "settings": {
+                "label": "Contact us",
+                "link": "/pages/contact",
+                "open_in_new_tab": false,
+                "width": "fit-content",
+                "width_mobile": "custom",
+                "custom_width_mobile": 100,
+                "visibility": "all",
+                "style_class": "button-custom",
+                "custom_button_background": "{{ settings.color_palette.background }}",
+                "custom_button_text": "{{ settings.color_palette.color10 }}",
+                "custom_button_border": "{{ settings.color_palette.background }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "group_10",
+            "button_09"
+          ]
+        }
+      },
+      "block_order": [
+        "group_11"
+      ],
+      "name": "Talk to us",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 0,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "toggle_overlay": false,
+        "border": "none",
+        "border_radius": 0,
+        "padding-block-start": 72,
+        "padding-block-end": 96,
+        "anchor": "talk",
+        "line_width": 0,
+        "line_color": "{{ settings.color_palette.color7 }}"
+      }
+    }
+  },
+  "order": [
+    "about_hero",
+    "about_links",
+    "about_materials",
+    "about_artisans",
+    "about_founders",
+    "about_talk"
+  ]
+}
