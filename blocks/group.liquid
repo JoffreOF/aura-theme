@@ -8,6 +8,7 @@
   {%- if block.settings.visibility == 'desktop' %} hidden--mobile{% endif -%}
   {%- if block.settings.visibility == 'mobile' %} hidden--desktop{% endif -%}
   {%- if block.settings.mobile_first %} group-block--mobile-first{% endif -%}
+  {%- if block.settings.scroll_on_mobile %} group-block--scroll-mobile{% endif -%}
 {%- endcapture -%}
 
 {% render 'group',
@@ -502,6 +503,14 @@
       "label": "Show first on mobile",
       "info": "On phones this group moves above its neighbours in the same container.",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_on_mobile",
+      "label": "Scroll sideways on mobile",
+      "info": "For a horizontal row that does not fit a phone: one line that scrolls. Turn off Vertical on mobile.",
+      "default": false,
+      "visible_if": "{{ block.settings.content_direction == 'row' }}"
     },
     {
       "type": "header",
