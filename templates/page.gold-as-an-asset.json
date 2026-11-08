@@ -1567,7 +1567,7 @@
                     "type_preset": "custom",
                     "font": "var(--font-heading--family)",
                     "font_size": "3.25rem",
-                    "font_size_mobile": "2rem",
+                    "font_size_mobile": "2.1875rem",
                     "weight": "400",
                     "line_height": "tight",
                     "letter_spacing": "normal",
