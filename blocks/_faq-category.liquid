@@ -20,7 +20,7 @@
   endif
 -%}
 
-<div class="faq-panel" id="{{ slug }}" data-faq-panel {{ block.shopify_attributes }}>
+<div class="faq-panel" id="{{ slug }}" data-faq-panel data-faq-title="{{ block.settings.title | escape }}" {{ block.shopify_attributes }}>
   {%- if block.settings.title != blank -%}
     <h2 class="faq-panel__title {{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>{{ block.settings.title }}</h2>
   {%- endif -%}
