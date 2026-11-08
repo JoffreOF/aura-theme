@@ -44,11 +44,12 @@
 -%}
 
 <div
-  class="numbered-step spacing-style{% if s.show_line %} numbered-step--line{% endif %}{% if s.number_above %} numbered-step--number-above{% endif %}"
+  class="numbered-step spacing-style{% if s.show_line %} numbered-step--line{% endif %}{% if s.number_above %} numbered-step--number-above{% endif %}{% if s.text_beside %} numbered-step--text-beside{% endif %}"
   style="
     {% render 'spacing-padding', settings: s %}
     --step-number-column: {{ s.number_column }}px;
     --step-gap: {{ s.gap }}px;
+    --step-text-share: {{ s.text_share }};
     --step-body-opacity: {{ s.body_opacity | divided_by: 100.0 }};
     {% if s.line_color != blank %}--step-line-color: {{ s.line_color }};{% endif %}
     {% if s.number_color != blank %}--step-number-color: {{ s.number_color }};{% endif %}
@@ -99,6 +100,22 @@
     .numbered-step--number-above {
       grid-template-columns: minmax(0, 1fr);
       row-gap: var(--step-gap, 6px);
+    }
+  }
+
+  /* Title on the left and text on the right of the same row on desktop; phones: number left, title and text stacked. */
+  .numbered-step--text-beside {
+    grid-template-columns: min(var(--step-number-column, 60px), 56px) minmax(0, 1fr);
+  }
+
+  @media screen and (min-width: 750px) {
+    .numbered-step--text-beside {
+      grid-template-columns: var(--step-number-column, 60px) minmax(0, 1fr) minmax(0, calc(var(--step-text-share, 50) * 1%));
+      column-gap: 24px;
+    }
+
+    .numbered-step--text-beside .numbered-step__content {
+      display: contents;
     }
   }
 
@@ -185,6 +202,24 @@
       "label": "Number above the title on desktop",
       "info": "Phones keep the number on the left.",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "text_beside",
+      "label": "Text beside the title on desktop",
+      "info": "Number, title and text in one row. Phones keep the title and text stacked.",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "text_share",
+      "label": "Text column width",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ block.settings.text_beside }}"
     },
     {
       "type": "checkbox",
