@@ -1,0 +1,1660 @@
+{%- comment -%}
+  FAQ with categories: a menu on the left and the questions of the chosen category on the right.
+  Each category is a _faq-category block. assets/faq-categories.js shows one category at a time and reads the
+  URL hash (#returns); without JavaScript every category is shown one under the other.
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+
+  assign nav_class = s.nav_preset
+  assign nav_style = ''
+  if s.nav_preset == 'custom'
+    assign nav_class = 'custom-typography'
+    if s.nav_font_size != blank
+      assign nav_class = nav_class | append: ' custom-font-size'
+    endif
+    capture nav_style
+      render 'custom-typography-style', settings: s, prefix: 'nav_'
+    endcapture
+  endif
+-%}
+
+<script
+  src="{{ 'faq-categories.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{% if s.background_color != blank %}
+  {% render 'contrast-override', background_color: s.background_color, section_id: section.id %}
+{% endif %}
+
+<div class="section-background{% if s.background_color != blank %} color-custom-{{ section.id }}{% endif %}"></div>
+
+<faq-categories
+  class="faq section section--{{ s.section_width }}{% if s.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if s.sticky_nav %} faq--sticky{% endif %} spacing-style"
+  style="
+    {% render 'spacing-style', settings: s %}
+    --faq-nav-width: {{ s.nav_width }}px;
+    --faq-column-gap: {{ s.column_gap }}px;
+    --faq-title-gap: {{ s.title_gap }}px;
+    {% if s.nav_color != blank %}--faq-nav-color: {{ s.nav_color }};{% endif %}
+    {% if s.active_background != blank %}--faq-active-background: {{ s.active_background }};{% endif %}
+    {% if s.active_bar != blank %}--faq-active-bar: {{ s.active_bar }};{% endif %}
+    {% if s.footnote_color != blank %}--faq-footnote-color: {{ s.footnote_color }};{% endif %}
+  "
+>
+  <div class="faq__layout">
+    <nav class="faq__nav" aria-label="FAQ">
+      <ul class="faq__nav-list">
+        {%- for category in section.blocks -%}
+          {%- assign slug = category.settings.anchor | default: category.settings.title | handleize -%}
+          <li>
+            <a
+              class="faq__nav-link {{ nav_class }}"
+              href="#{{ slug }}"
+              data-faq-link
+              {% if nav_style != blank %}style="{{ nav_style }}"{% endif %}
+            >
+              {{- category.settings.title -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="faq__panels">
+      {% content_for 'blocks' %}
+
+      {%- if s.footnote != blank -%}
+        <div class="faq__footnote text_caption">{{ s.footnote }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</faq-categories>
+
+{% stylesheet %}
+  faq-categories {
+    display: block;
+    scroll-margin-block-start: var(--header-height, 0px);
+  }
+
+  .faq__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+    align-items: start;
+  }
+
+  .faq__nav-list {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 0 0 8px;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-foreground-rgb) / var(--opacity-40)) transparent;
+  }
+
+  .faq__nav-list > li {
+    flex: none;
+  }
+
+  .faq__nav-link {
+    display: block;
+    padding: 12px 18px;
+    white-space: nowrap;
+    color: var(--faq-nav-color, inherit);
+    text-decoration: none;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
+  }
+
+  .faq__nav-link[aria-current='true'] {
+    background: var(--faq-active-background, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
+    border-color: var(--faq-active-bar, var(--color-foreground));
+  }
+
+  .faq__footnote {
+    margin-block-start: 28px;
+    color: var(--faq-footnote-color, inherit);
+    opacity: 0.7;
+  }
+
+  .faq__footnote p {
+    margin: 0;
+  }
+
+  .faq__footnote a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* With scripting on, only the first category shows until faq-categories.js has picked the right one (no flash of all of them). */
+  @media (scripting: enabled) {
+    faq-categories:not([data-faq-ready]) .faq-panel:not(:first-child) {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq__layout {
+      grid-template-columns: var(--faq-nav-width, 300px) minmax(0, 1fr);
+      column-gap: var(--faq-column-gap, 72px);
+    }
+
+    .faq--sticky .faq__nav {
+      position: sticky;
+      top: calc(var(--header-height, 0px) + 24px);
+    }
+
+    .faq__nav-list {
+      flex-direction: column;
+      gap: 4px;
+      overflow: visible;
+      padding: 0;
+    }
+
+    .faq__nav-link {
+      white-space: normal;
+      padding: 14px 20px;
+      border-width: 0;
+      border-inline-start: 2px solid transparent;
+    }
+
+    .faq__nav-link[aria-current='true'] {
+      border-color: transparent;
+      border-inline-start-color: var(--faq-active-bar, var(--color-foreground));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ categories",
+  "class": "faq-section",
+  "blocks": [
+    {
+      "type": "_faq-category"
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A menu of categories on the left (a row you scroll sideways on phones) and the questions of the chosen category on the right. Each category is a block: give it a name and add an Accordion with the questions. The anchor name lets other pages link straight to a category, for example /pages/faq#returns."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "nav_width",
+      "label": "Menu width",
+      "min": 200,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Space between menu and questions",
+      "min": 24,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "title_gap",
+      "label": "Space under the category title",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_nav",
+      "label": "Keep the menu in view while scrolling (desktop)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Category title"
+    },
+    {
+      "type": "select",
+      "id": "title_preset",
+      "label": "Category title preset",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        },
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "h2",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "title_font",
+      "label": "Category title font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size",
+      "label": "Category title size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size_mobile",
+      "label": "Category title size on mobile",
+      "info": "Phones only (under 750px). Automatic keeps the size above.",
+      "options": [
+        {
+          "value": "",
+          "label": "Automatic"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Category title weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "500",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_line_height",
+      "label": "Category title line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_letter_spacing",
+      "label": "Category title letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_case",
+      "label": "Category title case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
+      "type": "select",
+      "id": "nav_preset",
+      "label": "Menu item preset",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        },
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        }
+      ],
+      "default": "paragraph",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "nav_font",
+      "label": "Menu item font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_font_size",
+      "label": "Menu item size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_font_size_mobile",
+      "label": "Menu item size on mobile",
+      "info": "Phones only (under 750px). Automatic keeps the size above.",
+      "options": [
+        {
+          "value": "",
+          "label": "Automatic"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_weight",
+      "label": "Menu item weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "500",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_line_height",
+      "label": "Menu item line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_letter_spacing",
+      "label": "Menu item letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_case",
+      "label": "Menu item case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.nav_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "nav_color",
+      "label": "Menu text",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "active_background",
+      "label": "Active item background",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "active_bar",
+      "label": "Active item bar and outline",
+      "placeholder": "Default"
+    },
+    {
+      "type": "header",
+      "content": "Footnote"
+    },
+    {
+      "type": "richtext",
+      "id": "footnote",
+      "label": "Text",
+      "default": "<p>This page is a summary for reference only.</p>"
+    },
+    {
+      "type": "color",
+      "id": "footnote_color",
+      "label": "Text colour",
+      "placeholder": "Default"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ categories",
+      "blocks": {
+        "category_1": {
+          "type": "_faq-category",
+          "settings": {
+            "title": "Category",
+            "anchor": "category"
+          }
+        }
+      },
+      "block_order": [
+        "category_1"
+      ]
+    }
+  ]
+}
+{% endschema %}
