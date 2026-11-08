@@ -1,0 +1,63 @@
+{%- doc -%}
+  One FAQ category: its name (shown in the menu and as the title) and, inside, the questions (an Accordion).
+  Typography of the title comes from the FAQ categories section.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = section.settings
+  assign slug = block.settings.anchor | default: block.settings.title | handleize
+
+  assign title_class = s.title_preset
+  assign title_style = ''
+  if s.title_preset == 'custom'
+    assign title_class = 'custom-typography'
+    if s.title_font_size != blank
+      assign title_class = title_class | append: ' custom-font-size'
+    endif
+    capture title_style
+      render 'custom-typography-style', settings: s, prefix: 'title_'
+    endcapture
+  endif
+-%}
+
+<div class="faq-panel" id="{{ slug }}" data-faq-panel data-faq-title="{{ block.settings.title | escape }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.title != blank -%}
+    <h2 class="faq-panel__title {{ title_class }}"{% if title_style != blank %} style="{{ title_style }}"{% endif %}>{{ block.settings.title }}</h2>
+  {%- endif -%}
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .faq-panel[hidden] {
+    display: none;
+  }
+
+  .faq-panel__title {
+    margin: 0 0 var(--faq-title-gap, 24px);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ category",
+  "tag": null,
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Name",
+      "default": "Category"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor name",
+      "info": "Used in the link to this category, for example returns gives /pages/faq#returns. Letters, numbers and dashes only. If empty, the name is used."
+    }
+  ]
+}
+{% endschema %}

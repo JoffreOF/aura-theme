@@ -19,7 +19,17 @@
   skip_contrast: skip_contrast
 %}
 
-<div class="section-background color-custom-{{ section_id }}"></div>
+{%- liquid
+  assign anchor_id = section.settings.anchor | handleize
+  assign line_width = section.settings.line_width | default: 0
+-%}
+<div
+  class="section-background color-custom-{{ section_id }}"
+  {% if anchor_id != blank %}id="{{ anchor_id }}"{% endif %}
+  {% if line_width > 0 %}
+    style="border-block-end: {{ line_width }}px solid {% if section.settings.line_color != blank %}{{ section.settings.line_color }}{% else %}var(--color-border){% endif %};"
+  {% endif %}
+></div>
 <div
   class="section section--{{ section.settings.section_width }} color-custom-{{ section_id }}"
   data-testid="ui-test-section"

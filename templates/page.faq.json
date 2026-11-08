@@ -1,0 +1,2261 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq_header": {
+      "type": "section",
+      "blocks": {
+        "text_03": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Help</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "font_size_mobile": "",
+            "weight": "",
+            "line_height": "normal",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color9 }}",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_01": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Frequently asked questions</h1>",
+            "width": "fit-content",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "4.5rem",
+            "font_size_mobile": "2.75rem",
+            "weight": "300",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.background }}",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "text_02": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Can't find what you're looking for? <a href=\"/pages/contact\">Talk to us</a>, we reply within 1 to 2 business days.</p>",
+            "width": "100%",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1.125rem",
+            "font_size_mobile": "0.9375rem",
+            "weight": "",
+            "line_height": "loose",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "{{ settings.color_palette.color1 }}",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "divider_01": {
+          "type": "_divider",
+          "settings": {
+            "thickness": 1,
+            "corner_radius": "square",
+            "divider_color": "{{ settings.color_palette.color7 }}",
+            "width_percent": 100,
+            "padding-block-start": 40,
+            "padding-block-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "text_03",
+        "text_01",
+        "text_02",
+        "divider_01"
+      ],
+      "name": "Heading",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 14,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "anchor": "",
+        "line_width": 0,
+        "line_color": "",
+        "padding-block-start": 72,
+        "padding-block-end": 0
+      }
+    },
+    "faq_categories": {
+      "type": "faq",
+      "blocks": {
+        "faq_category_01": {
+          "type": "_faq-category",
+          "name": "Gold care",
+          "settings": {
+            "title": "Gold care",
+            "anchor": "gold-care"
+          },
+          "blocks": {
+            "accordion_01": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_01": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Does 18k gold tarnish or turn black?",
+                    "open_by_default": true,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_04": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>No. Gold doesn’t rust, ever. Your piece is 75% pure gold, and the rest is a silver and copper blend that makes it strong enough for real life. Daily wear might dull the shine a little, but a quick clean brings it right back.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_04"
+                  ]
+                },
+                "accordion_row_02": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I wear it every day?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_05": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>That’s the whole point. Just take it off for the gym, heavy lifting, or cleaning day. Solid gold is tough, but it’s not invincible.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_05"
+                  ]
+                },
+                "accordion_row_03": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How should I store it?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_06": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>On its own, in your Aura box or a soft pouch. 18k gold is on the softer side, so it can pick up scratches from rubbing against other pieces.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_06"
+                  ]
+                },
+                "accordion_row_04": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Do scratches lower the value of my investment?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_07": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Not at all. Your piece is valued by the gold it contains, and everyday wear doesn’t change that weight. Wear it, love it, live in it.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_07"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_01",
+                "accordion_row_02",
+                "accordion_row_03",
+                "accordion_row_04"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_01"
+          ]
+        },
+        "faq_category_02": {
+          "type": "_faq-category",
+          "name": "Orders & shipping",
+          "settings": {
+            "title": "Orders & shipping",
+            "anchor": "orders-shipping"
+          },
+          "blocks": {
+            "accordion_02": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_05": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How long until I get my order?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_08": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Pieces from our collection take 7 to 14 business days to process, plus delivery time. As soon as your order is on its way, we’ll send you a shipping confirmation email with your tracking number. The tracking link can take up to 24 hours to show updates, so hang tight if it looks quiet at first.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "font_size_mobile": "",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_08"
+                  ]
+                },
+                "accordion_row_06": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How long does a bespoke piece take?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_09": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>About 30 business days. That time covers everything that makes your piece one of a kind: a personal design consultation, sourcing your gemstones, a custom CAD render, and crafting the final piece.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_09"
+                  ]
+                },
+                "accordion_row_07": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How much does shipping cost?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_10": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Free across Lima Metropolitana and Callao. Shipping to the rest of Peru is a flat rate with Olva, and international shipping is calculated at checkout with DHL Express rates.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_10"
+                  ]
+                },
+                "accordion_row_08": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I cancel or update my order?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_11": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Once an order is placed, we’re not able to cancel or make changes to it. We know that can be frustrating, and we’re sorry for any inconvenience. If you have any questions, email us at <a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a> and we’ll do everything we can to help.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_11"
+                  ]
+                },
+                "accordion_row_09": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Something wrong with your order?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_12": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We’re sorry, and we’re here to fix it. Email us at <a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a> with your order number and a quick rundown of what happened, and we’ll take it from there.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_12"
+                  ]
+                },
+                "accordion_row_10": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Why do you ask for my ID?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_13": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>For purchases above USD 1,000, we’re required by Peruvian regulations to verify our clients’ identity. It’s quick, it’s standard for gold, and your data is protected under our Privacy Policy.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_13"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_05",
+                "accordion_row_06",
+                "accordion_row_07",
+                "accordion_row_08",
+                "accordion_row_09",
+                "accordion_row_10"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_02"
+          ]
+        },
+        "faq_category_03": {
+          "type": "_faq-category",
+          "name": "International shipping",
+          "settings": {
+            "title": "International shipping",
+            "anchor": "international-shipping"
+          },
+          "blocks": {
+            "accordion_03": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_11": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Do you offer international shipping?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_14": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes, we do! We ship worldwide, and every international order travels with DHL Express Worldwide, arriving in 3 to 5 business days after dispatch. The shipping cost is calculated at checkout.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_14"
+                  ]
+                },
+                "accordion_row_12": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Is my order insured?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_15": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Every international order is insured from the moment it leaves us until it reaches you. So in the unlikely case your package gets lost or never arrives, you’re covered. If anything goes wrong along the way, email us at <a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a> and we’ll handle it.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_15"
+                  ]
+                },
+                "accordion_row_13": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Do I need to pay customs duties and taxes?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_16": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Aura Capital does not cover any duties, taxes or associated handling fees which may be applied to your order by your local government. You will be responsible for these costs upon delivery. Please contact your local customs office for more information. We are not responsible for replacing or refunding any orders that are stuck in customs clearance.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_16"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_11",
+                "accordion_row_12",
+                "accordion_row_13"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_03"
+          ]
+        },
+        "faq_category_04": {
+          "type": "_faq-category",
+          "name": "Returns & exchanges",
+          "settings": {
+            "title": "Returns & exchanges",
+            "anchor": "returns-exchanges"
+          },
+          "blocks": {
+            "accordion_04": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_14": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I return my piece?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_17": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Returns are accepted within 30 calendar days of delivery, exclusively when the item you received is incorrect or damaged. Returns for any other reason, including changes of mind, will not be accepted.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_17"
+                  ]
+                },
+                "accordion_row_15": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I return it if I just changed my mind?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_18": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Unfortunately not. Every Aura piece is made with care and real gold, so we only accept returns for defects or order errors.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_18"
+                  ]
+                },
+                "accordion_row_16": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How do I request a return?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_19": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Email us at <a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a> with your order number, a short description of the issue, and a few photos of the piece. We’ll guide you from there.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_19"
+                  ]
+                },
+                "accordion_row_17": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What condition does the piece need to be in?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_20": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>The piece must be returned unworn, with no signs of use, in its original packaging and together with your proof of purchase. Returns missing any of these requirements will not be accepted.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_20"
+                  ]
+                },
+                "accordion_row_18": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I return a bespoke or engraved piece?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_21": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Bespoke and engraved pieces are made exclusively for you and are final sale. The only exception is a verified manufacturing defect.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.875rem",
+                        "font_size_mobile": "",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_21"
+                  ]
+                },
+                "accordion_row_19": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What isn’t covered?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_22": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Returns do not cover damage caused by everyday wear, including scratches, dents, bent shapes, or loose stones resulting from normal use or accidents. Any piece that has been resized, altered, or repaired by a jeweler other than Aura is also excluded.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_22"
+                  ]
+                },
+                "accordion_row_20": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Who pays for return shipping?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_23": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>If your return qualifies and the issue is a defect or a mistake on our end, we will cover return shipping. Otherwise, return shipping and international handling costs are on you and aren’t refundable.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_23"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_14",
+                "accordion_row_15",
+                "accordion_row_16",
+                "accordion_row_17",
+                "accordion_row_18",
+                "accordion_row_19",
+                "accordion_row_20"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_04"
+          ]
+        },
+        "faq_category_05": {
+          "type": "_faq-category",
+          "name": "Size guide",
+          "settings": {
+            "title": "Size guide",
+            "anchor": "size-guide"
+          },
+          "blocks": {
+            "accordion_05": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_21": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How do I find my ring size?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_24": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Measure the inside diameter of a ring that fits you, or the circumference of your finger, and match it on our size guide. We offer US sizes 4 to 10, in half sizes.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_24"
+                  ]
+                },
+                "accordion_row_22": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How long are your necklaces and bracelets?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_25": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Necklaces are 45 cm long. Bracelets are 18 to 18.5 cm long, as listed on each product page.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_25"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_21",
+                "accordion_row_22"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_05"
+          ]
+        },
+        "faq_category_06": {
+          "type": "_faq-category",
+          "name": "Gold quality",
+          "settings": {
+            "title": "Gold quality",
+            "anchor": "gold-quality"
+          },
+          "blocks": {
+            "accordion_06": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_23": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What does 18k mean?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_26": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>It means your piece is 75% pure gold. The remaining 25% is a blend of silver and copper that makes it strong enough for everyday wear.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_26"
+                  ]
+                },
+                "accordion_row_24": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Why 18k and not 24k?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_27": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>24k gold is 99.9% pure, but it’s so soft it dents and wears down quickly. 18k is the perfect balance: enough gold to hold real value, and enough strength to be worn every day forever.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_27"
+                  ]
+                },
+                "accordion_row_25": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How can I verify my piece is real 18k gold?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_28": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Every Aura piece is stamped with “18k”, the international mark for 75% gold, and comes with a certificate of authenticity.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_28"
+                  ]
+                },
+                "accordion_row_26": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Where does your gold come from?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_29": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We work exclusively with responsibly sourced gold from traceable Peruvian suppliers, committed to environmental stewardship. Each piece is then handcrafted by our local artisans under fair conditions.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_29"
+                  ]
+                },
+                "accordion_row_27": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Is 18k gold suitable for sensitive skin?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_30": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our 18k gold is alloyed with silver and copper, without nickel, which is the most common cause of skin reactions. Most people with sensitive skin wear it comfortably.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_30"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_23",
+                "accordion_row_24",
+                "accordion_row_25",
+                "accordion_row_26",
+                "accordion_row_27"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_06"
+          ]
+        },
+        "faq_category_07": {
+          "type": "_faq-category",
+          "name": "Payment",
+          "settings": {
+            "title": "Payment",
+            "anchor": "payment"
+          },
+          "blocks": {
+            "accordion_07": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_28": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What payment methods do you accept?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_31": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>We process all payments securely through Mercado Pago, which accepts major credit and debit cards, as well as other local payment options available in Peru.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_31"
+                  ]
+                },
+                "accordion_row_29": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I pay in installments?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_32": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes. Peruvian cards can pay in up to 6 interest-free installments through Mercado Pago.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_32"
+                  ]
+                },
+                "accordion_row_30": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Why do prices change?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_33": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Our prices are tied to the gold price, updated every day at 10:00 AM (Lima time), so they move with the market. It’s the same transparency that lets you know exactly what you’re paying for.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_33"
+                  ]
+                },
+                "accordion_row_31": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Is my price locked in when I check out?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_34": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes. The price you see at checkout is the price you pay, regardless of later movements in the gold price.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_34"
+                  ]
+                },
+                "accordion_row_32": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "In which currency are prices shown?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_35": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Prices are shown and charged in US dollars. If you pay with a foreign card, your bank may apply its own exchange rate or fees.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_35"
+                  ]
+                },
+                "accordion_row_33": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Are my payments secure?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_36": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes. All payments are processed through Mercado Pago, with bank-level encryption. Aura never sees or stores your card details.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_36"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_28",
+                "accordion_row_29",
+                "accordion_row_30",
+                "accordion_row_31",
+                "accordion_row_32",
+                "accordion_row_33"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_07"
+          ]
+        },
+        "faq_category_08": {
+          "type": "_faq-category",
+          "name": "My portfolio",
+          "settings": {
+            "title": "My portfolio",
+            "anchor": "my-portfolio"
+          },
+          "blocks": {
+            "accordion_08": {
+              "type": "accordion",
+              "settings": {
+                "icon": "plus",
+                "dividers": true,
+                "divider_color": "{{ settings.color_palette.color7 }}",
+                "type_preset": "paragraph",
+                "background_color": "",
+                "text_color": "",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_color": "",
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "accordion_row_34": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What is my Aura Portfolio?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_37": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>It’s your personal space to see what your jewelry is worth. Every piece you buy is recorded with its gold content, and its value updates daily with the gold price, just like tracking an investment.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_37"
+                  ]
+                },
+                "accordion_row_35": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Is this a financial product?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_38": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>No. You own physical jewelry, not shares or a fund. The portfolio is a tool to help you understand the value of what you own.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_38"
+                  ]
+                },
+                "accordion_row_36": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "What is the cost basis of my piece?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_39": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>It’s the gold value of your piece on the day you bought it: its gold weight, times its 75% purity, times that day’s gold spot price. It’s your starting point.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_39"
+                  ]
+                },
+                "accordion_row_37": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Why is my portfolio value lower than what I paid?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_40": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Your price includes a disclosed craftsmanship markup that pays for ethically sourced gold and our artisans’ fair wages. Your portfolio tracks only the gold, so it starts below your purchase price and moves with the market from there.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_40"
+                  ]
+                },
+                "accordion_row_38": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How often is the value updated?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_41": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Every day at 10:00 AM (Lima time), using the gold spot price.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_41"
+                  ]
+                },
+                "accordion_row_39": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can my portfolio lose value?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_42": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes. Gold prices go up and down. Historically gold has protected value over the long term, but past performance doesn’t guarantee future results.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_42"
+                  ]
+                },
+                "accordion_row_40": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Are gemstones included in the value?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_43": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>No. Your portfolio values only the gold content. Gemstones add beauty and character, but aren’t part of the gold valuation.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_43"
+                  ]
+                },
+                "accordion_row_41": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Can I sell my piece back to Aura?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_44": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Yes, you can request a buyback anytime by writing to <a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a>. Each request is reviewed individually, and eligible offers are based on the piece’s gold content at that day’s spot price, subject to our buyback terms.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_44"
+                  ]
+                },
+                "accordion_row_42": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "How do I access my portfolio?",
+                    "open_by_default": false,
+                    "icon": "none",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_45": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<p>Create an account with the email you used at checkout. Your pieces will appear automatically.</p>",
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.875rem",
+                        "weight": "",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "{{ settings.color_palette.color1 }}",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_45"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_row_34",
+                "accordion_row_35",
+                "accordion_row_36",
+                "accordion_row_37",
+                "accordion_row_38",
+                "accordion_row_39",
+                "accordion_row_40",
+                "accordion_row_41",
+                "accordion_row_42"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_08"
+          ]
+        }
+      },
+      "block_order": [
+        "faq_category_01",
+        "faq_category_02",
+        "faq_category_03",
+        "faq_category_04",
+        "faq_category_05",
+        "faq_category_06",
+        "faq_category_07",
+        "faq_category_08"
+      ],
+      "name": "Questions",
+      "settings": {
+        "section_width": "page-width",
+        "nav_width": 300,
+        "column_gap": 72,
+        "title_gap": 24,
+        "question_size": 17,
+        "sticky_nav": true,
+        "title_preset": "custom",
+        "title_font": "var(--font-heading--family)",
+        "title_font_size": "2.5rem",
+        "title_font_size_mobile": "2rem",
+        "title_weight": "400",
+        "title_line_height": "tight",
+        "title_letter_spacing": "normal",
+        "title_case": "none",
+        "nav_preset": "custom",
+        "nav_font": "var(--font-body--family)",
+        "nav_font_size": "0.9375rem",
+        "nav_font_size_mobile": "0.8125rem",
+        "nav_weight": "",
+        "nav_line_height": "normal",
+        "nav_letter_spacing": "normal",
+        "nav_case": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "nav_color": "{{ settings.color_palette.color1 }}",
+        "active_background": "{{ settings.color_palette.color2 }}",
+        "active_bar": "{{ settings.color_palette.background }}",
+        "footnote": "<p>This page is a summary for reference only. In the event of any discrepancy, our <a href=\"/policies/terms-of-service\">Terms & Conditions</a> prevail.</p>",
+        "footnote_color": "{{ settings.color_palette.color9 }}",
+        "padding-block-start": 56,
+        "padding-block-end": 96
+      }
+    }
+  },
+  "order": [
+    "faq_header",
+    "faq_categories"
+  ]
+}

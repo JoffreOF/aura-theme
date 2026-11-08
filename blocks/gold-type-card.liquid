@@ -17,7 +17,7 @@
 -%}
 
 <div
-  class="gold-type-card{% if s.highlighted %} gold-type-card--highlight{% endif %}"
+  class="gold-type-card{% if s.highlighted %} gold-type-card--highlight{% endif %}{% if s.hide_subtitle_mobile %} gold-type-card--no-subtitle-mobile{% endif %}"
   style="
     --gt-padding: {{ s.card_padding }}px;
     --gt-radius: {{ s.corner_radius }}px;
@@ -87,6 +87,12 @@
     }
   }
 
+  @media screen and (max-width: 749px) {
+    .gold-type-card--no-subtitle-mobile .gold-type-card__subtitle {
+      display: none;
+    }
+  }
+
   .gold-type-card__circle {
     display: flex;
     align-items: center;
@@ -106,6 +112,8 @@
 
   .gold-type-card__title {
     margin: 0;
+    /* the theme colours every h3 itself: follow the card's text colour (light on the dark card) */
+    color: var(--gt-text, var(--color-foreground));
     text-align: center;
     font-family: var(--gt-title-font, var(--font-heading--family));
     font-size: var(--gt-title-size, 28px);
@@ -220,6 +228,12 @@
       "id": "subtitle",
       "label": "Line under the title",
       "default": "A thin layer of gold electroplated over a base metal."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_subtitle_mobile",
+      "label": "Hide the line under the title on mobile",
+      "default": false
     },
     {
       "type": "text",
