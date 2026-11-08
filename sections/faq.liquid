@@ -33,12 +33,13 @@
 <div class="section-background{% if s.background_color != blank %} color-custom-{{ section.id }}{% endif %}"></div>
 
 <faq-categories
-  class="faq section section--{{ s.section_width }}{% if s.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if s.sticky_nav %} faq--sticky{% endif %} spacing-style"
+  class="faq section section--{{ s.section_width }}{% if s.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if s.sticky_nav %} faq--sticky{% endif %}{% if s.question_size > 0 %} faq--question-size{% endif %} spacing-style"
   style="
     {% render 'spacing-style', settings: s %}
     --faq-nav-width: {{ s.nav_width }}px;
     --faq-column-gap: {{ s.column_gap }}px;
     --faq-title-gap: {{ s.title_gap }}px;
+    --faq-question-size: {{ s.question_size }}px;
     {% if s.nav_color != blank %}--faq-nav-color: {{ s.nav_color }};{% endif %}
     {% if s.active_background != blank %}--faq-active-background: {{ s.active_background }};{% endif %}
     {% if s.active_bar != blank %}--faq-active-bar: {{ s.active_bar }};{% endif %}
@@ -47,21 +48,13 @@
 >
   <div class="faq__layout">
     <nav class="faq__nav" aria-label="FAQ">
-      <ul class="faq__nav-list">
-        {%- for category in section.blocks -%}
-          {%- assign slug = category.settings.anchor | default: category.settings.title | handleize -%}
-          <li>
-            <a
-              class="faq__nav-link {{ nav_class }}"
-              href="#{{ slug }}"
-              data-faq-link
-              {% if nav_style != blank %}style="{{ nav_style }}"{% endif %}
-            >
-              {{- category.settings.title -}}
-            </a>
-          </li>
-        {%- endfor -%}
-      </ul>
+      {%- comment -%} The links are built from the category blocks by faq-categories.js: a section cannot read the settings of its theme blocks. {%- endcomment -%}
+      <ul
+        class="faq__nav-list"
+        data-faq-list
+        data-link-class="faq__nav-link {{ nav_class }}"
+        data-link-style="{{ nav_style | strip_newlines | escape }}"
+      ></ul>
     </nav>
 
     <div class="faq__panels">
@@ -114,6 +107,10 @@
   .faq__nav-link[aria-current='true'] {
     background: var(--faq-active-background, rgb(var(--color-foreground-rgb) / var(--opacity-5)));
     border-color: var(--faq-active-bar, var(--color-foreground));
+  }
+
+  .faq--question-size .accordion {
+    --summary-font-size: var(--faq-question-size) !important;
   }
 
   .faq__footnote {
@@ -233,6 +230,17 @@
       "step": 2,
       "unit": "px",
       "default": 24
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "label": "Question size",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17,
+      "info": "Size of the questions. Overrides the text preset of the Accordion. 0 keeps the Accordion's own preset."
     },
     {
       "type": "checkbox",
