@@ -1832,7 +1832,7 @@
                 "corner_radius": 0,
                 "background_color": "",
                 "border_color": "{{ settings.color_palette.color7 }}",
-                "text_color": "{{ settings.color_palette.color1 }}",
+                "text_color": "{{ settings.color_palette.color10 }}",
                 "highlight_background": "{{ settings.color_palette.background }}",
                 "highlight_text": "{{ settings.color_palette.color2 }}"
               },
