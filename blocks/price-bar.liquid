@@ -1,0 +1,281 @@
+{%- doc -%}
+  One bar of the "How much of the price is gold" comparison: a label, a note on the right and a bar filled to a percentage.
+  With "Take the percentage from the markup" the fill is 100 / gold.markup (1.75 gives 57%) and {percent} and {markup}
+  in the note are replaced by the live values, so the page never goes out of date. Without it the typed percentage is used.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign markup = shop.metafields.gold.markup.value | times: 1.0
+
+  assign live = false
+  if s.use_markup and markup > 1
+    assign live = true
+  endif
+
+  assign fill = s.percent | times: 1.0
+  assign percent_text = s.percent
+  assign markup_text = ''
+
+  if live
+    assign fill = 10000 | divided_by: markup | round | divided_by: 100.0
+    assign percent_text = fill | round
+
+    # Markup as 1.75 or 1.8: two decimals, or one when the second is zero (built from integers).
+    assign hundredths = markup | times: 100 | round
+    assign second_decimal = hundredths | modulo: 10
+    if second_decimal == 0
+      assign tenths = hundredths | divided_by: 10
+      assign tenth_digit = tenths | modulo: 10
+      assign markup_whole = tenths | minus: tenth_digit | divided_by: 10
+      assign markup_text = markup_whole | append: '.' | append: tenth_digit
+    else
+      assign cents_digits = hundredths | modulo: 100
+      assign markup_whole = hundredths | minus: cents_digits | divided_by: 100
+      if cents_digits < 10
+        assign cents_digits = '0' | append: cents_digits
+      endif
+      assign markup_text = markup_whole | append: '.' | append: cents_digits
+    endif
+  endif
+
+  assign note = s.note | replace: '{percent}', percent_text | replace: '{markup}', markup_text
+  # Wanted live numbers but the markup cannot be read: no note, rather than a note with a missing number.
+  if s.use_markup and live == false
+    assign note = ''
+  endif
+-%}
+
+<div
+  class="price-bar spacing-style"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --price-bar-fill: {{ fill }}%;
+    --price-bar-row-width: {{ s.row_width }}%;
+    --price-bar-height: {{ s.bar_height }}px;
+    --price-bar-label-size: {{ s.label_size }}px;
+    --price-bar-label-size-mobile: {{ s.label_size_mobile }}px;
+    --price-bar-note-size: {{ s.note_size }}px;
+    --price-bar-note-size-mobile: {{ s.note_size_mobile }}px;
+    {% if s.bar_color != blank %}--price-bar-color: {{ s.bar_color }};{% endif %}
+    {% if s.text_color != blank %}--price-bar-text: {{ s.text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="price-bar__head">
+    <span class="price-bar__label">{{ s.label }}</span>
+    <span class="price-bar__note">{{ note }}</span>
+  </div>
+  <div class="price-bar__track" role="img" aria-label="{{ s.label }}: {{ percent_text }}%">
+    <span class="price-bar__fill"></span>
+  </div>
+</div>
+
+{% stylesheet %}
+  .price-bar {
+    box-sizing: border-box;
+    width: var(--price-bar-row-width, 100%);
+    max-width: 100%;
+    color: var(--price-bar-text, var(--color-foreground));
+  }
+
+  .price-bar__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 16px;
+    margin-block-end: 10px;
+  }
+
+  .price-bar__label {
+    font-family: var(--font-heading--family);
+    font-weight: 300;
+    font-size: var(--price-bar-label-size-mobile, 20px);
+    line-height: 1.2;
+  }
+
+  .price-bar__note {
+    font-size: var(--price-bar-note-size-mobile, 12px);
+    opacity: 0.75;
+  }
+
+  .price-bar__track {
+    height: var(--price-bar-height, 10px);
+    box-sizing: border-box;
+    border: 1px solid var(--price-bar-color, currentColor);
+  }
+
+  .price-bar__fill {
+    display: block;
+    height: 100%;
+    width: var(--price-bar-fill, 50%);
+    background: var(--price-bar-color, currentColor);
+  }
+
+  @media screen and (min-width: 750px) {
+    .price-bar {
+      width: var(--price-bar-row-width, 100%);
+    }
+
+    .price-bar__label {
+      font-size: var(--price-bar-label-size, 24px);
+    }
+
+    .price-bar__note {
+      font-size: var(--price-bar-note-size, 14px);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .price-bar {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Price bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Aura · plain gold"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note on the right",
+      "info": "{percent} and {markup} are replaced by the live values when the percentage comes from the markup.",
+      "default": "about {percent}% · ×{markup} markup"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_markup",
+      "label": "Take the percentage from the markup",
+      "info": "Fill = 100 divided by the shop markup (gold.markup). If the markup cannot be read, the typed percentage below is used.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "percent",
+      "label": "Percentage",
+      "info": "Number only, for example 11 or 57.",
+      "default": "50"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "row_width",
+      "label": "Row width on desktop",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar thickness",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label size",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "label_size_mobile",
+      "label": "Label size on mobile",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "note_size",
+      "label": "Note size",
+      "min": 11,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "note_size_mobile",
+      "label": "Note size on mobile",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "bar_color",
+      "label": "Bar colour",
+      "default": "#C4A35A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "placeholder": "Default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price bar",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,306 @@
+{%- doc -%}
+  A box that shows what one example piece costs, worked out live with the same formula as the price job:
+    Price paid  = round(weight x gold.price_18k_per_g x gold.markup, 2)
+    Cost basis  = round(weight x gold.price_18k_per_g, 2)   (the gold value, what the portfolio tracks)
+  The weight is a setting (default 4.1 g). Nothing is shown to visitors if the shop numbers cannot be read.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+  assign markup = shop.metafields.gold.markup.value | times: 1.0
+  assign weight = s.weight | times: 1.0
+
+  assign show = false
+  assign amount_text = ''
+  if gram_price > 0 and weight > 0
+    if s.amount == 'cost_basis'
+      assign cents = weight | times: gram_price | times: 100 | round
+      assign show = true
+    elsif markup > 0
+      assign cents = weight | times: gram_price | times: markup | times: 100 | round
+      assign show = true
+    endif
+    if show
+      assign amount_text = cents | money
+    endif
+  endif
+-%}
+
+{%- if show -%}
+  <div
+    class="price-example spacing-style{% if s.highlighted %} price-example--highlighted{% endif %}"
+    style="
+      {% render 'spacing-padding', settings: s %}
+      --price-example-formula-size: {{ s.formula_size }}px;
+      --price-example-formula-size-mobile: {{ s.formula_size_mobile }}px;
+      --price-example-amount-size: {{ s.amount_size }}px;
+      --price-example-amount-size-mobile: {{ s.amount_size_mobile }}px;
+      {% if s.border_color != blank %}--price-example-border: {{ s.border_color }};{% endif %}
+      {% if s.highlight_border_color != blank %}--price-example-highlight-border: {{ s.highlight_border_color }};{% endif %}
+      {% if s.text_color != blank %}--price-example-text: {{ s.text_color }};{% endif %}
+      {% if s.amount_color != blank %}--price-example-amount-color: {{ s.amount_color }};{% endif %}
+    "
+    {{ block.shopify_attributes }}
+  >
+    {%- if s.eyebrow != blank -%}
+      <p class="price-example__eyebrow">{{ s.eyebrow }}</p>
+    {%- endif -%}
+    {%- if s.formula != blank -%}
+      <p class="price-example__formula">{{ s.formula }}</p>
+    {%- endif -%}
+    <p class="price-example__amount">{{ amount_text }}</p>
+    {%- if s.caption != blank -%}
+      <p class="price-example__caption">{{ s.caption }}</p>
+    {%- endif -%}
+  </div>
+{%- elsif request.design_mode -%}
+  <p class="price-example__hint">Price example hidden: the shop needs gold.price_18k_per_g{% if s.amount != 'cost_basis' %} and gold.markup{% endif %} readable by the storefront.</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .price-example {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    color: var(--price-example-text, var(--color-foreground));
+    border: 1px solid var(--price-example-border, rgb(var(--color-foreground-rgb) / var(--opacity-20)));
+  }
+
+  .price-example--highlighted {
+    border-color: var(--price-example-highlight-border, var(--color-foreground));
+  }
+
+  .price-example__eyebrow {
+    margin: 0 0 12px;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .price-example__formula {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: 300;
+    font-size: var(--price-example-formula-size-mobile, 20px);
+    line-height: 1.4;
+  }
+
+  .price-example__amount {
+    margin: 20px 0 12px;
+    font-family: var(--font-heading--family);
+    font-weight: 300;
+    font-size: var(--price-example-amount-size-mobile, 36px);
+    line-height: 1.1;
+    color: var(--price-example-amount-color, inherit);
+    font-variant-numeric: lining-nums;
+  }
+
+  .price-example__caption {
+    margin: 0;
+    font-size: 0.8125rem;
+    opacity: 0.7;
+  }
+
+  .price-example__hint {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.55;
+  }
+
+  @media screen and (min-width: 750px) {
+    .price-example__formula {
+      font-size: var(--price-example-formula-size, 24px);
+    }
+
+    .price-example__amount {
+      font-size: var(--price-example-amount-size, 44px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Price example card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Works out one example piece live from the shop's gold price and markup, with the same formula as the price job."
+    },
+    {
+      "type": "select",
+      "id": "amount",
+      "label": "Amount",
+      "options": [
+        {
+          "value": "price",
+          "label": "Price paid (weight x gold price x markup)"
+        },
+        {
+          "value": "cost_basis",
+          "label": "Cost basis (weight x gold price)"
+        }
+      ],
+      "default": "price"
+    },
+    {
+      "type": "range",
+      "id": "weight",
+      "label": "Example weight",
+      "min": 1,
+      "max": 11,
+      "step": 0.1,
+      "unit": "g",
+      "default": 4.1
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Price paid"
+    },
+    {
+      "type": "text",
+      "id": "formula",
+      "label": "Formula",
+      "default": "75% × gold weight × spot price × disclosed craftsmanship markup"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "Example: Rolo chain bracelet, 4.1 g"
+    },
+    {
+      "type": "checkbox",
+      "id": "highlighted",
+      "label": "Highlight (darker outline)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "formula_size",
+      "label": "Formula size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "formula_size_mobile",
+      "label": "Formula size on mobile",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "amount_size",
+      "label": "Amount size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "amount_size_mobile",
+      "label": "Amount size on mobile",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Outline",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "highlight_border_color",
+      "label": "Highlighted outline",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "amount_color",
+      "label": "Amount colour",
+      "placeholder": "Default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price example card",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
