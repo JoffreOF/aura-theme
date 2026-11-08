@@ -1,8 +1,9 @@
 class FaqCategories extends HTMLElement {
   connectedCallback() {
-    this.links = Array.from(this.querySelectorAll('[data-faq-link]'));
     this.panels = Array.from(this.querySelectorAll('[data-faq-panel]'));
     if (!this.panels.length) return;
+    this.#buildMenu();
+    this.links = Array.from(this.querySelectorAll('[data-faq-link]'));
 
     this.addEventListener('click', this.#onClick);
     window.addEventListener('hashchange', this.#onHashChange);
@@ -16,6 +17,24 @@ class FaqCategories extends HTMLElement {
 
   disconnectedCallback() {
     window.removeEventListener('hashchange', this.#onHashChange);
+  }
+
+  // A section cannot read the settings of its theme blocks, so the menu is built here from the category blocks.
+  #buildMenu() {
+    const list = this.querySelector('[data-faq-list]');
+    if (!list) return;
+    list.replaceChildren();
+    this.panels.forEach((panel) => {
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${panel.id}`;
+      link.setAttribute('data-faq-link', '');
+      link.className = list.dataset.linkClass || '';
+      if (list.dataset.linkStyle) link.setAttribute('style', list.dataset.linkStyle);
+      link.textContent = panel.dataset.faqTitle || panel.querySelector('h2')?.textContent || panel.id;
+      item.append(link);
+      list.append(item);
+    });
   }
 
   #idFromHash() {
