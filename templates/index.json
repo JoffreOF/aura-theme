@@ -1096,7 +1096,7 @@
                     "alignment": "left",
                     "type_preset": "custom",
                     "font": "var(--font-body--family)",
-                    "font_size": "1.125rem",
+                    "font_size": "1.0625rem",
                     "font_size_mobile": "",
                     "weight": "",
                     "line_height": "loose",
