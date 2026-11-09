@@ -1,0 +1,759 @@
+{%- doc -%}
+  "One formula. No mystery." Two questions (weight with a slider, gemstones yes / no) and the price built live, term by term:
+    18K purity (75%) x weight x (gold price per ounce / 31.1 g per ounce) x markup = price
+  Data: gold.price_18k_per_g (the 18k gram price already holds the 75%), gold.markup (gold-only designs) and
+  gold.markup_stones (designs with gemstones). Until gold.markup_stones exists in the shop, the "Markup with gemstones" setting is used.
+  Price = round(weight x 18k gram price x markup, 2), the same formula and rounding as the price job (two decimals).
+  The weight is shared with the Gold terminal (event aura:weight) so its hover shows the gold value of this piece.
+  Server output holds the starting numbers; assets/formula-studio.js keeps them up to date. Words are settings.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+  assign markup = shop.metafields.gold.markup.value | times: 1.0
+  assign markup_stones = shop.metafields.gold.markup_stones.value | times: 1.0
+  if markup_stones <= 0
+    assign markup_stones = s.markup_stones | times: 1.0
+  endif
+
+  assign show = false
+  if gram_price > 0 and markup > 0
+    assign show = true
+    assign weight = s.weight_default | times: 1.0
+    assign ounce = gram_price | times: 31.1035 | divided_by: 0.75
+    assign ounce_text = ounce | times: 100 | round | money_without_currency | split: '.' | first
+    assign price_cents = weight | times: gram_price | times: markup | times: 100 | round
+    assign price_text = price_cents | money_without_currency
+    assign markup_text = markup | round: 2
+  endif
+-%}
+
+<formula-studio
+  class="fs spacing-style"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --fs-value-size: {{ s.value_size }}px;
+    --fs-value-size-mobile: {{ s.value_size_mobile }}px;
+    --fs-radius: {{ s.corner_radius }}px;
+    {% if s.text_color != blank %}--fs-text: {{ s.text_color }};{% endif %}
+    {% if s.muted_color != blank %}--fs-muted: {{ s.muted_color }};{% endif %}
+    {% if s.line_color != blank %}--fs-line: {{ s.line_color }};{% endif %}
+    {% if s.accent_color != blank %}--fs-accent: {{ s.accent_color }};{% endif %}
+    {% if s.strong_color != blank %}--fs-strong: {{ s.strong_color }};{% endif %}
+    {% if s.strong_text != blank %}--fs-strong-text: {{ s.strong_text }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <script type="application/json" data-config>
+      {
+        "gram": {{ gram_price | json }},
+        "markup": {{ markup | json }},
+        "markupStones": {{ markup_stones | json }},
+        "min": 0.5,
+        "max": {{ s.weight_max | json }},
+        "step": 0.1,
+        "weight": {{ weight | json }},
+        "captionPlain": {{ s.markup_caption_plain | json }},
+        "captionStones": {{ s.markup_caption_stones | json }}
+      }
+    </script>
+
+    <div class="fs__controls{% unless s.show_stones_toggle %} fs__controls--single{% endunless %}">
+      <div class="fs__q">
+        <span class="fs__ov">{{ s.input1_eyebrow }}</span>
+        <h3 class="fs__h">{{ s.input1_title }}</h3>
+        <div class="fs__wrow">
+          <span class="fs__wv">
+            <span data-fx="weight-big">{{ weight | round: 1 }}</span><small>g</small>
+          </span>
+          <div class="fs__wsl">
+            <input
+              type="range"
+              data-weight
+              min="0.5"
+              max="{{ s.weight_max }}"
+              step="0.1"
+              value="{{ weight }}"
+              aria-label="{{ s.input1_title | escape }}"
+            >
+            <div class="fs__rng"><span>0.5 g</span><span>{{ s.weight_max }} g</span></div>
+          </div>
+        </div>
+      </div>
+      {%- if s.show_stones_toggle -%}
+        <div class="fs__q">
+          <span class="fs__ov">{{ s.input2_eyebrow }}</span>
+          <h3 class="fs__h">{{ s.input2_title }}</h3>
+          <div class="fs__tog" role="group" aria-label="{{ s.input2_title | escape }}">
+            <button type="button" data-stones="0" aria-pressed="true">{{ s.no_label }}</button>
+            <button type="button" data-stones="1" aria-pressed="false">{{ s.yes_label }}</button>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <ol class="fs__fx">
+      <li class="fs__term">
+        <div class="fs__v">{{ s.purity_text }}</div>
+        <div class="fs__lb">{{ s.purity_label }}</div>
+        <p>{{ s.purity_caption }}</p>
+      </li>
+      <li class="fs__op" aria-hidden="true">×</li>
+      <li class="fs__term">
+        <div class="fs__v"><span data-fx="weight">{{ weight | round: 1 }}</span><span class="fs__u">g</span></div>
+        <div class="fs__lb">{{ s.weight_label }}</div>
+        <p>{{ s.weight_caption }}</p>
+      </li>
+      <li class="fs__op" aria-hidden="true">×</li>
+      <li class="fs__term fs__term--gold">
+        <div class="fs__v">
+          <span class="fs__frac">
+            <span class="fs__fr">$<span data-fx="ounce">{{ ounce_text }}</span><span class="fs__uf"><i>usd</i><i>oz t</i></span></span>
+            <span class="fs__fr">31.1<span class="fs__uf"><i>g</i><i>oz t</i></span></span>
+          </span>
+        </div>
+        <div class="fs__lb">{{ s.spot_label }}</div>
+        <p>{{ s.spot_caption }}</p>
+      </li>
+      <li class="fs__op" aria-hidden="true">×</li>
+      <li class="fs__term">
+        <div class="fs__v" data-fx="markup">{{ markup_text }}</div>
+        <div class="fs__lb">{{ s.markup_label }}</div>
+        <p data-fx="markup-caption">{{ s.markup_caption_plain }}</p>
+      </li>
+      <li class="fs__op" aria-hidden="true">=</li>
+      <li class="fs__term fs__term--result">
+        <div class="fs__v"><span class="fs__box">$<span data-fx="price">{{ price_text }}</span></span></div>
+        <div class="fs__lb">{{ s.price_label }}</div>
+        <p>{{ s.price_caption }}</p>
+      </li>
+    </ol>
+
+    {%- if s.button_label != blank -%}
+      <div class="fs__acts">
+        <a class="fs__btn" href="{{ s.button_link | default: '#' }}">{{ s.button_label }}</a>
+      </div>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="fs__empty">Formula hidden: the shop needs gold.price_18k_per_g and gold.markup.</p>
+  {%- endif -%}
+</formula-studio>
+
+{% stylesheet %}
+  formula-studio {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    color: var(--fs-text, var(--color-foreground));
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .fs__empty {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+
+  .fs__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-block-start: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
+    border-block-end: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
+  }
+
+  .fs__q {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 28px 0 32px;
+  }
+
+  .fs__q + .fs__q {
+    border-block-start: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
+  }
+
+  .fs__ov {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__h {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--fs-strong, inherit);
+  }
+
+  .fs__wrow {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .fs__wv {
+    flex: none;
+    min-width: 120px;
+    font-family: var(--font-heading--family);
+    font-size: clamp(36px, 3.6vw, 48px);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--fs-strong, inherit);
+  }
+
+  .fs__wv small {
+    margin-inline-start: 6px;
+    font-family: var(--font-body--family);
+    font-size: 15px;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__wsl {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fs__wsl input[type='range'] {
+    width: 100%;
+    height: 4px;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--fs-accent, #c4a35a) var(--f, 25%), rgb(var(--color-foreground-rgb) / 0.12) var(--f, 25%));
+  }
+
+  .fs__wsl input[type='range']::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+    appearance: none;
+    cursor: grab;
+    background: var(--fs-strong, #4a253d);
+    border: 4px solid var(--color-background, #fffaf8);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--fs-strong, #4a253d);
+  }
+
+  .fs__wsl input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    cursor: grab;
+    background: var(--fs-strong, #4a253d);
+    border: 4px solid var(--color-background, #fffaf8);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--fs-strong, #4a253d);
+  }
+
+  .fs__rng {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__tog {
+    display: inline-flex;
+    width: fit-content;
+    padding: 4px;
+    border: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
+    border-radius: var(--fs-radius, 0);
+  }
+
+  .fs__tog button {
+    padding: 11px 22px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--fs-text, inherit);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--fs-radius, 0);
+  }
+
+  .fs__tog button[aria-pressed='true'] {
+    color: var(--fs-strong-text, #fffaf8);
+    background: var(--fs-strong, #4a253d);
+  }
+
+  .fs__fx {
+    display: flex;
+    flex-direction: column;
+    margin: clamp(32px, 4vw, 56px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fs__term {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 2px 16px;
+    padding: 16px 0;
+    border-block-end: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.2));
+  }
+
+  .fs__v {
+    grid-row: 1 / 3;
+    font-family: var(--font-heading--family);
+    font-size: var(--fs-value-size-mobile, 28px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--fs-strong, inherit);
+  }
+
+  .fs__term--gold .fs__v {
+    color: var(--fs-accent, #c4a35a);
+  }
+
+  .fs__lb {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__term p {
+    grid-column: 2;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__op {
+    display: none;
+  }
+
+  .fs__u {
+    margin-inline-start: 0.2em;
+    font-family: var(--font-body--family);
+    font-size: 0.4em;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fs__fr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.12em 0.12em;
+  }
+
+  .fs__fr + .fs__fr {
+    border-block-start: 1.5px solid currentColor;
+  }
+
+  .fs__uf {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-inline-start: 0.4em;
+    font-family: var(--font-body--family);
+    font-size: max(10px, 0.38em);
+    line-height: 1.3;
+    color: var(--fs-muted, inherit);
+  }
+
+  .fs__uf i {
+    padding: 0 0.2em;
+    font-style: normal;
+  }
+
+  .fs__uf i + i {
+    border-block-start: 1px solid currentColor;
+  }
+
+  .fs__box {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.28em 0.5em;
+    color: var(--fs-strong-text, #fffaf8);
+    background: var(--fs-strong, #4a253d);
+    border-radius: var(--fs-radius, 0);
+    line-height: 1;
+  }
+
+  .fs__term--result {
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
+  .fs__term--result .fs__lb {
+    color: var(--fs-strong, inherit);
+  }
+
+  .fs__acts {
+    display: flex;
+    justify-content: center;
+    margin-block-start: clamp(28px, 4vw, 48px);
+  }
+
+  .fs__btn {
+    padding: 15px 28px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--fs-strong-text, #fffaf8);
+    background: var(--fs-strong, #4a253d);
+    border: 1px solid var(--fs-strong, #4a253d);
+    border-radius: var(--fs-radius, 0);
+  }
+
+  @media screen and (min-width: 750px) {
+    .fs__controls:not(.fs__controls--single) {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    }
+
+    .fs__controls:not(.fs__controls--single) .fs__q:first-child {
+      padding-inline-end: clamp(24px, 4vw, 56px);
+    }
+
+    .fs__controls:not(.fs__controls--single) .fs__q + .fs__q {
+      padding-inline-start: clamp(24px, 4vw, 56px);
+      border-block-start: 0;
+      border-inline-start: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
+    }
+
+    .fs__fx {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.2fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: start;
+      column-gap: clamp(4px, 0.9vw, 12px);
+    }
+
+    .fs__term,
+    .fs__term--result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      text-align: center;
+      border: 0;
+    }
+
+    .fs__v {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(var(--fs-value-size, 48px) * 3);
+      font-size: var(--fs-value-size, 48px);
+      white-space: nowrap;
+    }
+
+    .fs__lb {
+      width: 100%;
+      margin-block-start: 14px;
+      padding-block-start: 14px;
+      border-block-start: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.2));
+    }
+
+    .fs__term--result .fs__lb {
+      border-block-start-color: var(--fs-strong, currentColor);
+    }
+
+    .fs__term p {
+      grid-column: auto;
+      margin-block-start: 12px;
+    }
+
+    .fs__op {
+      display: flex;
+      align-items: center;
+      height: calc(var(--fs-value-size, 48px) * 3);
+      font-family: var(--font-heading--family);
+      font-size: var(--fs-value-size, 48px);
+      line-height: 1;
+      color: var(--fs-muted, inherit);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Formula studio",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Two questions and the price built live from the shop's gold price and markups: 75% x weight x (gold per ounce / 31.1) x markup = price, rounded to the cent like the store. Needs gold.price_18k_per_g and gold.markup. The weight is shared with the Gold terminal."
+    },
+    {
+      "type": "range",
+      "id": "weight_default",
+      "label": "Starting weight",
+      "min": 0.5,
+      "max": 30,
+      "step": 0.5,
+      "unit": "g",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "weight_max",
+      "label": "Largest weight on the slider",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "g",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stones_toggle",
+      "label": "Ask about gemstones",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "markup_stones",
+      "label": "Markup with gemstones",
+      "info": "Used until the shop has the gold.markup_stones metafield.",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.9,
+      "visible_if": "{{ block.settings.show_stones_toggle }}"
+    },
+    {
+      "type": "header",
+      "content": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "input1_eyebrow",
+      "label": "Question 1 label",
+      "default": "Your input · 1"
+    },
+    {
+      "type": "text",
+      "id": "input1_title",
+      "label": "Question 1",
+      "default": "How much does your jewel weigh?"
+    },
+    {
+      "type": "text",
+      "id": "input2_eyebrow",
+      "label": "Question 2 label",
+      "default": "Your input · 2"
+    },
+    {
+      "type": "text",
+      "id": "input2_title",
+      "label": "Question 2",
+      "default": "Does the design have gemstones?"
+    },
+    {
+      "type": "text",
+      "id": "no_label",
+      "label": "No",
+      "default": "No"
+    },
+    {
+      "type": "text",
+      "id": "yes_label",
+      "label": "Yes",
+      "default": "Yes"
+    },
+    {
+      "type": "header",
+      "content": "Formula words"
+    },
+    {
+      "type": "text",
+      "id": "purity_text",
+      "label": "Purity",
+      "default": "75%"
+    },
+    {
+      "type": "text",
+      "id": "purity_label",
+      "label": "Purity name",
+      "default": "18K purity"
+    },
+    {
+      "type": "text",
+      "id": "purity_caption",
+      "label": "Purity explanation",
+      "default": "18 of every 24 parts are pure gold, so 75% of your jewel is gold."
+    },
+    {
+      "type": "text",
+      "id": "weight_label",
+      "label": "Weight name",
+      "default": "Weight"
+    },
+    {
+      "type": "text",
+      "id": "weight_caption",
+      "label": "Weight explanation",
+      "default": "Your answer above: how much your piece weighs."
+    },
+    {
+      "type": "text",
+      "id": "spot_label",
+      "label": "Gold price name",
+      "default": "Gold price per gram"
+    },
+    {
+      "type": "text",
+      "id": "spot_caption",
+      "label": "Gold price explanation",
+      "default": "Gold is priced in usd per troy ounce (oz t). We simply convert it to usd per gram."
+    },
+    {
+      "type": "text",
+      "id": "markup_label",
+      "label": "Markup name",
+      "default": "Craftsmanship"
+    },
+    {
+      "type": "text",
+      "id": "markup_caption_plain",
+      "label": "Markup explanation, gold only",
+      "default": "Our disclosed markup for gold-only designs."
+    },
+    {
+      "type": "text",
+      "id": "markup_caption_stones",
+      "label": "Markup explanation, with gemstones",
+      "default": "Our disclosed markup for designs with gemstones."
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "Price name",
+      "default": "Your price today"
+    },
+    {
+      "type": "text",
+      "id": "price_caption",
+      "label": "Price explanation",
+      "default": "Updated every morning at 10:00 AM."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button",
+      "default": "Add to my portfolio"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Look"
+    },
+    {
+      "type": "range",
+      "id": "value_size",
+      "label": "Formula number size",
+      "min": 28,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "value_size_mobile",
+      "label": "Formula number size on mobile",
+      "min": 20,
+      "max": 44,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Secondary text",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Lines",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Gold (slider fill, gold price)",
+      "default": "#C4A35A"
+    },
+    {
+      "type": "color",
+      "id": "strong_color",
+      "label": "Dark colour (price, active choice, button)",
+      "default": "#4A253D"
+    },
+    {
+      "type": "color",
+      "id": "strong_text",
+      "label": "Text on the dark colour",
+      "default": "#FFFAF8"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Formula studio",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

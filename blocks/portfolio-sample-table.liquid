@@ -1,0 +1,474 @@
+{%- doc -%}
+  "Marked to market, daily": a dark "MY AURA" block with a summary (pieces, fine gold held, gold value today, change since
+  purchase) and a table of sample pieces. The pieces are blocks (_portfolio-sample-row) that work out their own numbers from the
+  shop's gold price history; assets/portfolio-sample.js adds them up for the summary. It is a sample, tagged as such, not a real portfolio.
+  Column and summary words are in the locale file (blocks.portfolio_sample_table).
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign today_text = 'now' | date: '%b %-d, %Y'
+  assign marked_text = s.marked_text | replace: '{date}', today_text
+-%}
+
+<portfolio-sample
+  class="ps spacing-style"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --ps-radius: {{ s.corner_radius }}px;
+    {% if s.background_color != blank %}--ps-bg: {{ s.background_color }};{% endif %}
+    {% if s.text_color != blank %}--ps-text: {{ s.text_color }};{% endif %}
+    {% if s.muted_color != blank %}--ps-muted: {{ s.muted_color }};{% endif %}
+    {% if s.accent_color != blank %}--ps-accent: {{ s.accent_color }};{% endif %}
+    {% if s.line_color != blank %}--ps-line: {{ s.line_color }};{% endif %}
+    {% if s.up_color != blank %}--ps-up: {{ s.up_color }};{% endif %}
+    {% if s.down_color != blank %}--ps-down: {{ s.down_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="ps__bar">
+    <div class="ps__sym">
+      <b>{{ s.label }}</b>
+      {%- if s.sublabel != blank -%}<span>{{ s.sublabel }}</span>{%- endif -%}
+      {%- if s.tag_text != blank -%}<span class="ps__tag">{{ s.tag_text }}</span>{%- endif -%}
+    </div>
+    <div class="ps__sym"><span>{{ marked_text }}</span></div>
+  </div>
+
+  <dl class="ps__sum">
+    <div><dt>{{ 'blocks.portfolio_sample_table.pieces' | t }}</dt><dd data-sum="pieces">—</dd></div>
+    <div><dt>{{ 'blocks.portfolio_sample_table.fine_gold' | t }}</dt><dd data-sum="fine">—</dd></div>
+    <div><dt>{{ 'blocks.portfolio_sample_table.value_today' | t }}</dt><dd data-sum="value">—</dd></div>
+    <div>
+      <dt>{{ 'blocks.portfolio_sample_table.change_since' | t }}</dt>
+      <dd><span data-sum="change">—</span><small data-sum="change-pct"></small></dd>
+    </div>
+  </dl>
+
+  <div class="ps__scroll">
+    <table class="ps__tbl">
+      <thead>
+        <tr>
+          <th>{{ 'blocks.portfolio_sample_table.piece' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.bought' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.fine_gold_short' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.you_paid' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.value_then' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.value_today' | t }}</th>
+          <th>{{ 'blocks.portfolio_sample_table.change' | t }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% content_for 'blocks' %}
+      </tbody>
+    </table>
+  </div>
+</portfolio-sample>
+
+{% stylesheet %}
+  portfolio-sample {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    color: var(--ps-text, #f2eae6);
+    background: var(--ps-bg, #4a253d);
+    border-radius: var(--ps-radius, 0);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .ps__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 14px 24px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ps-muted, #c2aebc);
+    border-block-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.14));
+  }
+
+  .ps__sym {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ps__sym b {
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--ps-accent, #d9c29a);
+  }
+
+  .ps__tag {
+    padding: 2px 8px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ps-accent, #d9c29a);
+    border: 1px solid var(--ps-accent, #d9c29a);
+  }
+
+  .ps__sum {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    border-block-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.14));
+  }
+
+  .ps__sum > div {
+    padding: 20px 24px;
+    border-inline-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.14));
+  }
+
+  .ps__sum > div:nth-child(2n) {
+    border-inline-end: 0;
+  }
+
+  .ps__sum dt {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ps-muted, #c2aebc);
+  }
+
+  .ps__sum dd {
+    margin: 8px 0 0;
+    font-size: 24px;
+    white-space: nowrap;
+  }
+
+  .ps__sum dd small {
+    display: block;
+    margin-block-start: 4px;
+    font-size: 14px;
+  }
+
+  [data-direction='up'],
+  .ps__change--up {
+    color: var(--ps-up, #a9cba2);
+  }
+
+  [data-direction='down'],
+  .ps__change--down {
+    color: var(--ps-down, #eba3a3);
+  }
+
+  .ps__tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .ps__tbl thead {
+    display: none;
+  }
+
+  .ps__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 16px;
+    padding: 20px 24px;
+    border-block-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.1));
+  }
+
+  .ps__row:last-child {
+    border-block-end: 0;
+  }
+
+  .ps__row td {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0;
+    text-align: start;
+  }
+
+  .ps__row td[data-label]::before {
+    content: attr(data-label);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ps-muted, #c2aebc);
+  }
+
+  .ps__piece,
+  .ps__action {
+    grid-column: 1 / -1;
+  }
+
+  .ps__cell {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ps__thumb {
+    display: block;
+    flex: none;
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+    background: rgb(242 234 230 / 0.08);
+    border-radius: min(var(--ps-radius, 0px), 10px);
+  }
+
+  .ps__thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ps__name {
+    font-size: 15px;
+  }
+
+  .ps__pct {
+    margin-inline-start: 4px;
+    opacity: 0.8;
+  }
+
+  .ps__buyback {
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--ps-text, #f2eae6);
+    border: 1px solid rgb(242 234 230 / 0.35);
+    border-radius: var(--ps-radius, 0);
+  }
+
+  .ps__buyback:hover {
+    color: var(--ps-bg, #4a253d);
+    background: var(--ps-text, #f2eae6);
+  }
+
+  @media screen and (min-width: 750px) {
+    .ps__sum {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .ps__sum > div:nth-child(2n) {
+      border-inline-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.14));
+    }
+
+    .ps__sum > div:last-child {
+      border-inline-end: 0;
+    }
+
+    .ps__scroll {
+      overflow-x: auto;
+    }
+
+    .ps__tbl thead {
+      display: table-header-group;
+    }
+
+    .ps__tbl th {
+      padding: 14px 12px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-align: end;
+      text-transform: uppercase;
+      white-space: normal;
+      color: var(--ps-muted, #c2aebc);
+      border-block-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.14));
+    }
+
+    .ps__row {
+      display: table-row;
+      padding: 0;
+    }
+
+    .ps__row td {
+      display: table-cell;
+      padding: 14px 12px;
+      text-align: end;
+      white-space: nowrap;
+      border-block-end: 1px solid var(--ps-line, rgb(242 234 230 / 0.08));
+    }
+
+    .ps__row:last-child td {
+      border-block-end: 0;
+    }
+
+    .ps__row td[data-label]::before {
+      display: none;
+    }
+
+    .ps__tbl th:first-child,
+    .ps__row td:first-child {
+      padding-inline-start: 24px;
+      text-align: start;
+    }
+
+    .ps__tbl th:last-child,
+    .ps__row td:last-child {
+      padding-inline-end: 24px;
+    }
+
+    .ps__piece,
+    .ps__action {
+      grid-column: auto;
+    }
+
+    .ps__piece {
+      min-width: 190px;
+      white-space: normal;
+    }
+
+    .ps__thumb {
+      width: 48px;
+      height: 48px;
+    }
+
+    .ps__pct {
+      display: block;
+      margin-inline-start: 0;
+    }
+
+    .ps__buyback {
+      padding: 8px 10px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sample portfolio",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_portfolio-sample-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A dark portfolio table of sample pieces, valued with the shop's real gold price history. Add one Sample piece block per row. It is labelled as a sample."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Name",
+      "default": "MY AURA"
+    },
+    {
+      "type": "text",
+      "id": "sublabel",
+      "label": "Subtitle",
+      "default": "Virtual portfolio"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag",
+      "default": "Sample"
+    },
+    {
+      "type": "text",
+      "id": "marked_text",
+      "label": "Marked-to-market line",
+      "info": "{date} becomes today's date.",
+      "default": "Marked to market · {date} · 10:00 AM"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#4A253D"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#F2EAE6"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Secondary text",
+      "default": "#C2AEBC"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#D9C29A"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Lines",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "up_color",
+      "label": "Went up",
+      "default": "#A9CBA2"
+    },
+    {
+      "type": "color",
+      "id": "down_color",
+      "label": "Went down",
+      "default": "#EBA3A3"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sample portfolio",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
