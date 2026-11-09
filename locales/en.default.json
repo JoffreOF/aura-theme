@@ -311,6 +311,19 @@
       "past_y5": "past 5 years",
       "past_max": "all time"
     },
+    "portfolio_sample_table": {
+      "pieces": "Pieces",
+      "fine_gold": "Fine gold held",
+      "value_today": "Gold value today",
+      "change_since": "Change since purchase",
+      "piece": "Piece",
+      "bought": "Bought",
+      "fine_gold_short": "Fine gold",
+      "you_paid": "You paid",
+      "value_then": "Gold value then",
+      "change": "Change",
+      "request_buyback": "Request buyback"
+    },
     "gold_terminal": {
       "label": "Gold price terminal, US dollars per troy ounce",
       "fix_time": "10:00 AM",
