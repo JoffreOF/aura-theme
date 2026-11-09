@@ -11,10 +11,18 @@
   assign s = block.settings
   assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
 
+  # What the item shows: 18K gram price as stored, 24K gram (/ 0.75) or the ounce of pure gold (x 31.1035 / 0.75).
+  assign scale = 31.1035 | divided_by: 0.75
+  if s.value == 'gram_18k'
+    assign scale = 1.0
+  elsif s.value == 'gram_24k'
+    assign scale = 1.0 | divided_by: 0.75
+  endif
+
   assign show = false
   if gram_price > 0
     assign show = true
-    assign oz_now = gram_price | times: 31.1035 | divided_by: 0.75
+    assign oz_now = gram_price | times: scale
     assign oz_cents = oz_now | times: 100 | round
     assign price_text = oz_cents | money_without_currency
   endif
@@ -33,8 +41,8 @@
       if gap_days >= 0 and gap_days <= 5 and previous_gram > 0
         assign show_change = true
         assign latest_gram = latest[1] | times: 1.0
-        assign oz_latest = latest_gram | times: 31.1035 | divided_by: 0.75
-        assign oz_previous = previous_gram | times: 31.1035 | divided_by: 0.75
+        assign oz_latest = latest_gram | times: scale
+        assign oz_previous = previous_gram | times: scale
         assign diff = oz_latest | minus: oz_previous
         assign diff_abs = diff
         if diff < 0
@@ -91,6 +99,8 @@
       --ticker-change-scale: {{ s.change_scale | divided_by: 100.0 }};
       {% if s.text_color != blank %}--ticker-color: {{ s.text_color }};{% endif %}
       {% if s.change_color != blank %}--ticker-change-color: {{ s.change_color }};{% endif %}
+      {% if s.up_color != blank %}--ticker-up-color: {{ s.up_color }};{% endif %}
+      {% if s.down_color != blank %}--ticker-down-color: {{ s.down_color }};{% endif %}
       {% if s.diamond_color != blank %}--ticker-diamond: {{ s.diamond_color }};{% endif %}
       --ticker-diamond-size: {{ s.diamond_size }}px;
       --ticker-diamond-space: {{ s.diamond_space }}px;
@@ -106,7 +116,11 @@
         {%- elsif direction == 'down' -%}
           <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M5 8L1 1.5h8z" fill="currentColor"/></svg>
         {%- endif -%}
-        {{ diff_text }} ({{ sign }}{{ pct_text }}%)
+        {%- if s.show_change_amount -%}
+          {{ diff_text }} ({{ sign }}{{ pct_text }}%)
+        {%- else -%}
+          {{ sign }}{{ pct_text }}%
+        {%- endif -%}
       </span>
     {%- endif -%}
     {%- if s.show_diamond -%}
@@ -139,6 +153,14 @@
     white-space: nowrap;
     font-size: calc(1em * var(--ticker-change-scale, 0.9));
     color: var(--ticker-change-color, currentColor);
+  }
+
+  .gold-ticker__change--up {
+    color: var(--ticker-up-color, var(--ticker-change-color, currentColor));
+  }
+
+  .gold-ticker__change--down {
+    color: var(--ticker-down-color, var(--ticker-change-color, currentColor));
   }
 
   .gold-ticker__change svg {
@@ -180,11 +202,38 @@
       "default": "XAU/USD"
     },
     {
+      "type": "select",
+      "id": "value",
+      "label": "What it shows",
+      "options": [
+        {
+          "value": "ounce",
+          "label": "Pure gold per troy ounce (XAU/USD)"
+        },
+        {
+          "value": "gram_24k",
+          "label": "24K gold per gram"
+        },
+        {
+          "value": "gram_18k",
+          "label": "18K gold per gram"
+        }
+      ],
+      "default": "ounce"
+    },
+    {
       "type": "checkbox",
       "id": "show_change",
       "label": "Show the change since the previous price",
       "default": true,
       "info": "Only shown when the last two stored prices are 5 days apart or less."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_change_amount",
+      "label": "Show the amount of the change as well as the percentage",
+      "default": true,
+      "visible_if": "{{ block.settings.show_change }}"
     },
     {
       "type": "checkbox",
@@ -273,6 +322,20 @@
       "type": "color",
       "id": "change_color",
       "label": "Change colour"
+    },
+    {
+      "type": "color",
+      "id": "up_color",
+      "label": "Colour when it went up",
+      "info": "Empty uses the change colour.",
+      "visible_if": "{{ block.settings.show_change }}"
+    },
+    {
+      "type": "color",
+      "id": "down_color",
+      "label": "Colour when it went down",
+      "info": "Empty uses the change colour.",
+      "visible_if": "{{ block.settings.show_change }}"
     },
     {
       "type": "header",

@@ -1,0 +1,699 @@
+{%- doc -%}
+  Gold price "terminal" for the homepage: a dark block with a header bar (symbol, daily fix, next-fix countdown), the latest
+  price with its change, stats (previous fix, high and low of the range, 24K and 18K per gram), range tabs and the chart.
+  Same data and the same drawing code as the Gold chart block (assets/gold-chart.js in terminal mode): the shop's 18k gram
+  price history (gold.price_history) turned into ounces of pure gold, ounce price = gram price x 31.1035 / 0.75.
+  Hovering the chart shows the recorded price of that day and the gold value of a piece of the weight typed in the formula
+  block (the event aura:weight), or of this block's example weight. Daily 10:00 AM Lima price from the fix date on, daily
+  closes or monthly points before (see the "Daily fix starts on" setting). All words are in the locale file (blocks.gold_terminal).
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign history = shop.metafields.gold.price_history.value
+  assign gram_price = shop.metafields.gold.price_18k_per_g.value | times: 1.0
+
+  assign show = false
+  if history.size >= 2 and gram_price > 0
+    assign show = true
+  endif
+
+  if show
+    # Today's price is added as the last point when the daily job has not written it to the history yet.
+    assign last_entry = history | last
+    assign last_gram = last_entry[1] | times: 1.0
+    assign today_iso = 'now' | date: '%Y-%m-%d'
+    assign add_today = false
+    if last_entry[0] != today_iso and last_gram != gram_price
+      assign add_today = true
+    endif
+
+    capture points_json
+      echo '['
+      for entry in history
+        assign ounce = entry[1] | times: 31.1035 | divided_by: 0.75 | round: 2
+        echo '["' | append: entry[0] | append: '",' | append: ounce | append: ']'
+        unless forloop.last
+          echo ','
+        endunless
+      endfor
+      if add_today
+        assign ounce_today = gram_price | times: 31.1035 | divided_by: 0.75 | round: 2
+        echo ',["' | append: today_iso | append: '",' | append: ounce_today | append: ']'
+      endif
+      echo ']'
+    endcapture
+
+    assign ounce_now = gram_price | times: 31.1035 | divided_by: 0.75
+    assign ounce_cents = ounce_now | times: 100 | round
+    assign ounce_text = ounce_cents | money_without_currency
+    assign g24 = gram_price | divided_by: 0.75
+    assign g24_cents = g24 | times: 100 | round
+    assign g24_text = g24_cents | money_without_currency
+    assign g18_cents = gram_price | times: 100 | round
+    assign g18_text = g18_cents | money_without_currency
+
+    assign keys = 'w1,m1,m6,ytd,y1,y5,max' | split: ','
+    capture strings_json
+      echo '{"label":'
+      echo 'blocks.gold_terminal.label' | t | json
+      echo ',"fixTime":'
+      echo 'blocks.gold_terminal.fix_time' | t | json
+      echo ',"nextFix":'
+      echo 'blocks.gold_terminal.next_fix' | t | json
+      echo ',"high":'
+      echo 'blocks.gold_terminal.high' | t | json
+      echo ',"low":'
+      echo 'blocks.gold_terminal.low' | t | json
+      echo ',"perOunce":'
+      echo 'blocks.gold_terminal.per_ounce' | t | json
+      echo ',"tipFix":'
+      echo 'blocks.gold_terminal.tip_fix' | t | json
+      echo ',"tipClose":'
+      echo 'blocks.gold_terminal.tip_close' | t | json
+      echo ',"tipMonth":'
+      echo 'blocks.gold_terminal.tip_month' | t | json
+      echo ',"tipPiece":'
+      echo 'blocks.gold_terminal.tip_piece' | t | json
+      for key in keys
+        assign long_key = 'blocks.gold_chart.long_' | append: key
+        assign short_key = 'blocks.gold_chart.short_' | append: key
+        assign past_key = 'blocks.gold_chart.past_' | append: key
+        echo ',"long_' | append: key | append: '":'
+        echo long_key | t | json
+        echo ',"short_' | append: key | append: '":'
+        echo short_key | t | json
+        echo ',"past_' | append: key | append: '":'
+        echo past_key | t | json
+      endfor
+      echo '}'
+    endcapture
+  endif
+-%}
+
+<gold-chart
+  class="gold-terminal"
+  style="
+    {% render 'spacing-padding', settings: s %}
+    --gt-radius: {{ s.corner_radius }}px;
+    --gt-height: {{ s.chart_height }}px;
+    --gt-height-mobile: {{ s.chart_height_mobile }}px;
+    --gt-price-size: {{ s.price_size }}px;
+    --gt-price-size-mobile: {{ s.price_size_mobile }}px;
+    {% if s.background_color != blank %}--gt-bg: {{ s.background_color }};{% endif %}
+    {% if s.text_color != blank %}--gt-text: {{ s.text_color }};{% endif %}
+    {% if s.muted_color != blank %}--gt-muted: {{ s.muted_color }};{% endif %}
+    {% if s.line_color != blank %}--gt-line: {{ s.line_color }};{% endif %}
+    {% if s.fill_color != blank %}--gt-fill: {{ s.fill_color }};{% endif %}
+    {% if s.accent_color != blank %}--gt-accent: {{ s.accent_color }};{% endif %}
+    {% if s.up_color != blank %}--gt-up: {{ s.up_color }};{% endif %}
+    {% if s.down_color != blank %}--gt-down: {{ s.down_color }};{% endif %}
+    {% if s.tooltip_background != blank %}--gt-tip-bg: {{ s.tooltip_background }};{% endif %}
+    {% if s.tooltip_text != blank %}--gt-tip-text: {{ s.tooltip_text }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show -%}
+    <script type="application/json" data-config>
+      {
+        "terminal": true,
+        "points": {{ points_json }},
+        "defaultRange": {{ s.default_range | json }},
+        "ranges": ["w1", "m1", "m6", "ytd", "y1", "y5", "max"],
+        "hideShort": {{ s.hide_short_ranges | json }},
+        "symbol": "$",
+        "weight": {{ s.example_weight | json }},
+        "fixFrom": {{ s.fix_from | json }},
+        "strings": {{ strings_json }}
+      }
+    </script>
+
+    <div class="gt__bar">
+      <div class="gt__sym">
+        <b>{{ s.label }}</b>
+        {%- if s.sublabel != blank -%}<span>{{ s.sublabel }}</span>{%- endif -%}
+      </div>
+      <div class="gt__sym">
+        {%- if s.pill_text != blank -%}<span class="gt__pill"><i></i>{{ s.pill_text }}</span>{%- endif -%}
+        <span data-next-fix></span>
+      </div>
+    </div>
+
+    <div class="gt__quote">
+      <div>
+        <div class="gt__fixlabel" data-quote-date></div>
+        <div class="gt__price"><span data-quote-price>${{ ounce_text }}</span><small>USD</small></div>
+        <div class="gt__change"><span data-quote-change data-direction="flat"></span> <span class="gt__vs">{{ 'blocks.gold_terminal.vs_previous' | t }}</span></div>
+      </div>
+      <dl class="gt__stats">
+        <div><dt>{{ 'blocks.gold_terminal.prev' | t }}</dt><dd data-stat="prev">—</dd></div>
+        <div><dt data-stat-label="high">{{ 'blocks.gold_terminal.high' | t }}</dt><dd data-stat="high">—</dd></div>
+        <div><dt data-stat-label="low">{{ 'blocks.gold_terminal.low' | t }}</dt><dd data-stat="low">—</dd></div>
+        <div class="gt__stat--gold"><dt>{{ 'blocks.gold_terminal.gram_24k' | t }}</dt><dd data-stat="g24">${{ g24_text }}</dd></div>
+        <div class="gt__stat--gold"><dt>{{ 'blocks.gold_terminal.gram_18k' | t }}</dt><dd data-stat="g18">${{ g18_text }}</dd></div>
+      </dl>
+    </div>
+
+    <div class="gt__tabsrow">
+      <div class="gt__tabs" role="group" aria-label="{{ 'blocks.gold_terminal.label' | t }}" data-tabs></div>
+      <span class="gt__period" data-period-change data-direction="flat"></span>
+    </div>
+
+    <div class="gold-chart__plot" data-plot>
+      <div class="gold-chart__tooltip" data-tooltip hidden></div>
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class="gt__empty">Gold terminal hidden: the shop needs gold.price_18k_per_g and at least two entries in gold.price_history.</p>
+  {%- endif -%}
+</gold-chart>
+
+{% stylesheet %}
+  gold-chart.gold-terminal {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    color: var(--gt-text, #f2eae6);
+    background: var(--gt-bg, #4a253d);
+    border-radius: var(--gt-radius, 0);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .gt__empty {
+    margin: 0;
+    padding: 16px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+
+  .gt__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--gt-line, rgb(242 234 230 / 0.14));
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  .gt__sym {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .gt__sym b {
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--gt-accent, #d9c29a);
+  }
+
+  .gt__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    color: var(--gt-accent, #d9c29a);
+    border: 1px solid var(--gt-accent, #d9c29a);
+    border-radius: var(--gt-radius, 0);
+  }
+
+  .gt__pill i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .gt__quote {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: end;
+    gap: 24px;
+    padding: 28px 24px 8px;
+  }
+
+  .gt__fixlabel {
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  .gt__price {
+    font-family: var(--font-heading--family);
+    font-size: var(--gt-price-size-mobile, 40px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .gt__price small {
+    margin-inline-start: 8px;
+    font-family: var(--font-body--family);
+    font-size: 16px;
+    letter-spacing: 0;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  .gt__change {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .gt__vs {
+    font-weight: 300;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  [data-direction='up'] {
+    color: var(--gt-up, #a9cba2);
+  }
+
+  [data-direction='down'] {
+    color: var(--gt-down, #eba3a3);
+  }
+
+  .gt__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 0;
+    margin: 0;
+  }
+
+  .gt__stats > div {
+    padding: 4px 16px;
+    border-inline-start: 1px solid var(--gt-line, rgb(242 234 230 / 0.14));
+  }
+
+  .gt__stats dt {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  .gt__stats dd {
+    margin: 6px 0 0;
+    font-size: 16px;
+  }
+
+  .gt__stat--gold dd {
+    color: var(--gt-accent, #d9c29a);
+  }
+
+  .gt__tabsrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    padding: 18px 24px 0;
+  }
+
+  .gt__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .gt__tabs .gold-chart__tab {
+    padding: 7px 14px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--gt-muted, #c2aebc);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--gt-radius, 0);
+    cursor: pointer;
+  }
+
+  .gt__tabs .gold-chart__tab:hover {
+    color: var(--gt-text, #f2eae6);
+    border-color: var(--gt-line, rgb(242 234 230 / 0.25));
+  }
+
+  .gt__tabs .gold-chart__tab[aria-pressed='true'] {
+    color: var(--gt-bg, #4a253d);
+    background: var(--gt-accent, #d9c29a);
+  }
+
+  .gt__tabs .gold-chart__tab-long,
+  .gt__tabs .gold-chart__tab-change {
+    display: none;
+  }
+
+  .gt__period {
+    margin-inline-start: auto;
+    font-size: 13px;
+    color: var(--gt-muted, #c2aebc);
+  }
+
+  gold-chart.gold-terminal .gold-chart__plot {
+    position: relative;
+    width: 100%;
+    height: var(--gt-height-mobile, 240px);
+    margin: 8px 0 12px;
+    padding-inline: 12px;
+    box-sizing: border-box;
+  }
+
+  gold-chart.gold-terminal .gold-chart__plot svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: visible;
+    font-family: var(--font-body--family);
+  }
+
+  .gold-terminal .gc-grid {
+    stroke: var(--gt-line, rgb(242 234 230 / 0.1));
+    stroke-width: 1;
+  }
+
+  .gold-terminal .gc-axis {
+    font-size: 11px;
+    fill: var(--gt-muted, #c2aebc);
+  }
+
+  .gold-terminal .gc-line {
+    fill: none;
+    stroke: var(--gt-accent, #d9c29a);
+    stroke-width: 1.6px;
+    stroke-linejoin: round;
+  }
+
+  .gold-terminal .gc-area {
+    fill: var(--gt-fill, rgb(217 194 154 / 0.14));
+    stroke: none;
+  }
+
+  .gold-terminal .gc-dash {
+    stroke: var(--gt-accent, #d9c29a);
+    stroke-width: 1;
+    stroke-dasharray: 2 4;
+    opacity: 0.55;
+  }
+
+  .gold-terminal .gc-tag {
+    fill: var(--gt-accent, #d9c29a);
+  }
+
+  .gold-terminal .gc-tag-text {
+    fill: var(--gt-bg, #4a253d);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .gold-terminal .gc-cursor {
+    stroke: rgb(242 234 230 / 0.4);
+    stroke-width: 1;
+  }
+
+  .gold-terminal .gc-dot {
+    fill: var(--gt-accent, #d9c29a);
+    stroke: var(--gt-bg, #4a253d);
+    stroke-width: 2;
+  }
+
+  .gold-terminal .gc-surface {
+    fill: transparent;
+    cursor: crosshair;
+    touch-action: pan-y;
+  }
+
+  gold-chart.gold-terminal .gold-chart__tooltip {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: nowrap;
+    pointer-events: none;
+    color: var(--gt-tip-text, #3a1630);
+    background: var(--gt-tip-bg, #f2eae6);
+    border-radius: var(--gt-radius, 0);
+  }
+
+  gold-chart.gold-terminal .gold-chart__tooltip[hidden] {
+    display: none;
+  }
+
+  .gt-tip__price b {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  @media screen and (min-width: 750px) {
+    .gt__quote {
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 24px 48px;
+    }
+
+    .gt__price {
+      font-size: var(--gt-price-size, 56px);
+    }
+
+    .gt__stats {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    gold-chart.gold-terminal .gold-chart__plot {
+      height: var(--gt-height, 340px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Gold terminal",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Dark gold price block: price, change, stats, range tabs and a chart. Reads gold.price_18k_per_g and gold.price_history. Hovering the chart shows the recorded price of that day and the gold value of a piece of the weight typed in the formula block. Wording is in the theme language files (blocks.gold_terminal)."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Symbol",
+      "default": "XAU/USD"
+    },
+    {
+      "type": "text",
+      "id": "sublabel",
+      "label": "Unit",
+      "default": "US$ / troy oz"
+    },
+    {
+      "type": "text",
+      "id": "pill_text",
+      "label": "Daily fix tag",
+      "default": "Daily fix · 10:00 AM"
+    },
+    {
+      "type": "header",
+      "content": "Data"
+    },
+    {
+      "type": "select",
+      "id": "default_range",
+      "label": "Range shown first",
+      "options": [
+        { "value": "w1", "label": "1W" },
+        { "value": "m1", "label": "1M" },
+        { "value": "m6", "label": "6M" },
+        { "value": "ytd", "label": "YTD" },
+        { "value": "y1", "label": "1Y" },
+        { "value": "y5", "label": "5Y" },
+        { "value": "max", "label": "Max" }
+      ],
+      "default": "y1"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_short_ranges",
+      "label": "Hide a range until the history covers it",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "example_weight",
+      "label": "Example piece weight",
+      "info": "Used in the tooltip until a visitor types a weight in the formula block.",
+      "min": 1,
+      "max": 11,
+      "step": 0.1,
+      "unit": "g",
+      "default": 4.1
+    },
+    {
+      "type": "text",
+      "id": "fix_from",
+      "label": "Daily fix starts on",
+      "info": "Prices from this date (YYYY-MM-DD) are called the 10:00 AM fix in the tooltip, earlier daily prices are called the close.",
+      "default": "2026-10-24"
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 32,
+      "max": 88,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "price_size_mobile",
+      "label": "Price size on mobile",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "chart_height",
+      "label": "Chart height",
+      "min": 200,
+      "max": 520,
+      "step": 10,
+      "unit": "px",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "chart_height_mobile",
+      "label": "Chart height on mobile",
+      "min": 160,
+      "max": 360,
+      "step": 10,
+      "unit": "px",
+      "default": 240
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#4A253D"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#F2EAE6"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Secondary text",
+      "default": "#C2AEBC"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (line, tag, active range)",
+      "default": "#D9C29A"
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Area under the line",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Dividers and grid",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "up_color",
+      "label": "Went up",
+      "default": "#A9CBA2"
+    },
+    {
+      "type": "color",
+      "id": "down_color",
+      "label": "Went down",
+      "default": "#EBA3A3"
+    },
+    {
+      "type": "color",
+      "id": "tooltip_background",
+      "label": "Tooltip background",
+      "placeholder": "Default"
+    },
+    {
+      "type": "color",
+      "id": "tooltip_text",
+      "label": "Tooltip text",
+      "placeholder": "Default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gold terminal",
+      "category": "t:categories.basic"
+    }
+  ]
+}
+{% endschema %}
