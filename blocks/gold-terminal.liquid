@@ -324,7 +324,17 @@
     gap: 4px;
   }
 
-  .gt__tabs .gold-chart__tab {
+  /* The classic Gold chart's stylesheet can be on the same page and also styles .gold-chart__tab (borders, column layout) and
+     hides the short names outside phones; these rules are strong enough to win over it on every property. */
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-width: 0;
+    min-height: 0;
     padding: 7px 14px;
     font: inherit;
     font-size: 12px;
@@ -337,18 +347,23 @@
     cursor: pointer;
   }
 
-  .gt__tabs .gold-chart__tab:hover {
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab:hover {
     color: var(--gt-text, #f2eae6);
     border-color: var(--gt-line, rgb(242 234 230 / 0.25));
   }
 
-  .gt__tabs .gold-chart__tab[aria-pressed='true'] {
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab[aria-pressed='true'] {
     color: var(--gt-bg, #4a253d);
     background: var(--gt-accent, #d9c29a);
+    border-color: var(--gt-accent, #d9c29a);
   }
 
-  .gt__tabs .gold-chart__tab-long,
-  .gt__tabs .gold-chart__tab-change {
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab-short {
+    display: inline;
+  }
+
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab-long,
+  gold-chart.gold-terminal .gt__tabs .gold-chart__tab-change {
     display: none;
   }
 
