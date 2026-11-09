@@ -1,0 +1,74 @@
+{% assign s = block.settings %}
+<div class="ga-karat" data-karat{% if s.selected %} data-default{% endif %} {{ block.shopify_attributes }}>
+ <button class="ga-karat__button" type="button" data-karat-button id="karat-button-{{ block.id }}" aria-controls="karat-detail-{{ block.id }}"><span class="ga-karat__tube" style="--ga-purity-percent:{{ s.percent | at_least: 0 | at_most: 100 }}%;"><span class="ga-karat__percent">{{ s.percentage_label | escape }}</span><span class="ga-karat__fill" aria-hidden="true"></span>{% if s.show_mark %}<span class="ga-karat__mark">{% if s.mark_image != blank %}{{ s.mark_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '', widths: '100, 200' }}{% else %}<img src="{{ 'aura-gold-mark.png' | asset_url }}" width="492" height="276" alt="" loading="lazy">{% endif %}{{ s.mark_label | escape }}</span>{% endif %}</span><span class="ga-karat__label">{{ s.label | escape }}</span></button>
+ <div class="ga-karat__detail" id="karat-detail-{{ block.id }}" data-karat-detail role="region" aria-labelledby="karat-button-{{ block.id }}"><h3 class="ga-karat__heading">{{ s.title | escape }}</h3><div class="ga-karat__copy">{{ s.text }}</div>{% if s.note != blank %}<p class="ga-karat__note">{{ s.note | escape }}</p>{% endif %}</div>
+</div>
+
+{% schema %}
+{
+  "name": "_karat-tube",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Karat",
+      "default": "18k"
+    },
+    {
+      "type": "number",
+      "id": "percent",
+      "label": "Gold percentage",
+      "default": 75,
+      "info": "Use a value from 0 to 100; decimals are allowed."
+    },
+    {
+      "type": "text",
+      "id": "percentage_label",
+      "label": "Percentage label",
+      "default": "75.0%"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Description heading",
+      "default": "18k · 75.0% gold"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>The balance of gold content and strength for everyday jewelry.</p>"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Aura note"
+    },
+    {
+      "type": "checkbox",
+      "id": "selected",
+      "label": "Selected at first",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mark",
+      "label": "Show Aura mark",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "mark_image",
+      "label": "Mark image",
+      "info": "Leave empty to use the supplied Aura mark."
+    },
+    {
+      "type": "text",
+      "id": "mark_label",
+      "label": "Mark label",
+      "default": "AURA"
+    }
+  ]
+}
+{% endschema %}

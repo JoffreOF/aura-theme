@@ -1,0 +1,1444 @@
+{% assign s = block.settings %}
+<gold-purity class="ga-purity spacing-style" style="{% render 'spacing-padding', settings: s %}--ga-tube-height:{{ s.tube_height }}px;--ga-tube-height-mobile:{{ s.tube_height_mobile }}px;--ga-tube-width:{{ s.tube_width }}px;{% if s.text_color != blank %}--ga-purity-text:{{ s.text_color }};{% endif %}{% if s.gold_color != blank %}--ga-gold:{{ s.gold_color }};{% endif %}{% if s.border_color != blank %}--ga-purity-edge:{{ s.border_color }};{% endif %}{% render 'typography-vars', settings: s, prefix: 'title_', name: 'ga-karat-title' %}{% render 'typography-vars', settings: s, prefix: 'body_', name: 'ga-karat-body' %}" {{ block.shopify_attributes }}><div class="ga-purity__grid">{% content_for 'blocks' %}</div></gold-purity>
+
+{% stylesheet %}
+gold-purity{display:block;width:100%;min-width:0;color:var(--ga-purity-text,var(--color-foreground))}
+.ga-purity__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 16px;align-items:start;max-width:520px;margin-inline:auto}
+.ga-purity:not([data-ready]) .ga-purity__grid{grid-template-columns:1fr}
+.ga-karat{min-width:0;display:flex;flex-direction:column;align-items:center}
+.ga-karat__button{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;padding:4px 0 0;border:0;background:transparent;color:inherit;cursor:pointer}
+.ga-karat__tube{display:block;position:relative;width:min(100%,var(--ga-tube-width,92px));height:var(--ga-tube-height,220px);border:1px solid var(--ga-purity-edge,var(--color-border));border-radius:999px;overflow:hidden;isolation:isolate}
+.ga-karat__fill{position:absolute;inset:auto 0 0;height:var(--ga-purity-percent);background:linear-gradient(180deg,#ebd6ac,var(--ga-gold,#b8955a) 70%,#b3924f);transition:height 1.8s ease;z-index:-1}
+.ga-purity[data-ready]:not([data-filled]) .ga-karat__fill{height:0}
+.ga-karat__percent{display:block;position:absolute;inset:16px 0 auto;text-align:center;font-family:var(--font-body--family);font-size:12px;color:inherit}
+.ga-karat__mark{position:absolute;left:50%;bottom:22%;width:62%;transform:translateX(-50%);text-align:center;color:var(--ga-purity-text,var(--color-foreground));font-family:var(--font-body--family);font-size:8px;letter-spacing:.24em}
+.ga-karat__mark img{display:block;width:100%;height:auto;mix-blend-mode:multiply;opacity:.7;margin-bottom:6px}
+.ga-karat__label{font-family:var(--ga-karat-title-font-family,var(--font-heading--family));font-size:30px;font-weight:400;line-height:1}
+.ga-karat__button[aria-pressed='true'] .ga-karat__tube{border-color:var(--ga-purity-text,var(--color-foreground));box-shadow:0 0 0 4px rgb(80 34 63 / .08)}
+.ga-karat__button:focus-visible{outline:2px solid var(--ga-gold,#b8955a);outline-offset:6px}
+.ga-karat__detail{width:100%;margin-top:28px;padding-top:24px;border-top:1px solid var(--ga-purity-edge,var(--color-border))}
+.ga-karat__detail[hidden]{display:none}
+.ga-karat__heading{font-family:var(--ga-karat-title-font-family,var(--font-body--family));font-size:var(--ga-karat-title-font-size,1rem);font-weight:var(--ga-karat-title-font-weight,400);line-height:var(--ga-karat-title-line-height,1.6);letter-spacing:var(--ga-karat-title-letter-spacing,normal);text-transform:var(--ga-karat-title-text-transform,none);margin:0;color:inherit}
+.ga-karat__copy{font-family:var(--ga-karat-body-font-family,var(--font-body--family));font-size:var(--ga-karat-body-font-size,1rem);font-weight:var(--ga-karat-body-font-weight,400);line-height:var(--ga-karat-body-line-height,1.6);letter-spacing:var(--ga-karat-body-letter-spacing,normal);text-transform:var(--ga-karat-body-text-transform,none);margin-top:10px;text-wrap:pretty}
+.ga-karat__copy p{margin:0}
+.ga-karat__note{font-family:var(--font-body--family);font-size:13px;color:var(--ga-gold,#b8955a);margin:14px 0 0}
+.ga-purity[data-ready] .ga-karat{display:contents}
+.ga-purity[data-ready] .ga-karat__button{grid-row:1}
+.ga-purity[data-ready] .ga-karat__detail{grid-row:2;grid-column:1/-1;min-height:180px;margin-top:0}
+@media(max-width:749px){.ga-karat__tube{height:var(--ga-tube-height-mobile,180px)}.ga-karat__heading{font-size:var(--ga-karat-title-font-size-mobile,var(--ga-karat-title-font-size,1.5rem))}.ga-karat__copy{font-size:var(--ga-karat-body-font-size-mobile,var(--ga-karat-body-font-size,1rem))}.ga-purity:not([data-ready]) .ga-purity__grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.ga-karat__fill{transition:none}}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Karat tubes",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_karat-tube"
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "tube_height",
+      "label": "Tube height",
+      "min": 160,
+      "max": 320,
+      "step": 4,
+      "default": 220,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tube_height_mobile",
+      "label": "Tube height on mobile",
+      "min": 120,
+      "max": 240,
+      "step": 4,
+      "default": 180,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tube_width",
+      "label": "Tube width",
+      "min": 48,
+      "max": 120,
+      "step": 2,
+      "default": 92,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colours"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "gold_color",
+      "label": "Gold"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border"
+    },
+    {
+      "type": "header",
+      "content": "Description heading typography"
+    },
+    {
+      "type": "select",
+      "id": "title_preset",
+      "label": "Title preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "title_font",
+      "label": "Title font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-heading--family)",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size",
+      "label": "Title size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1.75rem",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_font_size_mobile",
+      "label": "Title size on mobile",
+      "info": "Phones only (under 750px). Automatic keeps the size above.",
+      "options": [
+        {
+          "value": "",
+          "label": "Automatic"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1.5rem",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_line_height",
+      "label": "Title line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_letter_spacing",
+      "label": "Title letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_case",
+      "label": "Title case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.title_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Description typography"
+    },
+    {
+      "type": "select",
+      "id": "body_preset",
+      "label": "Title preset",
+      "options": [
+        {
+          "value": "paragraph",
+          "label": "t:options.paragraph"
+        },
+        {
+          "value": "h1",
+          "label": "t:options.h1"
+        },
+        {
+          "value": "h2",
+          "label": "t:options.h2"
+        },
+        {
+          "value": "h3",
+          "label": "t:options.h3"
+        },
+        {
+          "value": "h4",
+          "label": "t:options.h4"
+        },
+        {
+          "value": "h5",
+          "label": "t:options.h5"
+        },
+        {
+          "value": "h6",
+          "label": "t:options.h6"
+        },
+        {
+          "value": "h7",
+          "label": "Heading 7"
+        },
+        {
+          "value": "h8",
+          "label": "Heading 8"
+        },
+        {
+          "value": "h9",
+          "label": "Heading 9"
+        },
+        {
+          "value": "h10",
+          "label": "Heading 10"
+        },
+        {
+          "value": "h11",
+          "label": "Heading 11"
+        },
+        {
+          "value": "h12",
+          "label": "Heading 12"
+        },
+        {
+          "value": "h13",
+          "label": "Heading 13"
+        },
+        {
+          "value": "h14",
+          "label": "Heading 14"
+        },
+        {
+          "value": "h15",
+          "label": "Heading 15"
+        },
+        {
+          "value": "h16",
+          "label": "Heading 16"
+        },
+        {
+          "value": "h17",
+          "label": "Heading 17"
+        },
+        {
+          "value": "text_button",
+          "label": "Button"
+        },
+        {
+          "value": "h18",
+          "label": "Heading 18"
+        },
+        {
+          "value": "h19",
+          "label": "Heading 19"
+        },
+        {
+          "value": "h20",
+          "label": "Heading 20"
+        },
+        {
+          "value": "text_strong",
+          "label": "Strong"
+        },
+        {
+          "value": "text_caption",
+          "label": "Caption"
+        },
+        {
+          "value": "text_label",
+          "label": "Label"
+        },
+        {
+          "value": "h21",
+          "label": "Heading 21"
+        },
+        {
+          "value": "text_link",
+          "label": "Link"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom",
+      "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "select",
+      "id": "body_font",
+      "label": "Title font",
+      "options": [
+        {
+          "value": "var(--font-body--family)",
+          "label": "t:options.body"
+        },
+        {
+          "value": "var(--font-subheading--family)",
+          "label": "t:options.subheading"
+        },
+        {
+          "value": "var(--font-heading--family)",
+          "label": "t:options.heading"
+        },
+        {
+          "value": "var(--font-accent--family)",
+          "label": "t:options.accent"
+        }
+      ],
+      "default": "var(--font-body--family)",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_font_size",
+      "label": "Title size",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_font_size_mobile",
+      "label": "Title size on mobile",
+      "info": "Phones only (under 750px). Automatic keeps the size above.",
+      "options": [
+        {
+          "value": "",
+          "label": "Automatic"
+        },
+        {
+          "value": "0.625rem",
+          "label": "10px"
+        },
+        {
+          "value": "0.6875rem",
+          "label": "11px"
+        },
+        {
+          "value": "0.75rem",
+          "label": "12px"
+        },
+        {
+          "value": "0.8125rem",
+          "label": "13px"
+        },
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "0.9375rem",
+          "label": "15px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.0625rem",
+          "label": "17px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.1875rem",
+          "label": "19px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.3125rem",
+          "label": "21px"
+        },
+        {
+          "value": "1.375rem",
+          "label": "22px"
+        },
+        {
+          "value": "1.4375rem",
+          "label": "23px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        },
+        {
+          "value": "1.5625rem",
+          "label": "25px"
+        },
+        {
+          "value": "1.625rem",
+          "label": "26px"
+        },
+        {
+          "value": "1.6875rem",
+          "label": "27px"
+        },
+        {
+          "value": "1.75rem",
+          "label": "28px"
+        },
+        {
+          "value": "1.8125rem",
+          "label": "29px"
+        },
+        {
+          "value": "1.875rem",
+          "label": "30px"
+        },
+        {
+          "value": "1.9375rem",
+          "label": "31px"
+        },
+        {
+          "value": "2rem",
+          "label": "32px"
+        },
+        {
+          "value": "2.0625rem",
+          "label": "33px"
+        },
+        {
+          "value": "2.125rem",
+          "label": "34px"
+        },
+        {
+          "value": "2.1875rem",
+          "label": "35px"
+        },
+        {
+          "value": "2.25rem",
+          "label": "36px"
+        },
+        {
+          "value": "2.375rem",
+          "label": "38px"
+        },
+        {
+          "value": "2.5rem",
+          "label": "40px"
+        },
+        {
+          "value": "2.625rem",
+          "label": "42px"
+        },
+        {
+          "value": "2.75rem",
+          "label": "44px"
+        },
+        {
+          "value": "2.875rem",
+          "label": "46px"
+        },
+        {
+          "value": "3rem",
+          "label": "48px"
+        },
+        {
+          "value": "3.125rem",
+          "label": "50px"
+        },
+        {
+          "value": "3.25rem",
+          "label": "52px"
+        },
+        {
+          "value": "3.375rem",
+          "label": "54px"
+        },
+        {
+          "value": "3.5rem",
+          "label": "56px"
+        },
+        {
+          "value": "3.625rem",
+          "label": "58px"
+        },
+        {
+          "value": "3.75rem",
+          "label": "60px"
+        },
+        {
+          "value": "3.875rem",
+          "label": "62px"
+        },
+        {
+          "value": "4rem",
+          "label": "64px"
+        },
+        {
+          "value": "4.5rem",
+          "label": "72px"
+        },
+        {
+          "value": "5rem",
+          "label": "80px"
+        },
+        {
+          "value": "5.5rem",
+          "label": "88px"
+        },
+        {
+          "value": "6rem",
+          "label": "96px"
+        },
+        {
+          "value": "6.5rem",
+          "label": "104px"
+        },
+        {
+          "value": "7.5rem",
+          "label": "120px"
+        },
+        {
+          "value": "9.5rem",
+          "label": "152px"
+        },
+        {
+          "value": "11.5rem",
+          "label": "184px"
+        }
+      ],
+      "default": "0.9375rem",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_weight",
+      "label": "Title weight",
+      "options": [
+        {
+          "value": "",
+          "label": "t:options.default"
+        },
+        {
+          "value": "300",
+          "label": "t:options.light"
+        },
+        {
+          "value": "400",
+          "label": "t:options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:options.bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Title line height",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_letter_spacing",
+      "label": "Title letter spacing",
+      "options": [
+        {
+          "value": "tight",
+          "label": "t:options.tight"
+        },
+        {
+          "value": "normal",
+          "label": "t:options.normal"
+        },
+        {
+          "value": "loose",
+          "label": "t:options.loose"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "body_case",
+      "label": "Title case",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.default"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:options.uppercase"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.body_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Karat tubes"
+    }
+  ]
+}
+{% endschema %}

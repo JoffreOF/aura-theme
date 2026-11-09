@@ -1,0 +1,72 @@
+{% assign s = block.settings %}
+<article class="ga-cross-row" data-cross-row{% if s.solid %} data-solid{% endif %} style="--ga-layer-day:{{ s.layer_day }}px;--ga-layer-worn:{{ s.layer_worn }}px;{% if s.core_color != blank %}--ga-core:{{ s.core_color }};{% endif %}" {{ block.shopify_attributes }}><h3 class="ga-cross-row__title">{{ s.title | escape }}</h3><div class="ga-cross-row__capsule" aria-hidden="true"><span class="ga-cross-row__core">{{ s.core_label | escape }}</span></div><div class="ga-cross-row__copy">{{ s.text }}</div><span class="ga-cross-row__status" data-status data-day="{{ s.day_status | escape }}" data-worn="{{ s.worn_status | escape }}">{{ s.day_status | escape }}</span></article>
+
+{% schema %}
+{
+  "name": "_cross-section-row",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Gold-plated"
+    },
+    {
+      "type": "text",
+      "id": "core_label",
+      "label": "Material inside",
+      "default": "Base metal"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>A thin layer of gold over a base metal.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "solid",
+      "label": "Solid gold throughout",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "layer_day",
+      "label": "Gold layer on day one",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 6,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "layer_worn",
+      "label": "Gold layer after wear",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "text",
+      "id": "day_status",
+      "label": "Day one status",
+      "default": "Surface only"
+    },
+    {
+      "type": "text",
+      "id": "worn_status",
+      "label": "Worn status",
+      "default": "Gold worn off"
+    },
+    {
+      "type": "color",
+      "id": "core_color",
+      "label": "Core colour"
+    }
+  ]
+}
+{% endschema %}
