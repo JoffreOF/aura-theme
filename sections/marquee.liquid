@@ -17,7 +17,7 @@
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
 <marquee-component
-  class="section spacing-style gap-style{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+  class="section spacing-style gap-style{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.settings.pause_on_hover %} marquee--pause-on-hover{% endif %}"
   style="
     {%- render 'spacing-style', settings: section.settings %};
     {% render 'gap-style', value: gap_between_elements, name: 'marquee-gap' %}
@@ -96,6 +96,10 @@
     }
   }
 
+  marquee-component.marquee--pause-on-hover:hover .marquee__wrapper {
+    animation-play-state: paused;
+  }
+
   @keyframes marquee-motion {
     to {
       transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
@@ -107,7 +111,10 @@
 {
   "name": "t:names.marquee",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "blocks": [
     {
@@ -148,6 +155,12 @@
       "id": "background_color",
       "label": "t:settings.background_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause when the mouse is over it",
+      "default": false
     },
     {
       "type": "checkbox",
@@ -227,7 +240,9 @@
           }
         }
       },
-      "block_order": ["text"]
+      "block_order": [
+        "text"
+      ]
     }
   ]
 }

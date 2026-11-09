@@ -2,11 +2,15 @@
 // The block (blocks/gold-chart.liquid) prints the data as JSON: [[ "YYYY-MM-DD", ounce price ], ...], worked out from
 // gold.price_history (18k price per gram) as gram price x 31.1035 / 0.75. This file only draws it. No third-party code.
 //
+// "Terminal" mode (blocks/gold-terminal.liquid): config.terminal adds a price quote with stats, the next-fix countdown, a
+// tooltip with the weighted gold value and the YTD range. The classic chart (blocks/gold-chart.liquid) is unchanged.
+//
 // A range tab is shown only when the history really covers it: it must reach back to the start of the window and hold
 // enough points (see RANGES), so "1 Week" does not appear with two days of data.
 
 const DAY = 86400000;
 const NS = 'http://www.w3.org/2000/svg';
+const LIMA_FIX_UTC_HOUR = 15; // 10:00 in Lima (UTC-5, no daylight saving)
 
 /** key, label key suffix, window in days (null = all history), minimum points inside the window */
 const RANGES = [
@@ -14,6 +18,7 @@ const RANGES = [
   { key: 'm1', days: 30, min: 8 },
   { key: 'm3', days: 91, min: 8 },
   { key: 'm6', days: 182, min: 6 },
+  { key: 'ytd', days: 'ytd', min: 5 },
   { key: 'y1', days: 365, min: 8 },
   { key: 'y5', days: 1826, min: 20 },
   { key: 'max', days: null, min: 12 },
@@ -37,6 +42,10 @@ class GoldChart extends HTMLElement {
   #hover = -1;
   #observer;
   #fmt;
+  #weight = 4.1;
+  #clock;
+  #onWeight;
+  #kinds = [];
 
   connectedCallback() {
     const script = this.querySelector('script[data-config]');
@@ -56,6 +65,19 @@ class GoldChart extends HTMLElement {
     if (this.#points.length < 2) return;
 
     this.#fmt = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (this.#config.terminal) {
+      this.#weight = Number(this.#config.weight) || this.#weight;
+      this.#classifyPoints();
+      this.#onWeight = (event) => {
+        const weight = Number(event.detail && event.detail.weight);
+        if (!(weight > 0)) return;
+        this.#weight = weight;
+        if (this.#hover >= 0) this.#draw();
+      };
+      document.addEventListener('aura:weight', this.#onWeight);
+      this.#tickNextFix();
+      this.#clock = setInterval(() => this.#tickNextFix(), 30000);
+    }
     this.#buildTabs();
     this.#selectRange(this.#config.defaultRange || 'y1');
 
@@ -65,15 +87,18 @@ class GoldChart extends HTMLElement {
 
   disconnectedCallback() {
     this.#observer?.disconnect();
+    if (this.#clock) clearInterval(this.#clock);
+    if (this.#onWeight) document.removeEventListener('aura:weight', this.#onWeight);
   }
 
   /** Which ranges the history can really show. */
   #availableRanges() {
     const end = this.#points[this.#points.length - 1].t;
     const first = this.#points[0].t;
-    return RANGES.filter((r) => {
+    const wanted = this.#config.ranges;
+    return RANGES.filter((r) => !wanted || wanted.includes(r.key)).filter((r) => {
       if (!this.#config.hideShort) return true;
-      const start = r.days === null ? first : end - r.days * DAY;
+      const start = this.#startOf(r, end, first);
       // the history must reach back to the start of the window (a few days of slack: old points are monthly)
       if (r.days !== null && first > start + 3 * DAY) return false;
       const inside = this.#points.filter((p) => p.t >= start).length;
@@ -81,10 +106,16 @@ class GoldChart extends HTMLElement {
     });
   }
 
+  /** Start of a range window: all history, the 1st of January of the latest year (YTD), or N days back. */
+  #startOf(range, end, first) {
+    if (range.days === null) return first;
+    if (range.days === 'ytd') return Date.UTC(new Date(end).getUTCFullYear(), 0, 1);
+    return end - range.days * DAY;
+  }
+
   #windowOf(range) {
     const end = this.#points[this.#points.length - 1].t;
-    const start = range.days === null ? this.#points[0].t : end - range.days * DAY;
-    return { start, end };
+    return { start: this.#startOf(range, end, this.#points[0].t), end };
   }
 
   /** Price on a date: the last point on or before it (the first point if the date is earlier). */
@@ -148,6 +179,101 @@ class GoldChart extends HTMLElement {
     this.#draw();
   }
 
+  /** 'fix' (our 10:00 AM price), 'close' (back-filled daily close) or 'month' (a monthly point) for every point. */
+  #classifyPoints() {
+    const fixFrom = Date.parse(`${this.#config.fixFrom || '9999-12-31'}T00:00:00Z`);
+    const gapLimit = 20 * DAY;
+    this.#kinds = this.#points.map((p, i) => {
+      const before = i > 0 ? p.t - this.#points[i - 1].t : Infinity;
+      const after = i < this.#points.length - 1 ? this.#points[i + 1].t - p.t : Infinity;
+      if (before > gapLimit && after > gapLimit) return 'month';
+      return p.t >= fixFrom ? 'fix' : 'close';
+    });
+  }
+
+  #kindOf(point) {
+    const i = this.#points.findIndex((p) => p.t === point.t);
+    return this.#kinds[i] || 'close';
+  }
+
+  /** "Next fix in 18h 56m": the next 10:00 in Lima on a weekday. */
+  #tickNextFix() {
+    const el = this.querySelector('[data-next-fix]');
+    if (!el) return;
+    const now = Date.now();
+    const base = new Date(now);
+    let target = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate(), LIMA_FIX_UTC_HOUR, 0, 0);
+    if (target <= now) target += DAY;
+    while ([0, 6].includes(new Date(target).getUTCDay())) target += DAY;
+    const ms = target - now;
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
+    const text = `${hours}h ${String(minutes).padStart(2, '0')}m`;
+    el.textContent = ((this.#config.strings || {}).nextFix || 'Next fix in {time}').replace('{time}', text);
+  }
+
+  /** Quote, stats and period change of the terminal. */
+  #updateTerminal() {
+    const strings = this.#config.strings || {};
+    const set = (selector, value) => {
+      const el = this.querySelector(selector);
+      if (el) el.textContent = value;
+      return el;
+    };
+    const last = this.#points[this.#points.length - 1];
+    const prev = this.#points[this.#points.length - 2];
+    const signed = (value) => `${value >= 0 ? '+' : '−'}${this.#money(Math.abs(value))}`;
+    const percent = (value) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}%`;
+    const direction = (value) => (value >= 0 ? 'up' : 'down');
+
+    set('[data-quote-price]', this.#money(last.price));
+    set('[data-quote-date]', `${new Date(last.t).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} · ${strings.fixTime || '10:00 AM'}`);
+    const diff = last.price - prev.price;
+    const change = set('[data-quote-change]', `${signed(diff)} (${percent((diff / prev.price) * 100)})`);
+    if (change) change.dataset.direction = direction(diff);
+
+    const prices = this.#series.map((p) => p.price);
+    const short = (strings[`short_${this.#range}`] || this.#range).toUpperCase();
+    set('[data-stat="prev"]', this.#money(prev.price));
+    set('[data-stat="high"]', this.#money(Math.max(...prices)));
+    set('[data-stat="low"]', this.#money(Math.min(...prices)));
+    set('[data-stat="g24"]', this.#money(last.price / 31.1035));
+    set('[data-stat="g18"]', this.#money((last.price / 31.1035) * 0.75));
+    set('[data-stat-label="high"]', `${short} ${strings.high || 'High'}`);
+    set('[data-stat-label="low"]', `${short} ${strings.low || 'Low'}`);
+
+    const periodChange = last.price - this.#baseline;
+    const period = set('[data-period-change]', `${short} ${signed(periodChange)} (${percent(this.#baseline ? (periodChange / this.#baseline) * 100 : 0)})`);
+    if (period) period.dataset.direction = direction(periodChange);
+  }
+
+  /** The tooltip card of the terminal: date and kind of price, the price per ounce, the gold value of the weighted piece. */
+  #fillTerminalTooltip(tooltip, point) {
+    const strings = this.#config.strings || {};
+    const kind = this.#kindOf(point);
+    const date = kind === 'month'
+      ? new Date(point.t).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+      : new Date(point.t).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+    const kindLabel = kind === 'fix' ? strings.tipFix : kind === 'month' ? strings.tipMonth : strings.tipClose;
+    const goldValue = (this.#weight * 0.75 * point.price) / 31.1035;
+
+    const head = document.createElement('span');
+    head.className = 'gt-tip__head';
+    head.textContent = kindLabel ? `${date} · ${kindLabel}` : date;
+    const price = document.createElement('span');
+    price.className = 'gt-tip__price';
+    const strong = document.createElement('b');
+    strong.textContent = this.#money(point.price);
+    price.append(strong, ` ${strings.perOunce || '/ oz'}`);
+    tooltip.replaceChildren(head, price);
+    if (strings.tipPiece) {
+      const piece = document.createElement('span');
+      piece.className = 'gt-tip__piece';
+      piece.textContent = strings.tipPiece.replace('{weight}', this.#weight.toFixed(1)).replace('{value}', this.#money(goldValue));
+      tooltip.append(piece);
+    }
+  }
+
   #money(value) {
     return `${this.#config.symbol || '$'}${this.#fmt.format(value)}`;
   }
@@ -158,6 +284,7 @@ class GoldChart extends HTMLElement {
 
   /** The big price and the line under it (shown on mobile; the hovered day replaces the latest one). */
   #updateHeader() {
+    if (this.#config.terminal) this.#updateTerminal();
     const strings = this.#config.strings || {};
     const price = this.querySelector('[data-price]');
     const sub = this.querySelector('[data-sub]');
@@ -270,11 +397,12 @@ class GoldChart extends HTMLElement {
       dot.setAttribute('cy', py.toFixed(1));
       dot.hidden = false;
       if (tooltip) {
-        tooltip.textContent = `${p.date ? this.#dateLabel(p.t, true) : this.#dateLabel(p.t)} · ${this.#money(p.price)}`;
+        if (this.#config.terminal && p.date) this.#fillTerminalTooltip(tooltip, p);
+        else tooltip.textContent = `${p.date ? this.#dateLabel(p.t, true) : this.#dateLabel(p.t)} · ${this.#money(p.price)}`;
         tooltip.hidden = false;
         const w = tooltip.offsetWidth;
         tooltip.style.left = `${Math.min(Math.max(px - w / 2, 0), width - w)}px`;
-        tooltip.style.top = `${Math.max(py - 42, 0)}px`;
+        tooltip.style.top = `${Math.max(py - (this.#config.terminal ? tooltip.offsetHeight + 14 : 42), 0)}px`;
       }
       this.#updateHeader();
     };
