@@ -1,3 +1,7 @@
+{%- doc -%}
+  Gold as an asset: a row of numbered reasons. One panel is open at a time, the others fold into narrow vertical tabs. On desktop it can advance by itself (with a pause button); on mobile it is a stacked accordion. Children: Reason panel blocks. Script: assets/gold-asset.js (custom element gold-reasons).
+{%- enddoc -%}
+
 {% assign s = block.settings %}
 <gold-reasons class="ga-reasons spacing-style" data-autoplay="{{ s.autoplay }}" data-duration="{{ s.duration | times: 1000 }}" style="{% render 'spacing-padding', settings: s %} --ga-height:{{ s.panel_height }}px;--ga-radius:{{ s.corner_radius }}px;--ga-duration:{{ s.duration }}s;{% if s.background_color != blank %}--ga-panel-bg:{{ s.background_color }};{% endif %}{% if s.text_color != blank %}--ga-panel-text:{{ s.text_color }};{% endif %}{% if s.active_background != blank %}--ga-active-bg:{{ s.active_background }};{% endif %}{% if s.active_text != blank %}--ga-active-text:{{ s.active_text }};{% endif %}{% if s.accent_color != blank %}--ga-accent:{{ s.accent_color }};{% endif %}{% if s.border_color != blank %}--ga-edge:{{ s.border_color }};{% endif %}{% render 'typography-vars', settings: s, prefix: 'title_', name: 'ga-title' %}{% render 'typography-vars', settings: s, prefix: 'body_', name: 'ga-body' %}" {{ block.shopify_attributes }}>
   <div class="ga-reasons__list">{% content_for 'blocks' %}</div>
