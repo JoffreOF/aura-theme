@@ -86,9 +86,24 @@ export function formatDate(date, locale = 'en-US', withYear = true) {
 
 const DAY = 86_400_000;
 
+/** Length of each range button in days. */
+export const RANGE_DAYS = { '1w': 7, '1m': 30, '6m': 182, '1y': 365 };
+
+/**
+ * Which range buttons make sense: a range shows only when the first purchase is MORE than that many days ago
+ * (1W after 7 days, 1M after 30, 6M after 182, 1Y after 365). 'All' shows with them. When the first purchase is
+ * 7 days ago or less nothing is returned, so the whole button row is hidden.
+ */
+export function availableRanges(today, firstPurchase) {
+  if (!firstPurchase) return [];
+  const age = (dateMs(today) - dateMs(firstPurchase)) / DAY;
+  const shown = Object.keys(RANGE_DAYS).filter((key) => age > RANGE_DAYS[key]);
+  return shown.length ? [...shown, 'all'] : [];
+}
+
 /** First date shown for a range button, given today. 'all' starts at the first purchase. */
 export function rangeStart(range, today, firstPurchase) {
-  const days = { '1m': 30, '6m': 182, '1y': 365 }[range];
+  const days = RANGE_DAYS[range];
   if (!days) return firstPurchase;
   const start = new Date(dateMs(today) - days * DAY).toISOString().slice(0, 10);
   return start > firstPurchase ? start : firstPurchase;
@@ -138,6 +153,7 @@ export function buildSeries({ entries, history, gramPrice, start, end }) {
   const priceAt = (d) => (d >= end ? current : priceOn(history, d));
   const owned = (d, inclusive) => active.filter((e) => (inclusive ? e.date <= d : e.date < d));
   const valueAt = (list, d) => list.reduce((sum, e) => sum + e.w * priceAt(d), 0);
+  const costOf = (list) => list.reduce((sum, e) => sum + Number(e.costBasisCents) / 100, 0);
 
   const purchaseDates = [...new Set(active.map((e) => e.date))].filter((d) => d >= from && d <= end);
   const dates = new Set([from, end, ...purchaseDates, ...history.map(([d]) => d).filter((d) => d > from && d < end)]);
@@ -145,8 +161,8 @@ export function buildSeries({ entries, history, gramPrice, start, end }) {
   for (const d of [...dates].sort()) {
     const before = owned(d, false);
     const after = owned(d, true);
-    if (before.length && purchaseDates.includes(d) && d !== from) points.push({ date: d, value: valueAt(before, d) });
-    points.push({ date: d, value: valueAt(after, d) });
+    if (before.length && purchaseDates.includes(d) && d !== from) points.push({ date: d, value: valueAt(before, d), cost: costOf(before) });
+    points.push({ date: d, value: valueAt(after, d), cost: costOf(after) });
   }
   const markers = purchaseDates.map((d) => {
     const bought = active.filter((e) => e.date === d);
@@ -180,6 +196,28 @@ export function chartGeometry(points, domain, from, end) {
   const line = coords.map(([cx, cy], i) => `${i ? 'L' : 'M'}${cx.toFixed(3)} ${cy.toFixed(3)}`).join(' ');
   const area = `${line} L${coords[coords.length - 1][0].toFixed(3)} 100 L${coords[0][0].toFixed(3)} 100 Z`;
   return { x, y, line, area };
+}
+
+/**
+ * The point under a finger or pointer: `fraction` is how far across the chart (0 = first day, 1 = today). It snaps to
+ * the nearest point in time (a purchase day has two points, a step: the one after the purchase is used).
+ * Returns null when everything happened on one day, because there is nothing to move along.
+ */
+export function pointAtFraction(series, fraction) {
+  if (!series || !series.points.length) return null;
+  const span = dateMs(series.end) - dateMs(series.from);
+  if (span < DAY) return null;
+  const target = dateMs(series.from) + Math.min(Math.max(fraction, 0), 1) * span;
+  let best = 0;
+  let bestDistance = Infinity;
+  series.points.forEach((p, i) => {
+    const distance = Math.abs(dateMs(p.date) - target);
+    if (distance < bestDistance || (distance === bestDistance && p.date === series.points[best].date)) {
+      bestDistance = distance;
+      best = i;
+    }
+  });
+  return series.points[best];
 }
 
 /**
@@ -404,6 +442,65 @@ function init(root) {
     }
     box.append(svg);
 
+    // Read-out: slide a finger (or the mouse) anywhere over the chart; a line and a dot follow it, and a card says
+    // what the portfolio was worth that day. Mouse: goes away when the pointer leaves. Touch: stays where the
+    // finger stopped, until the next touch on the chart. The surface sits under the purchase markers, so they still work.
+    const surface = el('div', 'pf-chart__surface');
+    const cursor = el('div', 'pf-cursor');
+    const dot = el('div', 'pf-dot');
+    const readout = el('div', 'pf-readout');
+    cursor.hidden = true;
+    dot.hidden = true;
+    readout.hidden = true;
+    box.append(surface, cursor, dot, readout);
+    const hideReadout = () => {
+      cursor.hidden = true;
+      dot.hidden = true;
+      readout.hidden = true;
+    };
+    const showReadout = (clientX) => {
+      const rect = box.getBoundingClientRect();
+      if (!rect.width) return;
+      const point = pointAtFraction(series, (clientX - rect.left) / rect.width);
+      if (!point) return;
+      const px = (geo.x(point.date) / 100) * rect.width;
+      const py = (geo.y(point.value) / 100) * rect.height;
+      cursor.style.left = `${px}px`;
+      dot.style.left = `${px}px`;
+      dot.style.top = `${py}px`;
+      cursor.hidden = false;
+      dot.hidden = false;
+      const value = BigInt(Math.round(point.value * 100));
+      const cost = BigInt(Math.round((point.cost ?? 0) * 100));
+      readout.textContent = '';
+      readout.append(el('span', 'pf-readout__date', formatDate(point.date, locale)), el('strong', 'pf-readout__value', formatMoney(value, locale)));
+      if (cost > 0n && t.readoutChange) {
+        readout.append(el('span', 'pf-readout__change', fmt(t.readoutChange, { change: formatSigned(value - cost, locale), percent: formatPercent(value - cost, cost) })));
+      }
+      readout.hidden = false;
+      const w = readout.offsetWidth;
+      readout.style.left = `${Math.min(Math.max(px - w / 2, 0), Math.max(rect.width - w, 0))}px`;
+      // Above the dot; when the line is too near the top of the chart for that, below it.
+      const above = py - readout.offsetHeight - 14;
+      readout.style.top = `${above >= 0 ? above : Math.min(py + 14, Math.max(rect.height - readout.offsetHeight, 0))}px`;
+    };
+    surface.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') {
+        try {
+          surface.setPointerCapture(e.pointerId);
+        } catch (error) {
+          /* the read-out still follows while the finger is on the chart */
+        }
+      }
+      showReadout(e.clientX);
+    });
+    surface.addEventListener('pointermove', (e) => showReadout(e.clientX));
+    const mouseOnly = (handler) => (e) => {
+      if (e.pointerType !== 'touch') handler(e);
+    };
+    surface.addEventListener('pointerleave', mouseOnly(hideReadout));
+    surface.addEventListener('pointercancel', mouseOnly(hideReadout));
+
     const tip = el('div', 'pf-tip');
     tip.hidden = true;
     for (const marker of series.markers) {
@@ -431,8 +528,14 @@ function init(root) {
         tip.style.top = `${geo.y(marker.value)}%`;
         tip.hidden = false;
       };
-      button.addEventListener('mouseenter', showTip);
-      button.addEventListener('focus', showTip);
+      button.addEventListener('mouseenter', () => {
+        hideReadout();
+        showTip();
+      });
+      button.addEventListener('focus', () => {
+        hideReadout();
+        showTip();
+      });
       button.addEventListener('mouseleave', () => (tip.hidden = true));
       button.addEventListener('blur', () => (tip.hidden = true));
       box.append(button);
@@ -451,14 +554,20 @@ function init(root) {
     }
   }
 
-  function bindRanges(view, onChange) {
+  /** Wires the range buttons. Only ranges the first purchase is old enough for are shown; none: the whole row is hidden. */
+  function bindRanges(view, onChange, firstPurchase) {
     const buttons = $$('[data-range]', view);
+    const available = availableRanges(today, firstPurchase);
+    const row = $('.pf-ranges', view);
+    if (row) row.hidden = !available.length;
+    for (const b of buttons) b.hidden = !available.includes(b.dataset.range);
     const select = (range) => {
       for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.range === range));
       onChange(range);
     };
     for (const b of buttons) b.addEventListener('click', () => select(b.dataset.range));
-    select(config.defaultRange || 'all');
+    const wanted = config.defaultRange || 'all';
+    select(available.includes(wanted) ? wanted : 'all');
   }
 
   // ---- dashboard ----
@@ -479,7 +588,7 @@ function init(root) {
     bindRanges(view, (range) => {
       const series = firstPurchase && history.length ? buildSeries({ entries: data.entries, history, gramPrice: gram, start: rangeStart(range, today, firstPurchase), end: today }) : null;
       drawChart(view, series);
-    });
+    }, firstPurchase);
 
     // table of pieces
     const body = $('[data-pieces]', view);
@@ -617,10 +726,10 @@ function init(root) {
       const series = history.length && entry.status === 'active' ? buildSeries({ entries: [entry], history, gramPrice: gram, start: rangeStart(range, today, date), end: today }) : null;
       if (series) {
         // The line starts at what was paid in gold, not at an approximate price for that day.
-        series.points[0] = { date: series.points[0].date, value: Number(cost) / 100 };
+        series.points[0] = { ...series.points[0], value: Number(cost) / 100 };
       }
       drawChart(view, series, { costLine: Number(cost) });
-    });
+    }, entry.status === 'active' ? date : null);
     footnote(view, data);
     show('piece');
   }
