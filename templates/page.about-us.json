@@ -72,7 +72,7 @@
                 "font": "var(--font-heading--family)",
                 "font_size": "4.5rem",
                 "font_size_mobile": "3rem",
-                "weight": "300",
+                "weight": "",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
