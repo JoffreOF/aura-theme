@@ -1,6 +1,17 @@
 /* Policy page (terms, privacy, shipping, refund). Colours come from the --policy-* variables set in snippets/policy-page-assets.liquid. */
+/* Shopify's own policy wrapper is narrow and shrinks to its content: let it use the whole page width. */
+.content-for-layout > .shopify-policy__container,
 .shopify-policy__container {
-  padding-block: 0;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shopify-policy__container > .policy-page {
+  max-width: calc(var(--normal-page-width, 1200px) + (var(--page-margin, 20px) * 2));
 }
 
 .policy-page {
