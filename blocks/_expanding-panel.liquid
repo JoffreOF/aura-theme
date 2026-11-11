@@ -1,3 +1,7 @@
+{%- doc -%}
+  One reason inside Expanding panels: number, tab label, headline and text. Private block, only available inside Expanding panels.
+{%- enddoc -%}
+
 <article class="ga-reason" data-reason {{ block.shopify_attributes }}>
  <button class="ga-reason__button" id="reason-button-{{ block.id }}" type="button" data-reason-button aria-controls="reason-body-{{ block.id }}"><span class="ga-reason__label">{{ block.settings.label | escape }}</span><span class="ga-reason__number">{{ block.settings.number | escape }}</span></button>
  <div class="ga-reason__body" id="reason-body-{{ block.id }}" data-reason-body role="region" aria-labelledby="reason-button-{{ block.id }}"><h3 class="ga-reason__heading">{{ block.settings.title | escape }}</h3><div class="ga-reason__copy">{{ block.settings.text }}</div><div class="ga-reason__progress" aria-hidden="true"><i></i></div></div>
@@ -5,7 +9,7 @@
 
 {% schema %}
 {
-  "name": "_expanding-panel",
+  "name": "Reason panel",
   "tag": null,
   "settings": [
     {

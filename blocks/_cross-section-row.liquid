@@ -1,9 +1,13 @@
+{%- doc -%}
+  One row inside Cross-section rows: title, text, core label, layer thickness and the two status words. Private block, only available inside Cross-section rows.
+{%- enddoc -%}
+
 {% assign s = block.settings %}
 <article class="ga-cross-row" data-cross-row{% if s.solid %} data-solid{% endif %} style="--ga-layer-day:{{ s.layer_day }}px;--ga-layer-worn:{{ s.layer_worn }}px;{% if s.core_color != blank %}--ga-core:{{ s.core_color }};{% endif %}" {{ block.shopify_attributes }}><h3 class="ga-cross-row__title">{{ s.title | escape }}</h3><div class="ga-cross-row__capsule" aria-hidden="true"><span class="ga-cross-row__core">{{ s.core_label | escape }}</span></div><div class="ga-cross-row__copy">{{ s.text }}</div><span class="ga-cross-row__status" data-status data-day="{{ s.day_status | escape }}" data-worn="{{ s.worn_status | escape }}">{{ s.day_status | escape }}</span></article>
 
 {% schema %}
 {
-  "name": "_cross-section-row",
+  "name": "Cross-section row",
   "tag": null,
   "settings": [
     {

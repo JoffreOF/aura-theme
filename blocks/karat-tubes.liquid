@@ -1,3 +1,7 @@
+{%- doc -%}
+  Gold as an asset: capsule-shaped tubes that fill to each karat's purity (24k, 18k, 14k). Clicking a tube shows its description. Children: Karat tube blocks. Script: assets/gold-asset.js (custom element gold-purity).
+{%- enddoc -%}
+
 {% assign s = block.settings %}
 <gold-purity class="ga-purity spacing-style" style="{% render 'spacing-padding', settings: s %}--ga-tube-height:{{ s.tube_height }}px;--ga-tube-height-mobile:{{ s.tube_height_mobile }}px;--ga-tube-width:{{ s.tube_width }}px;{% if s.text_color != blank %}--ga-purity-text:{{ s.text_color }};{% endif %}{% if s.gold_color != blank %}--ga-gold:{{ s.gold_color }};{% endif %}{% if s.border_color != blank %}--ga-purity-edge:{{ s.border_color }};{% endif %}{% render 'typography-vars', settings: s, prefix: 'title_', name: 'ga-karat-title' %}{% render 'typography-vars', settings: s, prefix: 'body_', name: 'ga-karat-body' %}" {{ block.shopify_attributes }}><div class="ga-purity__grid">{% content_for 'blocks' %}</div></gold-purity>
 
