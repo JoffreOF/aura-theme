@@ -228,8 +228,8 @@
   .gc-surface {
     fill: transparent;
     cursor: crosshair;
-    /* a vertical swipe still scrolls the page; a sideways drag reads the chart */
-    touch-action: pan-y;
+    /* a finger on the chart reads the chart */
+    touch-action: none; /* a finger on the chart moves the read-out in any direction; scroll the page from outside the chart */
   }
 
   .gold-chart__tooltip {

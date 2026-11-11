@@ -375,6 +375,8 @@ class GoldChart extends HTMLElement {
     svg.setAttribute('width', String(width));
     svg.setAttribute('height', String(height));
     svg.setAttribute('role', 'img');
+    // Browsers only honour touch-action on the <svg> itself, not on shapes inside it: without this a drifting finger starts a page scroll and the chart loses it.
+    svg.style.touchAction = 'none';
     svg.setAttribute('aria-label', (this.#config.strings || {}).label || 'Gold price chart');
     svg.innerHTML = `${grid}<path class="gc-area" d="${area}"/><path class="gc-line" d="${line}"/>${dash}${labels}` +
       `<line class="gc-cursor" data-cursor y1="${top}" y2="${top + plotH}" hidden/><circle class="gc-dot" data-dot r="4.5" hidden/>`;
@@ -436,12 +438,25 @@ class GoldChart extends HTMLElement {
     surface.setAttribute('height', String(height));
     svg.append(surface);
     surface.addEventListener('pointermove', (e) => show(nearest(e.clientX)));
-    surface.addEventListener('pointerdown', (e) => show(nearest(e.clientX)));
-    surface.addEventListener('pointerleave', hide);
-    surface.addEventListener('pointerup', (e) => {
-      if (e.pointerType === 'touch') hide();
+    surface.addEventListener('pointerdown', (e) => {
+      // Touch: keep receiving the finger even when it slides past the edge of the chart.
+      if (e.pointerType === 'touch') {
+        try {
+          surface.setPointerCapture(e.pointerId);
+        } catch (error) {
+          /* not supported: the read-out still follows while the finger is on the chart */
+        }
+      }
+      show(nearest(e.clientX));
     });
-    surface.addEventListener('pointercancel', hide);
+    // Mouse: the read-out follows the pointer and goes away when it leaves.
+    // Touch: the read-out stays where the finger stopped (lifting the finger, or the page taking over a
+    // vertical scroll, does not clear it). The next touch on the chart moves it to the new day.
+    const mouseOnly = (handler) => (e) => {
+      if (e.pointerType !== 'touch') handler(e);
+    };
+    surface.addEventListener('pointerleave', mouseOnly(hide));
+    surface.addEventListener('pointercancel', mouseOnly(hide));
 
     if (this.#hover >= 0 && this.#hover < series.length) show(this.#hover);
     else this.#updateHeader();
