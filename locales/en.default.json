@@ -590,5 +590,20 @@
       "default_title": "Default Title",
       "sticky_add_to_cart": "Quick add to bag bar"
     }
+  },
+  "policy_page": {
+    "eyebrow_en": "Legal",
+    "eyebrow_es": "Legal",
+    "on_this_page_en": "On this page",
+    "on_this_page_es": "En esta página",
+    "other_policies_en": "Other policies",
+    "other_policies_es": "Otras políticas",
+    "jump_to_en": "Jump to section",
+    "jump_to_es": "Ir a la sección",
+    "language_label": "Language",
+    "language_en": "English",
+    "language_es": "Español",
+    "contact_note_en_html": "Questions about this policy? Write to <a href=\"mailto:{{ email }}\">{{ email }}</a>. Aura Capital Investments SAC · RUC 20616139879 · Calle Las Lilas 167, Lince, Lima, Peru",
+    "contact_note_es_html": "¿Preguntas sobre esta política? Escríbenos a <a href=\"mailto:{{ email }}\">{{ email }}</a>. Aura Capital Investments SAC · RUC 20616139879 · Calle Las Lilas 167, Lince, Lima, Perú"
   }
 }
