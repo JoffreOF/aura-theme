@@ -778,7 +778,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 40,
         "padding-block-end": 0
-      }
+      },
+      "disabled": true
     },
     "form": {
       "type": "section",
@@ -876,7 +877,8 @@
         "line_color": "",
         "padding-block-start": 32,
         "padding-block-end": 32
-      }
+      },
+      "disabled": true
     }
   },
   "order": [

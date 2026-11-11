@@ -1052,6 +1052,766 @@
                       "blocks": {}
                     }
                   },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "intro"
+              ]
+            }
+          },
+          "block_order": [
+            "left",
+            "right"
+          ]
+        },
+        "panels": {
+          "type": "expanding-panels",
+          "settings": {
+            "active_background": "{{ settings.color_palette.background }}",
+            "active_text": "{{ settings.color_palette.color10 }}",
+            "text_color": "{{ settings.color_palette.background }}",
+            "border_color": "{{ settings.color_palette.background }}",
+            "accent_color": "#c4a35a",
+            "corner_radius": 0
+          },
+          "blocks": {
+            "reason_1": {
+              "type": "_expanding-panel",
+              "settings": {
+                "label": "Inflation protection",
+                "number": "01",
+                "title": "Money can be printed. Gold can't.",
+                "text": "<p>Governments can create as much money as they want, and every new bill makes the ones you already have worth a little less. Gold is limited, and getting more out of the ground is slow and expensive. Savings kept in gold can't be watered down.</p>"
+              },
+              "blocks": {}
+            },
+            "reason_2": {
+              "type": "_expanding-panel",
+              "settings": {
+                "label": "Crisis resilience",
+                "number": "02",
+                "title": "It holds up when everything else falls.",
+                "text": "<p>Stocks, property and most investments depend on the same economy, so they tend to rise and fall together. Gold moves on its own, and it often gets stronger when people are worried. It works hardest exactly when the rest of your savings need support.</p>"
+              },
+              "blocks": {}
+            },
+            "reason_3": {
+              "type": "_expanding-panel",
+              "settings": {
+                "label": "Independence",
+                "number": "03",
+                "title": "It isn't anyone's promise.",
+                "text": "<p>A bank account, a bond or a share is a promise from a bank, a government or a company. If they can't keep it, you lose with them. Gold doesn't depend on anyone: its value is in the metal itself.</p>"
+              },
+              "blocks": {}
+            },
+            "reason_4": {
+              "type": "_expanding-panel",
+              "settings": {
+                "label": "Institutional conviction",
+                "number": "04",
+                "title": "The people who print money buy gold.",
+                "text": "<p>Central banks, the institutions that issue the world's currencies, are some of gold's biggest buyers. They know the limits of money better than anyone. Owning gold puts you on the same side as the best-informed players in the world economy.</p>"
+              },
+              "blocks": {}
+            },
+            "reason_5": {
+              "type": "_expanding-panel",
+              "settings": {
+                "label": "Global liquidity",
+                "number": "05",
+                "title": "Valued everywhere, easy to sell.",
+                "text": "<p>Gold is recognized in every country and every language, no matter the border or the government. That means it can be turned into cash almost anywhere in the world. Few assets protect your money and stay this flexible at the same time.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "reason_1",
+            "reason_2",
+            "reason_3",
+            "reason_4",
+            "reason_5"
+          ]
+        }
+      },
+      "block_order": [
+        "header",
+        "panels"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 36,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "line_width": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 64,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "anchor": "why-gold"
+      }
+    },
+    "gold_artifact_purity": {
+      "type": "section",
+      "name": "How purity is measured",
+      "blocks": {
+        "columns": {
+          "type": "group",
+          "name": "Purity and tubes",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 64,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "open_in_new_tab": false,
+            "visibility": "all",
+            "mobile_first": false,
+            "scroll_on_mobile": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "definition": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 16,
+                "width": "custom",
+                "custom_width": 45,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "open_in_new_tab": false,
+                "visibility": "all",
+                "mobile_first": false,
+                "scroll_on_mobile": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "eyebrow": {
+                  "type": "text",
+                  "settings": {
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "text": "<p>Karats, explained</p>",
+                    "text_color": "{{ settings.color_palette.color9 }}"
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "text",
+                  "settings": {
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "4rem",
+                    "font_size_mobile": "2.75rem",
+                    "weight": "400",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "text": "<h2>How purity is measured</h2>",
+                    "text_color": "{{ settings.color_palette.background }}"
+                  },
+                  "blocks": {}
+                },
+                "definition": {
+                  "type": "group",
+                  "name": "Karat definition",
+                  "settings": {
+                    "content_direction": "column",
+                    "vertical_on_mobile": true,
+                    "horizontal_alignment": "flex-start",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "flex-start",
+                    "gap": 16,
+                    "width": "fill",
+                    "custom_width": 100,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "background_media": "none",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "border": "solid",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "open_in_new_tab": false,
+                    "visibility": "all",
+                    "mobile_first": false,
+                    "scroll_on_mobile": false,
+                    "padding-block-start": 28,
+                    "padding-block-end": 28,
+                    "padding-inline-start": 28,
+                    "padding-inline-end": 28,
+                    "border_color": "{{ settings.color_palette.background }}"
+                  },
+                  "blocks": {
+                    "eyebrow": {
+                      "type": "text",
+                      "settings": {
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.75rem",
+                        "font_size_mobile": "0.75rem",
+                        "weight": "400",
+                        "line_height": "loose",
+                        "letter_spacing": "loose",
+                        "case": "uppercase",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "text": "<p>Definition</p>",
+                        "text_color": "{{ settings.color_palette.color9 }}"
+                      },
+                      "blocks": {}
+                    },
+                    "title": {
+                      "type": "text",
+                      "settings": {
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "2.5rem",
+                        "font_size_mobile": "2rem",
+                        "weight": "400",
+                        "line_height": "tight",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "text": "<h3>Karat (k)</h3>",
+                        "text_color": "{{ settings.color_palette.background }}"
+                      },
+                      "blocks": {}
+                    },
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.9375rem",
+                        "font_size_mobile": "0.9375rem",
+                        "weight": "400",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "text": "<p>The unit used to measure how pure gold is: how many parts out of 24 are pure gold.</p>",
+                        "text_color": "{{ settings.color_palette.color1 }}"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "eyebrow",
+                    "title",
+                    "text"
+                  ]
+                },
+                "text": {
+                  "type": "text",
+                  "settings": {
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "3.5rem",
+                    "font_size_mobile": "2.5rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0,
+                    "text": "<p>Pure gold, 24k, is beautiful but too soft for jewelry. Press it and it dents; wear it every day and it wears down within a year. So goldsmiths mix it with stronger metals. The karat number simply tells you how much gold is left after that mix.</p>",
+                    "text_color": "{{ settings.color_palette.color1 }}"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "eyebrow",
+                "title",
+                "definition",
+                "text"
+              ]
+            },
+            "tubes": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 16,
+                "width": "custom",
+                "custom_width": 47,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "open_in_new_tab": false,
+                "visibility": "all",
+                "mobile_first": false,
+                "scroll_on_mobile": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "tubes": {
+                  "type": "karat-tubes",
+                  "settings": {
+                    "text": "<p>In the jewelry industry, \"gold\" can describe very different products. They fall into four categories, and what separates them determines whether a piece holds its value over time or loses it.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "font_size_mobile": "0.9375rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color10 }}",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "karat_1": {
+                      "type": "_karat-tube",
+                      "settings": {
+                        "label": "24k",
+                        "percent": 99.9,
+                        "percentage_label": "99.9%",
+                        "title": "24k · 99.9% gold",
+                        "text": "<p>As pure as it gets, but too soft for everyday jewelry. It bends, scratches and wears down quickly.</p>",
+                        "selected": false,
+                        "show_mark": false
+                      },
+                      "blocks": {}
+                    },
+                    "karat_2": {
+                      "type": "_karat-tube",
+                      "settings": {
+                        "label": "18k",
+                        "percent": 75,
+                        "percentage_label": "75.0%",
+                        "title": "18k · 75.0% gold",
+                        "text": "<p>The perfect balance: enough gold to hold real, lasting value, and strong enough to wear every day for decades.</p>",
+                        "selected": true,
+                        "show_mark": true,
+                        "note": "Every Aura piece is crafted exclusively in certified 18k gold.",
+                        "mark_label": "AURA"
+                      },
+                      "blocks": {}
+                    },
+                    "karat_3": {
+                      "type": "_karat-tube",
+                      "settings": {
+                        "label": "14k",
+                        "percent": 58.3,
+                        "percentage_label": "58.3%",
+                        "title": "14k · 58.3% gold",
+                        "text": "<p>Common in mass-market jewelry. More durable, but a much cheaper asset: almost half of what you pay for isn't gold.</p>",
+                        "selected": false,
+                        "show_mark": false
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "karat_1",
+                    "karat_2",
+                    "karat_3"
+                  ]
+                }
+              },
+              "block_order": [
+                "tubes"
+              ]
+            }
+          },
+          "block_order": [
+            "definition",
+            "tubes"
+          ]
+        },
+        "closing": {
+          "type": "group",
+          "name": "Closing thought",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 40,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "open_in_new_tab": false,
+            "visibility": "all",
+            "mobile_first": false,
+            "scroll_on_mobile": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "line": {
+              "type": "_divider",
+              "settings": {
+                "text": "<h2>Aura only works with solid 18k gold.</h2>",
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "3.5rem",
+                "font_size_mobile": "2.5rem",
+                "weight": "400",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "{{ settings.color_palette.color10 }}",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0
+              },
+              "blocks": {}
+            },
+            "columns": {
+              "type": "group",
+              "settings": {
+                "content_direction": "row",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "space-between",
+                "vertical_alignment": "flex-end",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 48,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "open_in_new_tab": false,
+                "visibility": "all",
+                "mobile_first": false,
+                "scroll_on_mobile": false,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "title": {
+                  "type": "group",
+                  "settings": {
+                    "content_direction": "column",
+                    "vertical_on_mobile": true,
+                    "horizontal_alignment": "flex-start",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "flex-start",
+                    "gap": 16,
+                    "width": "custom",
+                    "custom_width": 56,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "background_media": "none",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "open_in_new_tab": false,
+                    "visibility": "all",
+                    "mobile_first": false,
+                    "scroll_on_mobile": false,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "title": {
+                      "type": "text",
+                      "settings": {
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "2.75rem",
+                        "font_size_mobile": "2rem",
+                        "weight": "400",
+                        "line_height": "tight",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "text": "<h3>Two pieces can look identical in a store and be worth very different amounts.</h3>",
+                        "text_color": "{{ settings.color_palette.background }}"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "title"
+                  ]
+                },
+                "text": {
+                  "type": "group",
+                  "settings": {
+                    "content_direction": "column",
+                    "vertical_on_mobile": true,
+                    "horizontal_alignment": "flex-start",
+                    "vertical_alignment": "center",
+                    "align_baseline": false,
+                    "horizontal_alignment_flex_direction_column": "flex-start",
+                    "vertical_alignment_flex_direction_column": "flex-start",
+                    "gap": 16,
+                    "width": "custom",
+                    "custom_width": 38,
+                    "width_mobile": "fill",
+                    "custom_width_mobile": 100,
+                    "height": "fit",
+                    "custom_height": 100,
+                    "background_media": "none",
+                    "video_position": "cover",
+                    "background_image_position": "cover",
+                    "overlay_color": "#00000026",
+                    "overlay_style": "solid",
+                    "gradient_direction": "to top",
+                    "border": "none",
+                    "border_width": 1,
+                    "border_opacity": 100,
+                    "border_radius": 0,
+                    "open_in_new_tab": false,
+                    "visibility": "all",
+                    "mobile_first": false,
+                    "scroll_on_mobile": false,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "text": {
+                      "type": "text",
+                      "settings": {
+                        "width": "100%",
+                        "max_width": "none",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "1rem",
+                        "font_size_mobile": "0.9375rem",
+                        "weight": "400",
+                        "line_height": "loose",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0,
+                        "text": "<p>For fine jewelry meant to be worn for years, 18k has become the benchmark: beautiful, durable and with real value of its own.</p>",
+                        "text_color": "{{ settings.color_palette.color1 }}"
+                      },
+                      "blocks": {}
+                    }
+                  },
                   "block_order": [
                     "text"
                   ]
@@ -1073,7 +1833,6 @@
         "columns",
         "closing"
       ],
-      "name": "How purity is measured",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -1087,27 +1846,25 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "{{ settings.color_palette.color10 }}",
         "video_position": "cover",
         "background_image_position": "cover",
-        "toggle_overlay": false,
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "border": "none",
         "border_width": 1,
         "border_opacity": 100,
-        "border_color": "",
         "border_radius": 0,
-        "anchor": "purity",
         "line_width": 0,
-        "line_color": "",
         "padding-block-start": 64,
-        "padding-block-end": 96
+        "padding-block-end": 96,
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "anchor": "purity"
       }
     },
     "gold_artifact_industry": {
       "type": "section",
+      "name": "Not all gold is gold",
       "blocks": {
         "header": {
           "type": "group",
@@ -1128,21 +1885,16 @@
             "height": "fit",
             "custom_height": 100,
             "background_media": "none",
-            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
-            "toggle_overlay": false,
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_color": "",
             "border_radius": 0,
-            "link": "",
             "open_in_new_tab": false,
-            "placeholder": "",
             "visibility": "all",
             "mobile_first": false,
             "scroll_on_mobile": false,
@@ -1170,21 +1922,16 @@
                 "height": "fit",
                 "custom_height": 100,
                 "background_media": "none",
-                "background_color": "",
                 "video_position": "cover",
                 "background_image_position": "cover",
-                "toggle_overlay": false,
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_color": "",
                 "border_radius": 0,
-                "link": "",
                 "open_in_new_tab": false,
-                "placeholder": "",
                 "visibility": "all",
                 "mobile_first": false,
                 "scroll_on_mobile": false,
@@ -1197,7 +1944,6 @@
                 "eyebrow": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Gold in the jewelry industry</p>",
                     "width": "100%",
                     "max_width": "none",
                     "alignment": "left",
@@ -1209,42 +1955,41 @@
                     "line_height": "loose",
                     "letter_spacing": "loose",
                     "case": "uppercase",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color10 }}",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "text": "<p>Gold in the jewelry industry</p>",
+                    "text_color": "{{ settings.color_palette.color10 }}"
                   },
                   "blocks": {}
                 },
                 "title": {
                   "type": "text",
                   "settings": {
-                    "text": "<h2>Not all gold is gold.</h2>",
                     "width": "100%",
                     "max_width": "none",
                     "alignment": "left",
                     "type_preset": "custom",
                     "font": "var(--font-heading--family)",
-                    "font_size": "3.5rem",
-                    "font_size_mobile": "2.5rem",
+                    "font_size": "4rem",
+                    "font_size_mobile": "2.75rem",
                     "weight": "400",
                     "line_height": "tight",
                     "letter_spacing": "normal",
                     "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color10 }}",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "text": "<h2>Not all gold is gold.</h2>",
+                    "text_color": "{{ settings.color_palette.color10 }}"
                   },
                   "blocks": {}
                 }
@@ -1272,21 +2017,16 @@
                 "height": "fit",
                 "custom_height": 100,
                 "background_media": "none",
-                "background_color": "",
                 "video_position": "cover",
                 "background_image_position": "cover",
-                "toggle_overlay": false,
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
-                "border_color": "",
                 "border_radius": 0,
-                "link": "",
                 "open_in_new_tab": false,
-                "placeholder": "",
                 "visibility": "all",
                 "mobile_first": false,
                 "scroll_on_mobile": false,
@@ -1299,27 +2039,26 @@
                 "intro": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>In the jewelry industry, \"gold\" can describe very different products. They fall into four categories, and what separates them determines whether a piece holds its value over time or loses it.</p>",
                     "width": "100%",
                     "max_width": "none",
                     "alignment": "left",
                     "type_preset": "custom",
                     "font": "var(--font-body--family)",
-                    "font_size": "1rem",
-                    "font_size_mobile": "0.9375rem",
+                    "font_size": "1.0625rem",
+                    "font_size_mobile": "1rem",
                     "weight": "400",
                     "line_height": "loose",
                     "letter_spacing": "normal",
                     "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color10 }}",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "text": "<p>In the jewelry industry, \"gold\" can describe very different products. They fall into four categories, and what separates them determines whether a piece holds its value over time or loses it.</p>",
+                    "text_color": "{{ settings.color_palette.color10 }}"
                   },
                   "blocks": {}
                 }
@@ -1337,38 +2076,13 @@
         "cross_sections": {
           "type": "cross-section-rows",
           "settings": {
-            "label": "Cross-section of each piece",
-            "toggle_label": "Compare wear over time",
-            "day_label": "Day one",
-            "worn_label": "After a year of wear",
-            "auto_wear": true,
-            "wear_delay": 3,
-            "capsule_height": 84,
-            "corner_radius": 0,
             "text_color": "{{ settings.color_palette.color10 }}",
             "gold_color": "#d9c29a",
             "worn_color": "#eba3a3",
             "border_color": "#7b5a6f",
             "active_background": "{{ settings.color_palette.color10 }}",
             "active_text": "{{ settings.color_palette.background }}",
-            "title_preset": "custom",
-            "title_font": "var(--font-heading--family)",
-            "title_font_size": "2rem",
-            "title_font_size_mobile": "1.75rem",
-            "title_weight": "400",
-            "title_line_height": "normal",
-            "title_letter_spacing": "normal",
-            "title_case": "none",
-            "body_preset": "custom",
-            "body_font": "var(--font-body--family)",
-            "body_font_size": "0.9375rem",
-            "body_font_size_mobile": "0.9375rem",
-            "body_weight": "400",
-            "body_line_height": "normal",
-            "body_letter_spacing": "normal",
-            "body_case": "none",
-            "padding-block-start": 0,
-            "padding-block-end": 0
+            "corner_radius": 0
           },
           "blocks": {
             "material_1": {
@@ -1376,13 +2090,12 @@
               "settings": {
                 "title": "Gold-plated",
                 "core_label": "Base metal",
-                "text": "<p>A very thin layer of gold, sometimes thinner than a micron, over a cheap metal. It wears off within months.</p>",
-                "solid": false,
                 "layer_day": 6,
                 "layer_worn": 0,
                 "day_status": "Surface only",
                 "worn_status": "Gold worn off",
-                "core_color": ""
+                "text": "<p>A very thin layer of gold, sometimes thinner than a micron, over a cheap metal. It wears off within months.</p>",
+                "solid": false
               },
               "blocks": {}
             },
@@ -1391,13 +2104,12 @@
               "settings": {
                 "title": "Gold vermeil",
                 "core_label": "Sterling silver",
-                "text": "<p>Gold plating over sterling silver. Thicker than regular plating, but still a coating, not the piece itself.</p>",
-                "solid": false,
                 "layer_day": 10,
                 "layer_worn": 2,
                 "day_status": "A coating",
                 "worn_status": "Wearing through",
-                "core_color": ""
+                "text": "<p>Gold plating over sterling silver. Thicker than regular plating, but still a coating, not the piece itself.</p>",
+                "solid": false
               },
               "blocks": {}
             },
@@ -1406,13 +2118,12 @@
               "settings": {
                 "title": "Gold-filled",
                 "core_label": "Base metal",
-                "text": "<p>A layer of gold pressed onto a cheap metal. It lasts longer than plating, but gold is still only a small part of the piece.</p>",
-                "solid": false,
                 "layer_day": 18,
                 "layer_worn": 9,
                 "day_status": "A bonded layer",
                 "worn_status": "Thinning",
-                "core_color": ""
+                "text": "<p>A layer of gold pressed onto a cheap metal. It lasts longer than plating, but gold is still only a small part of the piece.</p>",
+                "solid": false
               },
               "blocks": {}
             },
@@ -1421,13 +2132,12 @@
               "settings": {
                 "title": "Solid gold",
                 "core_label": "18k gold",
-                "text": "<p>The whole piece is gold at the stated karat, not just the surface. Nothing to wear off, nothing hidden underneath.</p>",
-                "solid": true,
                 "layer_day": 0,
                 "layer_worn": 0,
                 "day_status": "Gold throughout",
                 "worn_status": "Unchanged",
-                "core_color": ""
+                "text": "<p>The whole piece is gold at the stated karat, not just the surface. Nothing to wear off, nothing hidden underneath.</p>",
+                "solid": true
               },
               "blocks": {}
             }
@@ -1458,21 +2168,16 @@
             "height": "fit",
             "custom_height": 100,
             "background_media": "none",
-            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
-            "toggle_overlay": false,
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_color": "",
             "border_radius": 0,
-            "link": "",
             "open_in_new_tab": false,
-            "placeholder": "",
             "visibility": "all",
             "mobile_first": false,
             "scroll_on_mobile": false,
@@ -1485,7 +2190,6 @@
             "title": {
               "type": "text",
               "settings": {
-                "text": "<h2>Aura only works with solid 18k gold.</h2>",
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
@@ -1497,22 +2201,21 @@
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
-                "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.color10 }}",
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "text": "<h2>Aura only works with solid 18k gold.</h2>",
+                "text_color": "{{ settings.color_palette.color10 }}"
               },
               "blocks": {}
             },
             "note": {
               "type": "text",
               "settings": {
-                "text": "<p>Cross-sections are illustrative and not to scale.</p>",
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
@@ -1524,15 +2227,15 @@
                 "line_height": "loose",
                 "letter_spacing": "normal",
                 "case": "none",
-                "wrap": "pretty",
-                "text_color": "{{ settings.color_palette.color10 }}",
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "text": "<p>Cross-sections are illustrative and not to scale.</p>",
+                "text_color": "{{ settings.color_palette.color10 }}"
               },
               "blocks": {}
             }
@@ -1548,7 +2251,6 @@
         "cross_sections",
         "closing"
       ],
-      "name": "Not all gold is gold",
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -1562,302 +2264,20 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "{{ settings.color_palette.background }}",
         "video_position": "cover",
         "background_image_position": "cover",
-        "toggle_overlay": false,
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "border": "none",
         "border_width": 1,
         "border_opacity": 100,
-        "border_color": "",
         "border_radius": 0,
-        "anchor": "industry",
         "line_width": 0,
-        "line_color": "",
         "padding-block-start": 96,
-        "padding-block-end": 96
-      }
-    },
-    "gold_next": {
-      "type": "section",
-      "blocks": {
-        "group_19": {
-          "type": "group",
-          "name": "Next box",
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 32,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "background_color": "",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "border": "solid",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_color": "{{ settings.color_palette.background }}",
-            "border_radius": 0,
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "visibility": "all",
-            "mobile_first": false,
-            "scroll_on_mobile": false,
-            "padding-block-start": 48,
-            "padding-block-end": 48,
-            "padding-inline-start": 48,
-            "padding-inline-end": 48
-          },
-          "blocks": {
-            "group_17": {
-              "type": "group",
-              "name": "Text",
-              "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "flex-start",
-                "gap": 12,
-                "width": "custom",
-                "custom_width": 60,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "background_media": "none",
-                "background_color": "",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "link": "",
-                "open_in_new_tab": false,
-                "placeholder": "",
-                "visibility": "all",
-                "mobile_first": false,
-                "scroll_on_mobile": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "text_18": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Next</p>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "font_size_mobile": "",
-                    "weight": "",
-                    "line_height": "normal",
-                    "letter_spacing": "loose",
-                    "case": "uppercase",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color9 }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "text_19": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<h2>From gold to jewelry: how we price every piece</h2>",
-                    "width": "fit-content",
-                    "max_width": "none",
-                    "alignment": "left",
-                    "type_preset": "custom",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "2.25rem",
-                    "font_size_mobile": "1.75rem",
-                    "weight": "300",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.background }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_18",
-                "text_19"
-              ]
-            },
-            "group_18": {
-              "type": "group",
-              "name": "Buttons",
-              "settings": {
-                "content_direction": "row",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-end",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-end",
-                "vertical_alignment_flex_direction_column": "flex-start",
-                "gap": 12,
-                "width": "custom",
-                "custom_width": 34,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "custom_height": 100,
-                "background_media": "none",
-                "background_color": "",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "link": "",
-                "open_in_new_tab": false,
-                "placeholder": "",
-                "visibility": "all",
-                "mobile_first": false,
-                "scroll_on_mobile": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "button_09": {
-                  "type": "button",
-                  "settings": {
-                    "label": "Jewelry as an asset",
-                    "link": "/pages/jewelry-as-an-asset",
-                    "open_in_new_tab": false,
-                    "style_class": "button-custom",
-                    "custom_button_background": "{{ settings.color_palette.background }}",
-                    "custom_button_text": "{{ settings.color_palette.color10 }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}",
-                    "link_text_color": "",
-                    "visibility": "all",
-                    "width": "fit-content",
-                    "custom_width": 100,
-                    "width_mobile": "custom",
-                    "custom_width_mobile": 100
-                  },
-                  "blocks": {}
-                },
-                "button_10": {
-                  "type": "button",
-                  "settings": {
-                    "label": "Shop",
-                    "link": "/collections/all-jewelry",
-                    "open_in_new_tab": false,
-                    "style_class": "button-custom",
-                    "custom_button_background": "rgba(0,0,0,0)",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.background }}",
-                    "link_text_color": "",
-                    "visibility": "all",
-                    "width": "fit-content",
-                    "custom_width": 100,
-                    "width_mobile": "custom",
-                    "custom_width_mobile": 100
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "button_09",
-                "button_10"
-              ]
-            }
-          },
-          "block_order": [
-            "group_17",
-            "group_18"
-          ]
-        }
-      },
-      "block_order": [
-        "group_19"
-      ],
-      "name": "Next",
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "flex-start",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 0,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "{{ settings.color_palette.color10 }}",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_color": "",
-        "border_radius": 0,
-        "anchor": "",
-        "line_width": 0,
-        "line_color": "",
-        "padding-block-start": 88,
-        "padding-block-end": 96
+        "padding-block-end": 96,
+        "background_color": "{{ settings.color_palette.background }}",
+        "anchor": "industry"
       }
     }
   },
