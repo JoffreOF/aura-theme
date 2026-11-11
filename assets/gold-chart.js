@@ -437,11 +437,14 @@ class GoldChart extends HTMLElement {
     svg.append(surface);
     surface.addEventListener('pointermove', (e) => show(nearest(e.clientX)));
     surface.addEventListener('pointerdown', (e) => show(nearest(e.clientX)));
-    surface.addEventListener('pointerleave', hide);
-    surface.addEventListener('pointerup', (e) => {
-      if (e.pointerType === 'touch') hide();
-    });
-    surface.addEventListener('pointercancel', hide);
+    // Mouse: the read-out follows the pointer and goes away when it leaves.
+    // Touch: the read-out stays where the finger stopped (lifting the finger, or the page taking over a
+    // vertical scroll, does not clear it). The next touch on the chart moves it to the new day.
+    const mouseOnly = (handler) => (e) => {
+      if (e.pointerType !== 'touch') handler(e);
+    };
+    surface.addEventListener('pointerleave', mouseOnly(hide));
+    surface.addEventListener('pointercancel', mouseOnly(hide));
 
     if (this.#hover >= 0 && this.#hover < series.length) show(this.#hover);
     else this.#updateHeader();
