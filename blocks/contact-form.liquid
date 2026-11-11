@@ -153,6 +153,55 @@
       </div>
     {%- endif -%}
 
+    {%- if s.show_topic or s.show_order_number -%}
+      <div class="contact-form__form-row contact-form__form-row--top">
+        {%- if s.show_topic -%}
+          {%- assign topic_text = s.topic_label | default: 'What is it about?' -%}
+          <div class="contact-form__field">
+            <label
+              class="{{ label_class }}"
+              for="ContactForm-topic"
+            >
+              {{- topic_text -}}
+            </label>
+            <select
+              id="ContactForm-topic"
+              class="contact-form__input contact-form__select"
+              name="contact[Topic]"
+            >
+              {%- assign topic_lines = s.topic_options | newline_to_br | split: '<br />' -%}
+              {%- for line in topic_lines -%}
+                {%- assign topic = line | strip -%}
+                {%- if topic != blank -%}
+                  <option value="{{ topic | escape }}">{{ topic }}</option>
+                {%- endif -%}
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+        {%- if s.show_order_number -%}
+          {%- assign order_text = s.order_label | default: 'Order number' -%}
+          <div class="contact-form__field contact-form__field--order" data-order-field>
+            <label
+              class="{{ label_class }}"
+              for="ContactForm-order"
+            >
+              {{- order_text -}}
+              {%- if s.order_optional != blank %} <span class="contact-form__optional">{{ s.order_optional }}</span>{% endif -%}
+            </label>
+            <input
+              type="text"
+              id="ContactForm-order"
+              class="contact-form__input"
+              autocomplete="off"
+              name="contact[Order number]"
+              {% if s.order_placeholder != blank %}placeholder="{{ s.order_placeholder | escape }}"{% endif %}
+            >
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
     <div class="contact-form__field">
       <label
         class="{{ label_class }}"
@@ -171,6 +220,22 @@
         {{- form.body -}}
       </textarea>
     </div>
+
+    {%- if s.show_topic and s.show_order_number and s.order_for_topic != blank -%}
+      <script>
+        // Order number only for the chosen topic. Without JavaScript the field simply stays visible.
+        (() => {
+          const form = document.currentScript.closest('form');
+          const topic = form?.querySelector('#ContactForm-topic');
+          const field = form?.querySelector('[data-order-field]');
+          if (!topic || !field) return;
+          const wanted = {{ s.order_for_topic | json }};
+          const sync = () => { field.hidden = topic.value !== wanted; };
+          topic.addEventListener('change', sync);
+          sync();
+        })();
+      </script>
+    {%- endif -%}
 
     {{ submit_button }}
   {%- endform -%}
@@ -231,6 +296,27 @@
     border-radius: var(--style-border-radius-inputs);
     border: var(--style-border-width-inputs) solid var(--color-input-border);
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* "What is it about?" and "Order number" row: fields start at the top, the dropdown gets its own arrow */
+  .contact-form__form-row--top {
+    align-items: stretch;
+  }
+
+  .contact-form__select {
+    appearance: none;
+    padding-inline-end: 44px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23555' stroke-width='1.5'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+  }
+
+  .contact-form__field[hidden] {
+    display: none;
+  }
+
+  .contact-form__optional {
+    opacity: 0.7;
   }
 
   .contact-form__input--textarea {
@@ -367,6 +453,64 @@
       "max": 12,
       "step": 1,
       "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_topic",
+      "label": "Show the \"What is it about?\" dropdown",
+      "info": "The choice arrives in the email as Topic.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "topic_label",
+      "label": "Dropdown words",
+      "default": "What is it about?",
+      "visible_if": "{{ block.settings.show_topic }}"
+    },
+    {
+      "type": "textarea",
+      "id": "topic_options",
+      "label": "Dropdown choices",
+      "info": "One per line.",
+      "default": "Gold & investing\nMy order\nMy portfolio\nSelling a piece back (buyback)\nBespoke\nSomething else",
+      "visible_if": "{{ block.settings.show_topic }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_order_number",
+      "label": "Show the order number field",
+      "info": "Arrives in the email as Order number.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "order_for_topic",
+      "label": "Show the order number only when this choice is picked",
+      "info": "Must match a dropdown choice exactly. Empty: always show it.",
+      "default": "My order",
+      "visible_if": "{{ block.settings.show_order_number }}"
+    },
+    {
+      "type": "text",
+      "id": "order_label",
+      "label": "Order number words",
+      "default": "Order number",
+      "visible_if": "{{ block.settings.show_order_number }}"
+    },
+    {
+      "type": "text",
+      "id": "order_optional",
+      "label": "Small word after the order number label",
+      "default": "(optional)",
+      "visible_if": "{{ block.settings.show_order_number }}"
+    },
+    {
+      "type": "text",
+      "id": "order_placeholder",
+      "label": "Order number example",
+      "default": "#1001",
+      "visible_if": "{{ block.settings.show_order_number }}"
     },
     {
       "type": "range",
