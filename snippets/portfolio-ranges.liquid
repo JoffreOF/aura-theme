@@ -1,8 +1,11 @@
 {%- doc -%}
-  The 1M / 6M / 1Y / All buttons above a portfolio chart. The page script wires them up.
+  The 1W / 1M / 6M / 1Y / All buttons above a portfolio chart. The page script wires them up and hides the ones the
+  first purchase is too recent for (1W needs more than 7 days of history, 1M more than 30, 6M more than 182, 1Y more
+  than 365; with 7 days or less the whole row is hidden).
 {%- enddoc -%}
 
 <div class="pf-ranges" role="group" aria-label="{{ 'portfolio.range_label' | t }}">
+  <button type="button" class="pf-range" data-range="1w" aria-pressed="false">{{ 'portfolio.range_1w' | t }}</button>
   <button type="button" class="pf-range" data-range="1m" aria-pressed="false">{{ 'portfolio.range_1m' | t }}</button>
   <button type="button" class="pf-range" data-range="6m" aria-pressed="false">{{ 'portfolio.range_6m' | t }}</button>
   <button type="button" class="pf-range" data-range="1y" aria-pressed="false">{{ 'portfolio.range_1y' | t }}</button>

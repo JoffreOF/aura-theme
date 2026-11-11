@@ -170,6 +170,8 @@
     "chart_empty": "The chart appears once there is price history for your pieces.",
     "gold_added": "{amount} gold value added",
     "pieces_many": "{count} pieces",
+    "range_1w": "1W",
+    "readout_change": "{change} ({percent}) vs cost basis",
     "range_1m": "1M",
     "range_6m": "6M",
     "range_1y": "1Y",
