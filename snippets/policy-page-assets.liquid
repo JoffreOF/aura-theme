@@ -1,0 +1,48 @@
+{%- doc -%}
+  Loads the Aura layout for Shopify's own policy pages (Settings > Policies: terms, privacy, shipping, refund).
+  Renders nothing on any other page. The layout is built by assets/policy-page.js from the headings of the policy
+  text (h1 = language version, h2 = section, h3 = sub-section); words come from locales > policy_page.
+{%- enddoc -%}
+
+{%- if request.page_type == 'policy' -%}
+  {{ 'policy-page.css' | asset_url | stylesheet_tag }}
+  <style>
+    :root {
+      --policy-bg: {{ settings.color_palette.color10 }};
+      --policy-text: {{ settings.color_palette.color1 }};
+      --policy-title: {{ settings.color_palette.background }};
+      --policy-muted: {{ settings.color_palette.color9 }};
+      --policy-line: {{ settings.color_palette.color7 }};
+      --policy-active: {{ settings.color_palette.color2 }};
+    }
+
+    #MainContent {
+      background: var(--policy-bg);
+    }
+  </style>
+
+  {%- capture others -%}
+    {%- for policy in shop.policies -%}
+      {%- unless forloop.first -%},{%- endunless -%}
+      { "title": {{ policy.title | json }}, "url": {{ policy.url | json }} }
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  <script type="application/json" id="PolicyPageData">
+    {
+      "shop": {{ shop.name | json }},
+      "eyebrow": [{{ 'policy_page.eyebrow_en' | t | json }}, {{ 'policy_page.eyebrow_es' | t | json }}],
+      "on_this_page": [{{ 'policy_page.on_this_page_en' | t | json }}, {{ 'policy_page.on_this_page_es' | t | json }}],
+      "other_policies": [{{ 'policy_page.other_policies_en' | t | json }}, {{ 'policy_page.other_policies_es' | t | json }}],
+      "jump_to": [{{ 'policy_page.jump_to_en' | t | json }}, {{ 'policy_page.jump_to_es' | t | json }}],
+      "contact_note": [
+        {{ 'policy_page.contact_note_en_html' | t: email: shop.email | json }},
+        {{ 'policy_page.contact_note_es_html' | t: email: shop.email | json }}
+      ],
+      "language": {{ 'policy_page.language_label' | t | json }},
+      "language_names": [{{ 'policy_page.language_en' | t | json }}, {{ 'policy_page.language_es' | t | json }}],
+      "others": [{{ others }}]
+    }
+  </script>
+  <script src="{{ 'policy-page.js' | asset_url }}" type="module" defer></script>
+{%- endif -%}

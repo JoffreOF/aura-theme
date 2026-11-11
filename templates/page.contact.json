@@ -8,6 +8,610 @@
  * ------------------------------------------------------------
  */{
   "sections": {
+    "contact_talk": {
+      "type": "section",
+      "name": "Talk to us",
+      "blocks": {
+        "columns": {
+          "type": "group",
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-start",
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "flex-start",
+            "gap": 64,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "height": "fit",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "left": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 20,
+                "width": "custom",
+                "custom_width": 58,
+                "width_mobile": "fill",
+                "height": "fit",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "eyebrow": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Contact</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "title": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h1>Talk to us</h1>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "6rem",
+                    "font_size_mobile": "3.5rem",
+                    "weight": "400",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 8,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "intro": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>If you have a question about gold, about investing, about any part of this, write to us directly. Financial literacy for women isn't a tagline here, it's the actual reason Aura exists.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1.125rem",
+                    "font_size_mobile": "1rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 16,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "form": {
+                  "type": "contact-form",
+                  "settings": {
+                    "width": "custom",
+                    "custom_width": 100,
+                    "width_mobile": "custom",
+                    "custom_width_mobile": 100,
+                    "show_labels": true,
+                    "stack_fields": false,
+                    "show_phone": false,
+                    "message_rows": 8,
+                    "name_label": "Name",
+                    "email_label": "Email",
+                    "message_label": "Message",
+                    "label_size": 13,
+                    "label_color": "{{ settings.color_palette.color1 }}",
+                    "show_topic": true,
+                    "topic_label": "What is it about?",
+                    "topic_options": "Gold & investing\nMy order\nMy portfolio\nSelling a piece back (buyback)\nBespoke\nSomething else",
+                    "show_order_number": true,
+                    "order_label": "Order number",
+                    "order_for_topic": "My order",
+                    "order_optional": "(optional)",
+                    "order_placeholder": "#1001",
+                    "input_style": "custom",
+                    "input_background_color": "{{ settings.color_palette.color10 }}",
+                    "input_text_color": "{{ settings.color_palette.color1 }}",
+                    "input_border_color": "{{ settings.color_palette.color7 }}",
+                    "border_width": 1,
+                    "border_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {
+                    "submit-button": {
+                      "type": "contact-form-submit-button",
+                      "static": true,
+                      "settings": {
+                        "label": "Send message",
+                        "style_class": "button-custom",
+                        "custom_button_background": "{{ settings.color_palette.background }}",
+                        "custom_button_text": "{{ settings.color_palette.color10 }}",
+                        "custom_button_border": "{{ settings.color_palette.background }}",
+                        "width": "fit-content",
+                        "custom_width": 100,
+                        "width_mobile": "custom",
+                        "custom_width_mobile": 100
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": []
+                },
+                "note": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>We reply within 1 to 2 business days. During peak seasons, it may take a little longer.</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.8125rem",
+                    "font_size_mobile": "0.8125rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "eyebrow",
+                "title",
+                "intro",
+                "form",
+                "note"
+              ],
+              "name": "Form column"
+            },
+            "right": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "flex-start",
+                "gap": 18,
+                "width": "custom",
+                "custom_width": 34,
+                "width_mobile": "fill",
+                "height": "fit",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "line_1": {
+                  "type": "_divider",
+                  "settings": {
+                    "thickness": 1,
+                    "divider_color": "{{ settings.color_palette.color7 }}",
+                    "width_percent": 100,
+                    "corner_radius": "square",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                },
+                "email_label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Email</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "email": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><a href=\"mailto:helloauracapital@gmail.com\">helloauracapital@gmail.com</a></p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-heading--family)",
+                    "font_size": "2rem",
+                    "font_size_mobile": "1.5rem",
+                    "weight": "400",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.background }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "email_note": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Reply within 1 to 2 business days</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "font_size_mobile": "0.875rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "line_2": {
+                  "type": "_divider",
+                  "settings": {
+                    "thickness": 1,
+                    "divider_color": "{{ settings.color_palette.color7 }}",
+                    "width_percent": 100,
+                    "corner_radius": "square",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                },
+                "follow_label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Follow us</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "follow": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Instagram · @auracapital.pe</p><p>TikTok · @auracapital.pe</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "font_size_mobile": "0.9375rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "line_3": {
+                  "type": "_divider",
+                  "settings": {
+                    "thickness": 1,
+                    "divider_color": "{{ settings.color_palette.color7 }}",
+                    "width_percent": 100,
+                    "corner_radius": "square",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                },
+                "quick_label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Quick answers</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "quick": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><a href=\"/pages/faq#orders-shipping\">Shipping &amp; delivery times</a></p><p><a href=\"/pages/faq#returns-exchanges\">Returns &amp; exchanges</a></p><p><a href=\"/pages/faq#size-guide\">Size guide</a></p><p><a href=\"/pages/faq\">All FAQs</a></p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "font_size_mobile": "0.9375rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "line_4": {
+                  "type": "_divider",
+                  "settings": {
+                    "thickness": 1,
+                    "divider_color": "{{ settings.color_palette.color7 }}",
+                    "width_percent": 100,
+                    "corner_radius": "square",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                },
+                "company_label": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Company</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.75rem",
+                    "font_size_mobile": "0.75rem",
+                    "weight": "400",
+                    "line_height": "normal",
+                    "letter_spacing": "loose",
+                    "case": "uppercase",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "company": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Aura Capital Investments SAC</p><p>RUC 20616139879</p><p>Calle Las Lilas 167, Lince, Lima, Peru</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.875rem",
+                    "font_size_mobile": "0.875rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color9 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "libro": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><a href=\"/pages/libro-de-reclamaciones\">Libro de Reclamaciones</a></p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "0.9375rem",
+                    "font_size_mobile": "0.9375rem",
+                    "weight": "400",
+                    "line_height": "loose",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "text_color": "{{ settings.color_palette.color1 }}",
+                    "background": false,
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "line_5": {
+                  "type": "_divider",
+                  "settings": {
+                    "thickness": 1,
+                    "divider_color": "{{ settings.color_palette.color7 }}",
+                    "width_percent": 100,
+                    "corner_radius": "square",
+                    "padding-block-start": 0,
+                    "padding-block-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "line_1",
+                "email_label",
+                "email",
+                "email_note",
+                "line_2",
+                "follow_label",
+                "follow",
+                "line_3",
+                "quick_label",
+                "quick",
+                "line_4",
+                "company_label",
+                "company",
+                "libro",
+                "line_5"
+              ],
+              "name": "Details column"
+            }
+          },
+          "block_order": [
+            "left",
+            "right"
+          ],
+          "name": "Two columns"
+        }
+      },
+      "block_order": [
+        "columns"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "flex-start",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 0,
+        "section_width": "page-width",
+        "section_height": "",
+        "background_media": "none",
+        "background_color": "{{ settings.color_palette.color10 }}",
+        "border": "none",
+        "border_radius": 0,
+        "anchor": "",
+        "line_width": 0,
+        "padding-block-start": 88,
+        "padding-block-end": 96
+      }
+    },
     "main": {
       "type": "main-page",
       "blocks": {
@@ -68,7 +672,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 40,
         "padding-block-end": 0
-      }
+      },
+      "disabled": true
     },
     "form": {
       "type": "section",
@@ -131,10 +736,12 @@
         "gradient_direction": "to top",
         "padding-block-start": 32,
         "padding-block-end": 32
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
+    "contact_talk",
     "main",
     "form"
   ]
