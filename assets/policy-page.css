@@ -1,0 +1,289 @@
+/* Policy page (terms, privacy, shipping, refund). Colours come from the --policy-* variables set in snippets/policy-page-assets.liquid. */
+.shopify-policy__container {
+  padding-block: 0;
+}
+
+.policy-page {
+  --policy-gutter: var(--page-margin, 20px);
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(var(--normal-page-width, 1200px) + (var(--policy-gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--policy-gutter);
+  padding-block: 64px 96px;
+  color: var(--policy-text);
+  font-family: var(--font-body--family);
+}
+
+.policy-page *,
+.policy-page *::before,
+.policy-page *::after {
+  box-sizing: border-box;
+}
+
+.policy-page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block-end: 32px;
+  border-block-end: 1px solid var(--policy-line);
+}
+
+.policy-page__eyebrow,
+.policy-page__label {
+  margin: 0 0 12px;
+  color: var(--policy-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.policy-page__title {
+  margin: 0;
+  color: var(--policy-title);
+  font-family: var(--font-heading--family);
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.policy-page__updated {
+  margin: 12px 0 0;
+  color: var(--policy-muted);
+  font-size: 0.8125rem;
+}
+
+.policy-page__updated[hidden],
+.policy-page__language[hidden] {
+  display: none;
+}
+
+/* English / Español switch */
+.policy-page__switch {
+  display: inline-flex;
+}
+
+.policy-page__switch-button {
+  min-width: 88px;
+  padding: 10px 18px;
+  border: 1px solid var(--policy-title);
+  background: transparent;
+  color: var(--policy-title);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.policy-page__switch-button + .policy-page__switch-button {
+  border-inline-start: 0;
+}
+
+.policy-page__switch-button[aria-pressed='true'] {
+  background: var(--policy-title);
+  color: var(--policy-bg);
+}
+
+.policy-page__switch-button:focus-visible,
+.policy-page__select:focus-visible,
+.policy-page a:focus-visible {
+  outline: 2px solid var(--policy-title);
+  outline-offset: 2px;
+}
+
+/* Layout */
+.policy-page__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding-block-start: 32px;
+}
+
+.policy-page__jump {
+  display: block;
+}
+
+.policy-page__select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--policy-line);
+  border-radius: 0;
+  background: var(--policy-bg);
+  color: var(--policy-text);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.policy-page__side .policy-page__toc,
+.policy-page__others-nav--side {
+  display: none;
+}
+
+.policy-page__others-nav--bottom {
+  padding-block-start: 8px;
+}
+
+.policy-page__others {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.policy-page__others li + li {
+  margin-block-start: 10px;
+}
+
+.policy-page__others a,
+.policy-page__body a {
+  color: var(--policy-title);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Text */
+.policy-page__body {
+  color: var(--policy-text);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+.policy-page__body p,
+.policy-page__body ul,
+.policy-page__body ol {
+  margin-block: 0 1em;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.policy-page__body ul,
+.policy-page__body ol {
+  padding-inline-start: 1.4em;
+}
+
+.policy-page__intro {
+  padding-block-end: 8px;
+  font-size: 1rem;
+}
+
+.policy-page__section {
+  padding-block: 32px 8px;
+  border-block-start: 1px solid var(--policy-line);
+  scroll-margin-top: calc(var(--header-group-height, 0px) + 24px);
+}
+
+.policy-page__intro + .policy-page__section {
+  margin-block-start: 16px;
+}
+
+.policy-page__heading {
+  margin: 0 0 20px;
+  color: var(--policy-title);
+  font-family: var(--font-heading--family);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.2;
+  scroll-margin-top: calc(var(--header-group-height, 0px) + 24px);
+}
+
+.policy-page__body h3 {
+  margin: 28px 0 10px;
+  color: var(--policy-text);
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.5;
+  scroll-margin-top: calc(var(--header-group-height, 0px) + 24px);
+}
+
+.policy-page__contact {
+  margin-block: 24px 0;
+  padding-block-start: 24px;
+  border-block-start: 1px solid var(--policy-line);
+  color: var(--policy-muted);
+  font-size: 0.8125rem;
+}
+
+@media screen and (min-width: 750px) {
+  .policy-page {
+    padding-block: 88px 120px;
+  }
+
+  .policy-page__layout {
+    grid-template-columns: minmax(200px, 270px) minmax(0, 1fr);
+    column-gap: 64px;
+    align-items: start;
+  }
+
+  .policy-page__jump,
+  .policy-page__others-nav--bottom {
+    display: none;
+  }
+
+  .policy-page__side .policy-page__toc,
+  .policy-page__others-nav--side {
+    display: block;
+  }
+
+  .policy-page__side {
+    position: sticky;
+    top: calc(var(--header-group-height, 0px) + 24px);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    max-height: calc(100vh - var(--header-group-height, 0px) - 48px);
+    overflow-y: auto;
+  }
+
+  .policy-page__body {
+    max-width: 760px;
+  }
+
+  .policy-page__toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-inline-start: 1px solid var(--policy-line);
+  }
+
+  .policy-page__toc-list a {
+    display: block;
+    padding: 8px 12px;
+    margin-inline-start: -1px;
+    border-inline-start: 2px solid transparent;
+    color: var(--policy-text);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .policy-page__toc-list a:hover {
+    color: var(--policy-title);
+  }
+
+  .policy-page__toc-list a[aria-current='true'] {
+    border-inline-start-color: var(--policy-title);
+    background: var(--policy-active);
+    color: var(--policy-title);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .policy-page__switch {
+    display: flex;
+    width: 100%;
+  }
+
+  .policy-page__switch-button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
