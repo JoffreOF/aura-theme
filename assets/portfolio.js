@@ -85,6 +85,7 @@ export function formatDate(date, locale = 'en-US', withYear = true) {
 }
 
 const DAY = 86_400_000;
+let chartCount = 0; // unique id for each chart's gradient (the page can redraw and show two charts)
 
 /** Length of each range button in days. */
 export const RANGE_DAYS = { '1w': 7, '1m': 30, '6m': 182, '1y': 365 };
@@ -428,8 +429,23 @@ function init(root) {
       grid.setAttribute('class', 'pf-chart__grid');
       svg.append(grid);
     }
+    // The area under the line fades from the line colour at the top to nothing at the bottom (stop colours in the CSS)
+    const gradientId = `pf-grad-${(chartCount += 1)}`;
+    const defs = document.createElementNS(NS, 'defs');
+    const gradient = document.createElementNS(NS, 'linearGradient');
+    gradient.setAttribute('id', gradientId);
+    gradient.setAttribute('x1', '0'); gradient.setAttribute('y1', '0'); gradient.setAttribute('x2', '0'); gradient.setAttribute('y2', '1');
+    for (const [offset, cls] of [['0', 'pf-grad-top'], ['1', 'pf-grad-bottom']]) {
+      const stop = document.createElementNS(NS, 'stop');
+      stop.setAttribute('offset', offset);
+      stop.setAttribute('class', cls);
+      gradient.append(stop);
+    }
+    defs.append(gradient);
+    svg.prepend(defs);
     const area = document.createElementNS(NS, 'path');
     area.setAttribute('d', geo.area); area.setAttribute('class', 'pf-chart__area');
+    area.style.fill = `url(#${gradientId})`;
     const line = document.createElementNS(NS, 'path');
     line.setAttribute('d', geo.line); line.setAttribute('class', 'pf-chart__line');
     svg.append(area, line);

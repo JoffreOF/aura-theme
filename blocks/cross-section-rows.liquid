@@ -12,9 +12,10 @@
 gold-cross-sections{display:block;width:100%;color:var(--ga-cross-text,var(--color-foreground))}
 .ga-cross__bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
 .ga-cross__eyebrow{font-family:var(--font-body--family);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
-.ga-cross__toggle{display:inline-flex;flex-wrap:wrap;padding:4px;border:1px solid var(--ga-cross-edge,rgb(243 234 229 / .3));border-radius:var(--ga-toggle-radius,0);gap:4px}
+/* Day one / After a year: the homepage's mobile-app toggle (pill track, pill buttons, soft change) */
+.ga-cross__toggle{display:inline-flex;flex-wrap:wrap;padding:4px;border:1px solid var(--ga-cross-edge,rgb(243 234 229 / .3));border-radius:999px;gap:0}
 .ga-cross__toggle[hidden]{display:none}
-.ga-cross__toggle button{font:inherit;font-size:13px;padding:10px 16px;border:0;border-radius:var(--ga-toggle-radius,0);background:transparent;color:inherit;cursor:pointer}
+.ga-cross__toggle button{font:inherit;font-size:14px;padding:11px 22px;border:0;border-radius:999px;background:transparent;color:inherit;cursor:pointer;transition:background-color .3s,color .3s}
 .ga-cross__toggle button[aria-pressed='true']{background:var(--ga-toggle-bg,#f3eae5);color:var(--ga-toggle-text,#3a1630)}
 .ga-cross__toggle button:focus-visible{outline:2px solid var(--ga-cross-gold,#d9c29a);outline-offset:-3px}
 .ga-cross__rows{border-top:1px solid var(--ga-cross-edge,rgb(243 234 229 / .2))}

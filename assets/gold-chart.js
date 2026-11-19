@@ -11,6 +11,7 @@
 const DAY = 86400000;
 const NS = 'http://www.w3.org/2000/svg';
 const LIMA_FIX_UTC_HOUR = 15; // 10:00 in Lima (UTC-5, no daylight saving)
+let gradientCount = 0; // unique id for each chart's gradient (several charts can share a page)
 
 /** key, label key suffix, window in days (null = all history), minimum points inside the window */
 const RANGES = [
@@ -365,7 +366,9 @@ class GoldChart extends HTMLElement {
     let dash = `<line class="gc-dash" x1="2" x2="${width - axis - 2}" y1="${ly.toFixed(1)}" y2="${ly.toFixed(1)}"/>`;
     if (!compact) {
       const label = this.#fmt.format(latest);
-      dash += `<rect class="gc-tag" x="${width - axis + 2}" y="${(ly - 10).toFixed(1)}" width="60" height="20" rx="1"/>` +
+      // the tag follows the block's corner radius (a 16px radius gives a pill: half the 20px height at most)
+      const tagRadius = Math.min(Math.max(Number(this.#config.radius) || 1, 1), 10);
+      dash += `<rect class="gc-tag" x="${width - axis + 2}" y="${(ly - 10).toFixed(1)}" width="60" height="20" rx="${tagRadius}"/>` +
         `<text class="gc-tag-text" x="${width - axis + 32}" y="${(ly + 4).toFixed(1)}" text-anchor="middle">${label}</text>`;
     }
 
@@ -378,7 +381,15 @@ class GoldChart extends HTMLElement {
     // Browsers only honour touch-action on the <svg> itself, not on shapes inside it: without this a drifting finger starts a page scroll and the chart loses it.
     svg.style.touchAction = 'none';
     svg.setAttribute('aria-label', (this.#config.strings || {}).label || 'Gold price chart');
-    svg.innerHTML = `${grid}<path class="gc-area" d="${area}"/><path class="gc-line" d="${line}"/>${dash}${labels}` +
+    // Terminal: the area under the line fades from the line's gold at the top to nothing at the bottom (colours in the block CSS)
+    let defs = '';
+    let areaStyle = '';
+    if (this.#config.gradient) {
+      const id = `gc-grad-${(gradientCount += 1)}`;
+      defs = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="gc-grad-top"/><stop offset="1" class="gc-grad-bottom"/></linearGradient></defs>`;
+      areaStyle = ` style="fill:url(#${id})"`;
+    }
+    svg.innerHTML = `${defs}${grid}<path class="gc-area" d="${area}"${areaStyle}/><path class="gc-line" d="${line}"/>${dash}${labels}` +
       `<line class="gc-cursor" data-cursor y1="${top}" y2="${top + plotH}" hidden/><circle class="gc-dot" data-dot r="4.5" hidden/>`;
     plot.prepend(svg);
 
@@ -387,6 +398,12 @@ class GoldChart extends HTMLElement {
     const dot = svg.querySelector('[data-dot]');
     const tooltip = plot.querySelector('[data-tooltip]');
 
+    // SVG shapes have no `hidden` property and browsers do not hide them for the `hidden` attribute alone: toggle the
+    // attribute and let the CSS rule `.gc-cursor[hidden], .gc-dot[hidden] { display: none }` do the hiding.
+    const shown = (element, visible) => {
+      if (visible) element.removeAttribute('hidden');
+      else element.setAttribute('hidden', '');
+    };
     const show = (index) => {
       this.#hover = index;
       const p = series[index];
@@ -394,10 +411,10 @@ class GoldChart extends HTMLElement {
       const py = y(p.price);
       cursor.setAttribute('x1', px.toFixed(1));
       cursor.setAttribute('x2', px.toFixed(1));
-      cursor.hidden = false;
+      shown(cursor, true);
       dot.setAttribute('cx', px.toFixed(1));
       dot.setAttribute('cy', py.toFixed(1));
-      dot.hidden = false;
+      shown(dot, true);
       if (tooltip) {
         if (this.#config.terminal && p.date) this.#fillTerminalTooltip(tooltip, p);
         else tooltip.textContent = `${p.date ? this.#dateLabel(p.t, true) : this.#dateLabel(p.t)} · ${this.#money(p.price)}`;
@@ -410,8 +427,8 @@ class GoldChart extends HTMLElement {
     };
     const hide = () => {
       this.#hover = -1;
-      cursor.hidden = true;
-      dot.hidden = true;
+      shown(cursor, false);
+      shown(dot, false);
       if (tooltip) tooltip.hidden = true;
       this.#updateHeader();
     };

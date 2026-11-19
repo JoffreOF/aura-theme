@@ -650,6 +650,22 @@
     z-index: var(--layer-menu-drawer);
   }
 
+  /* Aura: with the header "always sticky", the announcement bar sticks too: the bar on top, the header right under it.
+     --announcement-bar-height is measured by sections/header-announcements.liquid. */
+  body:has(#header-component[sticky='always']) {
+    --sticky-announcement-height: var(--announcement-bar-height, 0px);
+  }
+
+  #header-group:has(#header-component[sticky='always']) > .shopify-section:has(> .announcement-bar) {
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-menu-drawer);
+  }
+
+  .header-section:has(> #header-component[sticky='always']) {
+    top: calc(var(--sticky-announcement-height, 0px) - 1px);
+  }
+
   .header[data-sticky-state] {
     transition: opacity var(--animation-speed) var(--animation-easing);
     opacity: 1;

@@ -171,6 +171,10 @@
     "gold_added": "{amount} gold value added",
     "pieces_many": "{count} pieces",
     "range_1w": "1W",
+    "block_label": "MY AURA",
+    "block_sub": "Marked to market daily",
+    "block_updated": "Updated every day at 10:00 AM",
+    "disclaimer": "Disclaimer: All content shared by Aura is intended for educational and informational purposes only and should not be considered financial or investment advice. Trading and investing involve risks. We encourage everyone to make informed decisions and seek professional guidance when needed.",
     "readout_change": "{change} ({percent}) vs cost basis",
     "range_1m": "1M",
     "range_6m": "6M",
@@ -345,7 +349,7 @@
     "gold_breakdown": {
       "gold_value": "Gold value",
       "craftsmanship": "Craftsmanship",
-      "weight": "{{ grams }} g"
+      "weight": "for {{ grams }} g"
     },
     "installments": {
       "label": "or {{ count }} × {{ amount }} interest-free"

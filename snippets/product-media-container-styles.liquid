@@ -41,7 +41,7 @@
 
   @media screen and (min-width: 750px) {
     .product-media-container.constrain-height {
-      --viewport-offset: var(--header-height, 100px);
+      --viewport-offset: calc(var(--header-height, 100px) + var(--sticky-announcement-height, 0px));
       --constrained-min-height: 500px;
     }
 

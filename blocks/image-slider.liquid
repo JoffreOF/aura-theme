@@ -1,0 +1,239 @@
+{%- doc -%}
+  Photo slider: up to five photos that change by themselves every few seconds (a soft fade), with small dots to jump to
+  a photo. Pauses while the mouse is over it or a dot has focus, and does not move for visitors who ask for reduced
+  motion. Without photos it shows placeholders, so the layout holds until photos are added. Script: assets/image-slider.js.
+{%- enddoc -%}
+
+{%- liquid
+  assign s = block.settings
+  assign photos = ''
+  for i in (1..5)
+    assign key = 'image_' | append: i
+    if s[key] != blank
+      assign photos = photos | append: key | append: ','
+    endif
+  endfor
+  assign keys = photos | split: ','
+
+  case s.aspect_ratio
+    when 'square'
+      assign ratio = '1 / 1'
+    when 'landscape'
+      assign ratio = '3 / 2'
+    when 'tall'
+      assign ratio = '2 / 3'
+    else
+      assign ratio = '4 / 5'
+  endcase
+-%}
+
+<script src="{{ 'image-slider.js' | asset_url }}" type="module" defer></script>
+
+<image-slider
+  class="img-slider"
+  data-interval="{{ s.interval | times: 1000 }}"
+  style="--slider-ratio: {{ ratio }}; --slider-radius: {{ s.corner_radius }}px;"
+  {{ block.shopify_attributes }}
+>
+  <div class="img-slider__track" aria-roledescription="carousel" aria-label="{{ s.label | escape }}">
+    {%- if keys.size > 0 -%}
+      {%- for key in keys -%}
+        {%- assign photo = s[key] -%}
+        <div class="img-slider__slide{% if forloop.first %} is-active{% endif %}" data-slide{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+          {%- liquid
+            assign loading = 'lazy'
+            if forloop.first
+              assign loading = 'eager'
+            endif
+          -%}
+          {{
+            photo
+            | image_url: width: 1600
+            | image_tag: widths: '400, 600, 800, 1200, 1600', sizes: '(min-width: 750px) 50vw, 100vw', loading: loading, class: 'img-slider__image', alt: photo.alt
+          }}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..3) -%}
+        <div class="img-slider__slide{% if forloop.first %} is-active{% endif %}" data-slide{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+          {{ 'lifestyle-' | append: i | placeholder_svg_tag: 'img-slider__image img-slider__placeholder' }}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+
+  {%- if s.show_dots -%}
+    <div class="img-slider__dots" data-dots></div>
+  {%- endif -%}
+</image-slider>
+
+{% stylesheet %}
+  image-slider {
+    display: block;
+    width: 100%;
+  }
+
+  .img-slider__track {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--slider-ratio, 4 / 5);
+    overflow: hidden;
+    border-radius: var(--slider-radius, 0);
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .img-slider__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+
+  .img-slider__slide.is-active {
+    opacity: 1;
+  }
+
+  .img-slider__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .img-slider__placeholder {
+    fill: rgb(var(--color-foreground-rgb) / 0.35);
+  }
+
+  .img-slider__dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-block-start: 14px;
+  }
+
+  .img-slider__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+
+  .img-slider__dot[aria-current='true'] {
+    background: currentColor;
+    opacity: 1;
+  }
+
+  .img-slider__dot:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .img-slider__slide {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Photo slider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Up to five photos that change by themselves. Without photos, placeholders are shown."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Photo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Photo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Photo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Photo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Photo 5"
+    },
+    {
+      "type": "range",
+      "id": "interval",
+      "label": "Change photo every",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Shape",
+      "options": [
+        {
+          "value": "portrait",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "tall",
+          "label": "Tall (2:3)"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (3:2)"
+        }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Name for screen readers",
+      "default": "Photos"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Photo slider"
+    }
+  ]
+}
+{% endschema %}

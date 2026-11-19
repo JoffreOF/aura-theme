@@ -356,6 +356,7 @@
     ~ *
     .product-details.sticky-content--desktop,
   quick-add-dialog[header-sticky-active] .product-details.sticky-content--desktop {
-    --sticky-header-offset: var(--header-height);
+    /* Aura: plus the sticky announcement bar when there is one (0px otherwise) */
+    --sticky-header-offset: calc(var(--header-height) + var(--sticky-announcement-height, 0px));
   }
 {% endstylesheet %}

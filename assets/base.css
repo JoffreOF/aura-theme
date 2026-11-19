@@ -357,7 +357,7 @@ p:empty {
 
 /* Section "Anchor name" setting: an in-page link lands below the sticky header */
 .shopify-section:not(.header-section) .section-background[id] {
-  scroll-margin-block-start: var(--header-height, 0px);
+  scroll-margin-block-start: calc(var(--header-height, 0px) + var(--sticky-announcement-height, 0px));
 }
 
 .shopify-section:not(.header-section) .section-background {

@@ -261,12 +261,13 @@
     color: var(--fs-muted, inherit);
   }
 
+  /* No / Yes switch: the artifact's mobile-app toggle (pill track, pill buttons, soft change) */
   .fs__tog {
     display: inline-flex;
     width: fit-content;
     padding: 4px;
     border: 1px solid var(--fs-line, rgb(var(--color-foreground-rgb) / 0.3));
-    border-radius: var(--fs-radius, 0);
+    border-radius: 999px;
   }
 
   .fs__tog button {
@@ -277,7 +278,8 @@
     cursor: pointer;
     background: none;
     border: 0;
-    border-radius: var(--fs-radius, 0);
+    border-radius: 999px;
+    transition: background-color 0.3s, color 0.3s;
   }
 
   .fs__tog button[aria-pressed='true'] {
@@ -379,14 +381,23 @@
     border-block-start: 1px solid currentColor;
   }
 
+  /* "Your price today" box. The serif's digits sit low in their line box (room for accents above), so equal padding
+     looks bottom-heavy. Browsers that can trim the line box to the cap height and the baseline get true centring;
+     the others get a little less padding on top and more below. */
   .fs__box {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.28em 0.5em;
+    display: inline-block;
+    padding: 0.2em 0.5em 0.34em;
     color: var(--fs-strong-text, #fffaf8);
     background: var(--fs-strong, #4a253d);
-    border-radius: var(--fs-radius, 0);
+    border-radius: 16px;
     line-height: 1;
+  }
+
+  @supports (text-box: trim-both cap alphabetic) {
+    .fs__box {
+      padding: 0.36em 0.5em;
+      text-box: trim-both cap alphabetic;
+    }
   }
 
   .fs__term--result {
