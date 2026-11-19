@@ -278,6 +278,63 @@
     },
     {
       "type": "header",
+      "content": "Frame"
+    },
+    {
+      "type": "select",
+      "id": "frame_style",
+      "label": "Frame",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "box",
+          "label": "Rounded box"
+        }
+      ],
+      "default": "none",
+      "info": "Rounded box: with Carousel the photos slide inside one outlined box (best with Square shape); with Grid each photo gets its own box."
+    },
+    {
+      "type": "range",
+      "id": "frame_radius",
+      "label": "Frame corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28,
+      "visible_if": "{{ block.settings.frame_style == 'box' }}"
+    },
+    {
+      "type": "color",
+      "id": "frame_color",
+      "label": "Frame line colour",
+      "visible_if": "{{ block.settings.frame_style == 'box' }}"
+    },
+    {
+      "type": "range",
+      "id": "frame_image_size",
+      "label": "Photo size inside the frame",
+      "min": 50,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "default": 78,
+      "visible_if": "{{ block.settings.frame_style == 'box' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stone_chip",
+      "label": "Show the stone chip",
+      "info": "The chosen stone (Stone option), else the product's stone. Pieces without stones show no chip.",
+      "default": true,
+      "visible_if": "{{ block.settings.frame_style == 'box' }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.padding"
     },
     {

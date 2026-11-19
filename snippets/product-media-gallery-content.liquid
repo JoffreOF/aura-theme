@@ -352,10 +352,19 @@
     {{ 'product-apparel-1' | placeholder_svg_tag: 'product-media-gallery__placeholder-image' }}
   </div>
 {% else %}
+  {%- liquid
+    # Aura: "Rounded box" frame (PDP artifact). Carousel: the photos slide inside one rounded outlined box.
+    # Grid: each photo gets its own box. The stone chip shows the variant's Stone option, else the stone metafield.
+    capture frame_chip
+      render 'product-stone-chip', product: closest.product, class: 'media-gallery__stone-chip', frame: block_settings.frame_style, enabled: block_settings.show_stone_chip
+    endcapture
+    assign frame_chip = frame_chip | strip
+  -%}
   <media-gallery
     class="
       spacing-style
       sticky-content
+      media-gallery--frame-{{ block_settings.frame_style | default: 'none' }}
       {% if media_presentation == 'grid' %}
         media-gallery--{{ block_settings.media_columns }}-column
         {% if block_settings.media_columns == "two" and block_settings.large_first_image%}media-gallery--large-first-image{% endif %}
@@ -368,7 +377,7 @@
         media-gallery--extend
       {% endif %}
     "
-    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
+    style="--frame-radius: {{ block_settings.frame_radius | default: 28 }}px; --frame-scale: {{ block_settings.frame_image_size | default: 78 | divided_by: 100.0 }}; --frame-color: {{ block_settings.frame_color | default: 'rgb(var(--color-foreground-rgb))' }};{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
   >
@@ -451,6 +460,10 @@
         {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
       {% endcapture %}
     {% endif %}
+    {%- comment -%} The arrows slot sits inside the slideshow viewport: the stone chip stays put while the photos slide {%- endcomment -%}
+    {% if frame_chip != blank %}
+      {% capture slideshow_arrows %}{{ slideshow_arrows }}{{ frame_chip }}{% endcapture %}
+    {% endif %}
 
     {% render 'slideshow',
       ref: 'slideshow',
@@ -505,6 +518,7 @@
             {% else %}
               {%- render 'product-media', media: media, sizes: media_sizes, is_main_product_media: forloop.first -%}
             {% endif %}
+            {%- if forloop.first and frame_chip != blank -%}{{ frame_chip }}{%- endif -%}
           </li>
         {% endfor %}
       </ul>
@@ -1014,6 +1028,47 @@
   .product-media-gallery__slideshow--single-media slideshow-container {
     @media screen and (max-width: 749px) {
       grid-area: unset;
+    }
+  }
+
+  /* Aura "Rounded box" frame (PDP artifact): an outlined rounded box around the carousel viewport, or around each grid
+     photo; the photo sits inside at --frame-scale and melts into the page (multiply), the stone chip bottom-right. */
+  /* media-gallery.… outranks the theme's own .media-gallery--carousel slideshow-container radius rule */
+  media-gallery.media-gallery--frame-box slideshow-container,
+  media-gallery.media-gallery--frame-box .media-gallery__grid > li {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--frame-color, rgb(var(--color-foreground-rgb)));
+    border-radius: var(--frame-radius, 28px);
+    background: var(--color-background);
+  }
+
+  .media-gallery--frame-box .product-media img,
+  .media-gallery--frame-box .product-media video {
+    object-fit: contain;
+    transform: scale(var(--frame-scale, 0.78));
+    mix-blend-mode: multiply;
+  }
+
+  .media-gallery--frame-box .product-media,
+  .media-gallery--frame-box slideshow-slide,
+  .media-gallery--frame-box .media-gallery__grid > li {
+    --media-radius: 0px;
+    --gallery-media-border-radius: 0px;
+  }
+
+  .media-gallery__stone-chip {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .media-gallery__stone-chip {
+      right: 14px;
+      bottom: 14px;
     }
   }
 
