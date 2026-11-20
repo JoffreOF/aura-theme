@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_iyt6zg": {
       "type": "hero",
@@ -272,7 +273,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<h3>Shop by category</h3>",
+                "text": "<h3>shop by category</h3>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -280,7 +281,7 @@
                 "font": "var(--font-heading--family)",
                 "font_size": "2.75rem",
                 "font_size_mobile": "1.875rem",
-                "weight": "400",
+                "weight": "600",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -300,7 +301,7 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "View all Jewelry",
+                "label": "view all jewelry",
                 "link": "shopify://collections",
                 "open_in_new_tab": false,
                 "style_class": "button-unstyled",
@@ -1381,7 +1382,7 @@
                     "number_line_height": "normal",
                     "number_letter_spacing": "normal",
                     "number_case": "none",
-                    "number_color": "#c4a35a",
+                    "number_color": "{{ settings.color_palette.color3 }}",
                     "title_preset": "custom",
                     "title_font": "var(--font-heading--family)",
                     "title_font_size": "1.75rem",
@@ -1389,7 +1390,7 @@
                     "title_weight": "400",
                     "title_line_height": "normal",
                     "title_letter_spacing": "normal",
-                    "title_case": "none",
+                    "title_case": "uppercase",
                     "title_color": "{{ settings.color_palette.background }}",
                     "body_preset": "custom",
                     "body_font": "var(--font-body--family)",
@@ -1475,7 +1476,7 @@
                     "number_line_height": "normal",
                     "number_letter_spacing": "normal",
                     "number_case": "none",
-                    "number_color": "#c4a35a",
+                    "number_color": "{{ settings.color_palette.color3 }}",
                     "title_preset": "custom",
                     "title_font": "var(--font-heading--family)",
                     "title_font_size": "1.75rem",
@@ -1483,7 +1484,7 @@
                     "title_weight": "400",
                     "title_line_height": "normal",
                     "title_letter_spacing": "normal",
-                    "title_case": "none",
+                    "title_case": "uppercase",
                     "title_color": "{{ settings.color_palette.background }}",
                     "body_preset": "custom",
                     "body_font": "var(--font-body--family)",
@@ -1569,7 +1570,7 @@
                     "number_line_height": "normal",
                     "number_letter_spacing": "normal",
                     "number_case": "none",
-                    "number_color": "#c4a35a",
+                    "number_color": "{{ settings.color_palette.color3 }}",
                     "title_preset": "custom",
                     "title_font": "var(--font-heading--family)",
                     "title_font_size": "1.75rem",
@@ -1577,7 +1578,7 @@
                     "title_weight": "",
                     "title_line_height": "normal",
                     "title_letter_spacing": "normal",
-                    "title_case": "none",
+                    "title_case": "uppercase",
                     "title_color": "{{ settings.color_palette.background }}",
                     "body_preset": "custom",
                     "body_font": "var(--font-body--family)",
@@ -1663,7 +1664,7 @@
                     "number_line_height": "normal",
                     "number_letter_spacing": "normal",
                     "number_case": "none",
-                    "number_color": "#c4a35a",
+                    "number_color": "{{ settings.color_palette.color3 }}",
                     "title_preset": "custom",
                     "title_font": "var(--font-heading--family)",
                     "title_font_size": "1.75rem",
@@ -1671,7 +1672,7 @@
                     "title_weight": "",
                     "title_line_height": "normal",
                     "title_letter_spacing": "normal",
-                    "title_case": "none",
+                    "title_case": "uppercase",
                     "title_color": "{{ settings.color_palette.background }}",
                     "body_preset": "custom",
                     "body_font": "var(--font-body--family)",
@@ -1974,11 +1975,12 @@
             "label": "XAU/USD",
             "sublabel": "US$ / troy oz",
             "pill_text": "Daily fix · 10:00 AM",
+            "fix_note": "Updated every day at 10:00 AM, except holidays",
             "default_range": "y1",
             "hide_short_ranges": true,
             "example_weight": 4.1,
             "fix_from": "2026-10-24",
-            "corner_radius": 16,
+            "corner_radius": 12,
             "price_size": 56,
             "price_size_mobile": 40,
             "chart_height": 340,
@@ -1994,8 +1996,7 @@
             "tooltip_background": "",
             "tooltip_text": "",
             "padding-block-start": 0,
-            "padding-block-end": 0,
-            "fix_note": "Updated every day at 10:00 AM, except holidays"
+            "padding-block-end": 0
           },
           "blocks": {}
         }
@@ -2583,7 +2584,7 @@
             "sublabel": "Virtual portfolio",
             "tag_text": "Sample",
             "marked_text": "Marked to market · {date} · 10:00 AM",
-            "corner_radius": 16,
+            "corner_radius": 12,
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "{{ settings.color_palette.color2 }}",
             "muted_color": "{{ settings.color_palette.color7 }}",
@@ -3806,6 +3807,7 @@
         "group_16",
         "group_20"
       ],
+      "disabled": true,
       "name": "Talk like an investor",
       "settings": {
         "content_direction": "column",
@@ -3837,8 +3839,7 @@
         "line_color": "",
         "padding-block-start": 24,
         "padding-block-end": 64
-      },
-      "disabled": true
+      }
     },
     "aura_materials_people": {
       "type": "section",
@@ -3957,7 +3958,7 @@
                     "label": "Our materials",
                     "link": "/pages/about-us#materials",
                     "open_in_new_tab": false,
-                    "style_class": "button-custom",
+                    "style_class": "button",
                     "custom_button_background": "rgba(0,0,0,0)",
                     "custom_button_text": "{{ settings.color_palette.background }}",
                     "custom_button_border": "{{ settings.color_palette.background }}",
@@ -4047,7 +4048,7 @@
                     "label": "Our artisans",
                     "link": "/pages/about-us#artisans",
                     "open_in_new_tab": false,
-                    "style_class": "button-custom",
+                    "style_class": "button",
                     "custom_button_background": "rgba(0,0,0,0)",
                     "custom_button_text": "{{ settings.color_palette.background }}",
                     "custom_button_border": "{{ settings.color_palette.background }}",
@@ -4137,7 +4138,7 @@
                     "label": "About us",
                     "link": "/pages/about-us#founders",
                     "open_in_new_tab": false,
-                    "style_class": "button-custom",
+                    "style_class": "button",
                     "custom_button_background": "rgba(0,0,0,0)",
                     "custom_button_text": "{{ settings.color_palette.background }}",
                     "custom_button_border": "{{ settings.color_palette.background }}",
