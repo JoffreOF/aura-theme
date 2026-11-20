@@ -281,7 +281,7 @@
                 "font": "var(--font-heading--family)",
                 "font_size": "2.75rem",
                 "font_size_mobile": "1.875rem",
-                "weight": "600",
+                "weight": "500",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
