@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "gold_artifact_why": {
       "type": "section",
@@ -2515,7 +2516,7 @@
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
-                "border": "solid",
+                "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
                 "border_color": "{{ settings.color_palette.background }}",
@@ -2594,109 +2595,6 @@
             },
             "group_18": {
               "type": "group",
-              "name": "Mark-to-market",
-              "settings": {
-                "content_direction": "column",
-                "vertical_on_mobile": true,
-                "horizontal_alignment": "flex-start",
-                "vertical_alignment": "center",
-                "align_baseline": false,
-                "horizontal_alignment_flex_direction_column": "flex-start",
-                "vertical_alignment_flex_direction_column": "flex-start",
-                "gap": 8,
-                "width": "custom",
-                "custom_width": 32,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fill",
-                "custom_height": 100,
-                "background_media": "none",
-                "background_color": "",
-                "video_position": "cover",
-                "background_image_position": "cover",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "solid",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_color": "",
-                "border_radius": 0,
-                "link": "",
-                "open_in_new_tab": false,
-                "placeholder": "",
-                "visibility": "all",
-                "mobile_first": false,
-                "scroll_on_mobile": false,
-                "padding-block-start": 24,
-                "padding-block-end": 28,
-                "padding-inline-start": 24,
-                "padding-inline-end": 24
-              },
-              "blocks": {
-                "text_18": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Next</p>",
-                    "width": "fit-content",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "0.75rem",
-                    "font_size_mobile": "",
-                    "weight": "",
-                    "line_height": "normal",
-                    "letter_spacing": "loose",
-                    "case": "uppercase",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color9 }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
-                "text_19": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<h2>From gold to jewelry: how we price every piece</h2>",
-                    "width": "fit-content",
-                    "max_width": "none",
-                    "alignment": "left",
-                    "type_preset": "custom",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "2.25rem",
-                    "font_size_mobile": "1.75rem",
-                    "weight": "300",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.background }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "text_18",
-                "text_19"
-              ]
-            },
-            "group_18": {
-              "type": "group",
               "name": "Buttons",
               "settings": {
                 "content_direction": "row",
@@ -2721,7 +2619,7 @@
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
-                "border": "solid",
+                "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
                 "border_color": "",
