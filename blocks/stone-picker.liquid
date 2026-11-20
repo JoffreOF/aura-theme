@@ -1,0 +1,451 @@
+{%- doc -%}
+  Stone picker (PDP artifact): a pill dropdown listing the product's "Stone" (or "Piedra") option values, each with
+  its swatch, "Natural · Precious" line and price ("Included", "+ $228", "Not available"). Stone details come from the
+  Stone library (metaobjects of type "stone", matched by "label", ignoring case). Picking a stone selects the matching
+  option in the product's variant picker (the Stone row there is hidden), so the price, cart and checkout follow the
+  theme's own variant handling. Refreshes on every variant change (assets/variant-live.js).
+  Renders nothing for products without a Stone option.
+{%- enddoc -%}
+
+{%- liquid
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+
+  assign stone_option = nil
+  for option in product.options_with_values
+    assign option_name = option.name | strip | downcase
+    if option_name == 'stone' or option_name == 'piedra'
+      assign stone_option = option
+    endif
+  endfor
+
+  comment
+    Baseline for "difference" prices: the variant (at the selected size) of the stone marked "included",
+    else the cheapest available stone.
+  endcomment
+  assign base_cents = nil
+  if stone_option
+    for value in stone_option.values
+      assign wanted = value.name | strip | downcase
+      for stone in metaobjects.stone.values
+        assign stone_label = stone.label.value | strip | downcase
+        if stone_label == wanted and stone.included.value == true and value.variant
+          assign base_cents = value.variant.price
+        endif
+      endfor
+    endfor
+    if base_cents == nil
+      for value in stone_option.values
+        if value.available and value.variant
+          if base_cents == nil or value.variant.price < base_cents
+            assign base_cents = value.variant.price
+          endif
+        endif
+      endfor
+    endif
+  endif
+-%}
+
+{%- if stone_option -%}
+  <script src="{{ 'stone-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <variant-live
+    class="stone-picker-block spacing-style"
+    data-block-id="{{ block.id }}"
+    data-product-id="{{ product.id }}"
+    style="
+      {% render 'spacing-padding', settings: block.settings %}
+      --stone-picker-line: {{ block.settings.line_color }};
+      {% if block.settings.list_background != blank %}--stone-picker-list-bg: {{ block.settings.list_background }};{% endif %}
+      {% if block.settings.hover_background != blank %}--stone-picker-hover-bg: {{ block.settings.hover_background }};{% endif %}
+      --stone-picker-radius: {{ block.settings.list_radius }}px;
+    "
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.label != blank -%}
+      <span class="stone-picker__label" id="StoneLabel-{{ block.id }}">{{ block.settings.label }}</span>
+    {%- endif -%}
+
+    {%- capture rows -%}
+      {%- for value in stone_option.values -%}
+        {%- liquid
+          assign entry = nil
+          assign wanted = value.name | strip | downcase
+          for stone in metaobjects.stone.values
+            assign stone_label = stone.label.value | strip | downcase
+            if stone_label == wanted
+              assign entry = stone
+              break
+            endif
+          endfor
+
+          assign row_name = entry.name.value | default: value.name
+          assign row_meta = ''
+          if entry.origin.value != blank and entry.tier.value != blank
+            assign row_meta = entry.origin.value | append: ' · ' | append: entry.tier.value
+          else
+            assign row_meta = entry.origin.value | default: entry.tier.value
+          endif
+
+          assign disabled = false
+          if entry and entry.available.value == false
+            assign disabled = true
+          endif
+          if value.available == false
+            assign disabled = true
+          endif
+
+          assign row_price = ''
+          if disabled
+            assign row_price = 'blocks.stone_picker.not_available' | t
+          elsif entry.included.value == true
+            assign row_price = 'blocks.stone_picker.included' | t
+          elsif block.settings.price_display == 'premium'
+            if entry.premium.value > 0
+              assign premium_cents = entry.premium.value | times: 100 | round
+              assign row_price = premium_cents | money_without_trailing_zeros | prepend: '+ '
+            endif
+          elsif base_cents != nil and value.variant
+            assign diff = value.variant.price | minus: base_cents
+            if diff > 0
+              assign row_price = diff | money_without_trailing_zeros | prepend: '+ '
+            endif
+          endif
+        -%}
+        {%- capture swatch -%}{%- render 'stone-swatch-style', stone: entry -%}{%- endcapture -%}
+        {%- if value.selected -%}
+          {%- assign selected_swatch = swatch -%}
+          {%- assign selected_name = value.name -%}
+          {%- assign selected_price = row_price -%}
+        {%- endif -%}
+        <button
+          type="button"
+          class="stone-picker__option"
+          role="option"
+          data-stone-value="{{ value.name | escape }}"
+          aria-selected="{{ value.selected }}"
+          {% if disabled %}disabled aria-disabled="true"{% endif %}
+        >
+          <i class="stone-picker__swatch" style="{{ swatch }}" aria-hidden="true"></i>
+          <span class="stone-picker__name">
+            {{- row_name -}}
+            {%- if row_meta != blank -%}<small>{{ row_meta }}</small>{%- endif -%}
+          </span>
+          <span class="stone-picker__price">{{ row_price }}</span>
+        </button>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <stone-picker class="stone-picker">
+      <button
+        type="button"
+        class="stone-picker__toggle"
+        data-stone-toggle
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        {% if block.settings.label != blank %}aria-labelledby="StoneLabel-{{ block.id }} StoneSelected-{{ block.id }}"{% endif %}
+      >
+        <i class="stone-picker__swatch" style="{{ selected_swatch }}" aria-hidden="true"></i>
+        <span class="stone-picker__current" id="StoneSelected-{{ block.id }}">{{ selected_name }}</span>
+        <span class="stone-picker__current-price">{{ selected_price }}</span>
+        <span class="stone-picker__caret" aria-hidden="true"></span>
+      </button>
+      <div class="stone-picker__list" role="listbox"{% if block.settings.label != blank %} aria-labelledby="StoneLabel-{{ block.id }}"{% endif %}>
+        {{- rows -}}
+      </div>
+    </stone-picker>
+  </variant-live>
+
+  {%- if block.settings.hide_option_buttons -%}
+    {%- style -%}
+      .shopify-section:has([data-block-id="{{ block.id }}"]) .variant-option:has(input[data-option-name="{{ stone_option.name | escape }}"]),
+      .shopify-section:has([data-block-id="{{ block.id }}"]) .variant-option:has(select[name="options[{{ stone_option.name | escape }}]"]) {
+        display: none;
+      }
+    {%- endstyle -%}
+  {%- endif -%}
+{%- elsif request.design_mode -%}
+  <p class="stone-picker__hint" {{ block.shopify_attributes }}>
+    Stone picker: this product has no "Stone" option, so nothing shows here. Products with a Stone option (Size ×
+    Stone variants) show the dropdown.
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .stone-picker-block {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: 100%;
+  }
+
+  .stone-picker__label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+  }
+
+  .stone-picker {
+    position: relative;
+    display: block;
+  }
+
+  .stone-picker__toggle {
+    font: inherit;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 18px 8px 8px;
+    border: 1px solid var(--stone-picker-line, currentColor);
+    border-radius: 999px;
+    background: none;
+    color: var(--color-foreground);
+    font-size: 14px;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .stone-picker__toggle:focus-visible {
+    outline: 2px solid var(--stone-picker-line, currentColor);
+    outline-offset: 2px;
+  }
+
+  .stone-picker__current {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .stone-picker__current-price {
+    font-size: 13px;
+    color: rgb(var(--color-foreground-rgb) / 0.75);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .stone-picker__caret {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    margin: 0 2px 4px 6px;
+    border-right: 1.5px solid var(--stone-picker-line, currentColor);
+    border-bottom: 1.5px solid var(--stone-picker-line, currentColor);
+    transform: rotate(45deg);
+    transition: transform 0.3s;
+  }
+
+  .stone-picker[open] .stone-picker__caret {
+    transform: rotate(225deg);
+    margin-bottom: -4px;
+  }
+
+  .stone-picker__list {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(100% + 8px);
+    z-index: 5;
+    max-height: 300px;
+    overflow: auto;
+    padding: 8px;
+    border: 1px solid var(--stone-picker-line, currentColor);
+    border-radius: var(--stone-picker-radius, 22px);
+    background: var(--stone-picker-list-bg, var(--color-background));
+    box-shadow: 0 24px 48px -24px rgb(58 22 48 / 0.35);
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stone-picker[open] .stone-picker__list {
+    display: flex;
+  }
+
+  .stone-picker__option {
+    font: inherit;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 14px 7px 8px;
+    border: 0;
+    border-radius: 14px;
+    background: none;
+    color: var(--color-foreground);
+    font-size: 14px;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .stone-picker__option small {
+    display: block;
+    margin-top: 1px;
+    font-size: 11px;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+  }
+
+  .stone-picker__price {
+    font-size: 13px;
+    color: rgb(var(--color-foreground-rgb) / 0.75);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .stone-picker__option:hover,
+  .stone-picker__option:focus-visible,
+  .stone-picker__option[aria-selected='true'] {
+    background: var(--stone-picker-hover-bg, rgb(var(--color-foreground-rgb) / 0.06));
+    outline: none;
+  }
+
+  .stone-picker__option[aria-selected='true'] .stone-picker__price {
+    color: var(--color-foreground);
+    font-weight: 500;
+  }
+
+  .stone-picker__option:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .stone-picker__option:disabled:hover {
+    background: none;
+  }
+
+  .stone-picker__swatch {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+    transition: background 0.5s;
+  }
+
+  .stone-picker__hint {
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    border: 1px dashed currentColor;
+    opacity: 0.7;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Stone picker",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows a dropdown for products with a \"Stone\" option. Stone details (swatch, origin, tier, premium, \"Included\", \"Not available\") come from Content > Metaobjects > Stone, matched by Label."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Stone"
+    },
+    {
+      "type": "select",
+      "id": "price_display",
+      "label": "Price next to each stone",
+      "options": [
+        { "value": "difference", "label": "Price difference (what the customer pays extra)" },
+        { "value": "premium", "label": "Stone premium before markup (as in the design)" }
+      ],
+      "default": "difference",
+      "info": "Price difference compares with the included stone (Zircon) at the selected size."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_option_buttons",
+      "label": "Hide the Stone row in the variant picker",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line color",
+      "default": "#4A253D"
+    },
+    {
+      "type": "color",
+      "id": "list_background",
+      "label": "List background",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "hover_background",
+      "label": "Selected row background",
+      "alpha": true
+    },
+    {
+      "type": "range",
+      "id": "list_radius",
+      "label": "List corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stone picker",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

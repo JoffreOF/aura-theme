@@ -1,0 +1,20 @@
+{%- doc -%}
+  Outputs the inline CSS background for a stone's round swatch (no wrapper): the entry's "swatch_image" when set,
+  else a gem-like gradient built from its "color", else a neutral pearl-white gradient (no entry, or neither field).
+  Use with capture: {% capture style %}{% render 'stone-swatch-style', stone: entry %}{% endcapture %}
+
+  @param {object} [stone] - A metaobject of type "stone" (may be blank)
+{%- enddoc -%}
+
+{%- liquid
+  if stone.swatch_image.value != blank
+    assign swatch_url = stone.swatch_image.value | image_url: width: 96
+    echo 'background: center / cover no-repeat url(' | append: swatch_url | append: ');'
+  elsif stone.color.value != blank
+    assign c = stone.color.value
+    echo 'background: radial-gradient(circle at 35% 30%, color-mix(in srgb, ' | append: c | append: ' 40%, #fff), '
+    echo c | append: ' 55%, color-mix(in srgb, ' | append: c | append: ' 65%, #000));'
+  else
+    echo 'background: radial-gradient(circle at 35% 30%, #fff, #e9ecf2 55%, #c9cfda);'
+  endif
+-%}

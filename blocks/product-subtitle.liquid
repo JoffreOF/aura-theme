@@ -1,0 +1,153 @@
+{%- doc -%}
+  Product subtitle under the title (PDP artifact): "Solid 18k Yellow Gold (750) · Natural Sapphire". The gold type
+  comes from specs.gold_type; the stone is the selected "Stone" option value, else specs.stone_type. Changes with
+  the selected variant (assets/variant-live.js).
+{%- enddoc -%}
+
+{%- liquid
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+
+  assign stone = ''
+  for option in product.options_with_values
+    assign option_name = option.name | strip | downcase
+    if option_name == 'stone' or option_name == 'piedra'
+      assign stone = option.selected_value
+    endif
+  endfor
+  if stone == blank and block.settings.show_fixed_stone
+    assign stone = product.metafields.specs.stone_type.value
+  endif
+
+  assign parts = product.metafields.specs.gold_type.value | default: ''
+  if stone != blank
+    if parts != blank
+      assign parts = parts | append: block.settings.separator
+    endif
+    assign parts = parts | append: stone
+  endif
+-%}
+
+<variant-live
+  class="product-subtitle spacing-style"
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product.id }}"
+  style="
+    {% render 'spacing-padding', settings: block.settings %}
+    --subtitle-size: {{ block.settings.font_size }}px;
+    {% if block.settings.text_color != blank %}--subtitle-color: {{ block.settings.text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if parts != blank -%}
+    <span class="product-subtitle__text">{{ parts }}</span>
+  {%- endif -%}
+</variant-live>
+
+{% stylesheet %}
+  .product-subtitle {
+    display: block;
+    width: 100%;
+  }
+
+  .product-subtitle__text {
+    font-size: var(--subtitle-size, 14px);
+    line-height: 1.45;
+    color: var(--subtitle-color, rgb(var(--color-foreground-rgb) / 0.75));
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product subtitle",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Gold type (specs.gold_type) and the selected stone. Updates when the stone changes."
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": " · "
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fixed_stone",
+      "label": "Show the stone for pieces without a Stone option",
+      "info": "Uses the Stone type field (specs.stone_type).",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "alpha": true
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product subtitle",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

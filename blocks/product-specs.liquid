@@ -1,0 +1,215 @@
+{%- doc -%}
+  Specifications from the product's metafields (PDP artifact, "Specifications" accordion):
+  "Solid 18k Yellow Gold (750) · 5.60 g · Marquise stone, 11.00 x 5.50 mm · 1 stone". Gold type, the selected
+  variant's gold.weight_g, stone shape and size, stone count, length, width and diameter. Empty fields are left out.
+  Changes with the selected variant (assets/variant-live.js). Works inside an accordion row.
+{%- enddoc -%}
+
+{%- liquid
+  assign product = closest.product
+  if request.visual_preview_mode and product == blank
+    assign product = collections.all.products.first
+  endif
+  assign variant = product.selected_or_first_available_variant
+  assign specs = product.metafields.specs
+
+  assign items = ''
+  assign sep = '|~|'
+
+  if specs.gold_type.value != blank
+    assign items = items | append: specs.gold_type.value | append: sep
+  endif
+
+  assign weight = variant.metafields.gold.weight_g.value
+  if weight != blank and weight > 0
+    assign scaled = weight | times: 100 | round
+    assign fraction = scaled | modulo: 100
+    assign whole = scaled | minus: fraction | divided_by: 100
+    if fraction < 10
+      assign fraction = '0' | append: fraction
+    endif
+    assign grams = whole | append: '.' | append: fraction | append: ' g'
+    assign items = items | append: grams | append: sep
+  endif
+
+  assign stone_text = ''
+  if specs.stone_shape.value != blank
+    assign stone_text = specs.stone_shape.value | append: ' ' | append: block.settings.stone_word
+  endif
+  if specs.stone_size.value != blank
+    if stone_text != blank
+      assign stone_text = stone_text | append: ', '
+    endif
+    assign stone_text = stone_text | append: specs.stone_size.value
+  endif
+  if stone_text != blank
+    assign items = items | append: stone_text | append: sep
+  endif
+
+  if specs.stone_count.value != blank and specs.stone_count.value > 0
+    if specs.stone_count.value == 1
+      assign count_text = '1 ' | append: block.settings.stone_word
+    else
+      assign count_text = specs.stone_count.value | append: ' ' | append: block.settings.stones_word
+    endif
+    assign items = items | append: count_text | append: sep
+  endif
+
+  assign dimension_keys = 'length,width,diameter' | split: ','
+  for key in dimension_keys
+    assign dim = specs[key].value
+    if dim != blank
+      assign dim_text = dim.value | append: ' ' | append: dim.unit | replace: ' MILLIMETERS', ' mm' | replace: ' CENTIMETERS', ' cm'
+      assign label = 'blocks.product_specs.' | append: key | t
+      assign items = items | append: label | append: ' ' | append: dim_text | append: sep
+    endif
+  endfor
+
+  assign list = items | split: sep
+-%}
+
+<variant-live
+  class="product-specs spacing-style product-specs--{{ block.settings.layout }}"
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product.id }}"
+  style="
+    {% render 'spacing-padding', settings: block.settings %}
+    --specs-size: {{ block.settings.font_size }}px;
+    {% if block.settings.text_color != blank %}--specs-color: {{ block.settings.text_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if list.size > 0 -%}
+    {%- if block.settings.layout == 'list' -%}
+      <ul class="product-specs__list">
+        {%- for item in list -%}<li>{{ item }}</li>{%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="product-specs__line">{{ list | join: ' · ' }}</p>
+    {%- endif -%}
+  {%- elsif request.design_mode -%}
+    <p class="product-specs__line">Specifications: this product has no specs metafields filled in.</p>
+  {%- endif -%}
+</variant-live>
+
+{% stylesheet %}
+  .product-specs {
+    display: block;
+    width: 100%;
+    font-size: var(--specs-size, 14px);
+    line-height: 1.6;
+    color: var(--specs-color, rgb(var(--color-foreground-rgb) / 0.75));
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .product-specs__line {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .product-specs__list {
+    margin: 0;
+    padding-inline-start: 1.1em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product specifications",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Filled from the product's specs metafields and the variant's gold weight. Empty fields are skipped."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "line", "label": "One line" },
+        { "value": "list", "label": "List" }
+      ],
+      "default": "line"
+    },
+    {
+      "type": "text",
+      "id": "stone_word",
+      "label": "Word for one stone",
+      "default": "stone"
+    },
+    {
+      "type": "text",
+      "id": "stones_word",
+      "label": "Word for several stones",
+      "default": "stones"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "alpha": true
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product specifications",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

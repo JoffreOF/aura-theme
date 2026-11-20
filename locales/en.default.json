@@ -282,7 +282,20 @@
       "gold_detail": "{{ grams }} g × {{ price }} / g (18k)",
       "craftsmanship": "Craftsmanship & setting",
       "markup": "Our markup on gold: ×{{ markup }}",
-      "portfolio_note_html": "<strong>Adds {{ amount }}</strong> in gold value to your portfolio. Gemstones are not included in the gold valuation."
+      "portfolio_note_html": "<strong>Adds {{ amount }}</strong> in gold value to your portfolio. Gemstones are not included in the gold valuation.",
+      "gold_detail_fine": "{{ grams }} g × {{ price }}/g",
+      "stone": "Stone",
+      "stone_included": "Included",
+      "markup_added": "× {{ markup }} markup"
+    },
+    "stone_picker": {
+      "included": "Included",
+      "not_available": "Not available"
+    },
+    "product_specs": {
+      "length": "Length",
+      "width": "Width",
+      "diameter": "Diameter"
     },
     "gold_price_bar": {
       "label": "Today's gold price",

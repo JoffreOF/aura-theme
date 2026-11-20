@@ -8,6 +8,11 @@
 -%}
 
 {% unless product_resource == blank %}
+  {%- if block.settings.pill_buttons -%}
+    {%- style -%}
+      variant-picker[data-block-id="{{ block.id }}"] { --variant-picker-button-radius: 999px; }
+    {%- endstyle -%}
+  {%- endif -%}
   {% render 'variant-main-picker', product_resource: product_resource, section: section, product: product %}
 {% endunless %}
 
@@ -35,6 +40,13 @@
         }
       ],
       "default": "buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "pill_buttons",
+      "label": "Round (pill) buttons",
+      "info": "Overrides the variant button corner radius from Theme settings for this block.",
+      "default": false
     },
     {
       "type": "checkbox",

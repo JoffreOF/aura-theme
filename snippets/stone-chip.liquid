@@ -9,22 +9,18 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign swatch_style = 'background: radial-gradient(circle at 35% 30%, #fff, #e9ecf2 55%, #c9cfda);'
+  assign match = nil
   assign wanted = name | strip | downcase
   for stone in metaobjects.stone.values
     assign stone_label = stone.label.value | default: stone.name.value | strip | downcase
     assign stone_name = stone.name.value | strip | downcase
     if stone_label == wanted or stone_name == wanted
-      if stone.swatch_image.value != blank
-        assign swatch_url = stone.swatch_image.value | image_url: width: 96
-        assign swatch_style = 'background: center / cover no-repeat url(' | append: swatch_url | append: ');'
-      elsif stone.color.value != blank
-        assign swatch_style = 'background: ' | append: stone.color.value | append: ';'
-      endif
+      assign match = stone
       break
     endif
   endfor
 -%}
+{%- capture swatch_style -%}{%- render 'stone-swatch-style', stone: match -%}{%- endcapture -%}
 
 <span class="stone-chip{% if class != blank %} {{ class }}{% endif %}" data-stone-chip>
   <i class="stone-chip__swatch" style="{{ swatch_style }}" aria-hidden="true"></i>
