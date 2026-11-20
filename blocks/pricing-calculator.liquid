@@ -71,6 +71,7 @@
     {% if s.input_background != blank %}--pc-input-bg: {{ s.input_background }};{% endif %}
     {% if s.price_background != blank %}--pc-price-bg: {{ s.price_background }};{% endif %}
     {% if s.price_text != blank %}--pc-price-text: {{ s.price_text }};{% endif %}
+    --pc-price-radius: {{ s.price_radius | default: 0 }}px;
     {% if s.caption_color != blank %}--pc-caption: {{ s.caption_color }};{% endif %}
     {% if s.card_border_color != blank %}--pc-card-border: {{ s.card_border_color }};{% endif %}
   "
@@ -255,6 +256,7 @@
     font-size: var(--pc-price-size, 52px);
     color: var(--pc-price-text, #fff);
     background: var(--pc-price-bg, #4a253d);
+    border-radius: var(--pc-price-radius, 0);
   }
 
   .pc__note {
@@ -365,6 +367,11 @@
       margin-top: 4px;
       padding: 16px 18px;
       background: var(--pc-price-bg, #4a253d);
+      border-radius: var(--pc-price-radius, 0);
+    }
+
+    .pc__factor--price .pc__price {
+      border-radius: 0;
     }
 
     .pc__factor--price .pc__caption {
@@ -608,6 +615,16 @@
       "type": "color",
       "id": "price_text",
       "label": "Price text"
+    },
+    {
+      "type": "range",
+      "id": "price_radius",
+      "label": "Price box corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     },
     {
       "type": "color",

@@ -36,6 +36,7 @@
       --price-example-formula-size-mobile: {{ s.formula_size_mobile }}px;
       --price-example-amount-size: {{ s.amount_size }}px;
       --price-example-amount-size-mobile: {{ s.amount_size_mobile }}px;
+      --price-example-radius: {{ s.corner_radius | default: 0 }}px;
       {% if s.border_color != blank %}--price-example-border: {{ s.border_color }};{% endif %}
       {% if s.highlight_border_color != blank %}--price-example-highlight-border: {{ s.highlight_border_color }};{% endif %}
       {% if s.text_color != blank %}--price-example-text: {{ s.text_color }};{% endif %}
@@ -65,6 +66,7 @@
     height: 100%;
     color: var(--price-example-text, var(--color-foreground));
     border: 1px solid var(--price-example-border, rgb(var(--color-foreground-rgb) / var(--opacity-20)));
+    border-radius: var(--price-example-radius, 0);
   }
 
   .price-example--highlighted {
@@ -238,6 +240,16 @@
       "id": "highlight_border_color",
       "label": "Highlighted outline",
       "placeholder": "Default"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
     },
     {
       "type": "color",

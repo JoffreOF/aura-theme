@@ -17002,6 +17002,20 @@
         "id": "cart_installments_text",
         "label": "Text",
         "default": "{{ settings.color_palette.background }}"
+      },
+      {
+        "type": "header",
+        "content": "Box corners (bag, bag drawer, pre-checkout)"
+      },
+      {
+        "type": "range",
+        "id": "cart_box_radius",
+        "label": "Interest-free and portfolio boxes",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 12
       }
     ]
   }
