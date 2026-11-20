@@ -102,6 +102,21 @@ export function availableRanges(today, firstPurchase) {
   return shown.length ? [...shown, 'all'] : [];
 }
 
+/** Length of each range button in days. */
+export const RANGE_DAYS = { '1w': 7, '1m': 30, '6m': 182, '1y': 365 };
+
+/**
+ * Which range buttons make sense: a range shows only when the first purchase is MORE than that many days ago
+ * (1W after 7 days, 1M after 30, 6M after 182, 1Y after 365). 'All' shows with them. When the first purchase is
+ * 7 days ago or less nothing is returned, so the whole button row is hidden.
+ */
+export function availableRanges(today, firstPurchase) {
+  if (!firstPurchase) return [];
+  const age = (dateMs(today) - dateMs(firstPurchase)) / DAY;
+  const shown = Object.keys(RANGE_DAYS).filter((key) => age > RANGE_DAYS[key]);
+  return shown.length ? [...shown, 'all'] : [];
+}
+
 /** First date shown for a range button, given today. 'all' starts at the first purchase. */
 export function rangeStart(range, today, firstPurchase) {
   const days = RANGE_DAYS[range];
