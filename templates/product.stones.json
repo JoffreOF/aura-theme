@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -444,7 +445,7 @@
                 "show_markup": true,
                 "show_portfolio_note": false,
                 "weight_decimals": "2",
-                "gold_basis": "fine",
+                "gold_basis": "18k",
                 "markup_style": "added",
                 "show_stone": true,
                 "show_stone_note": true,
