@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "hero_iyt6zg": {
       "type": "hero",
@@ -1995,7 +1994,8 @@
             "tooltip_background": "",
             "tooltip_text": "",
             "padding-block-start": 0,
-            "padding-block-end": 0
+            "padding-block-end": 0,
+            "fix_note": "Updated every day at 10:00 AM, except holidays"
           },
           "blocks": {}
         }
@@ -3838,7 +3838,8 @@
         "line_color": "",
         "padding-block-start": 24,
         "padding-block-end": 64
-      }
+      },
+      "disabled": true
     },
     "aura_materials_people": {
       "type": "section",
