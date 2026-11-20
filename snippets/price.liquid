@@ -51,10 +51,10 @@
   endif
 
   # Aura: on a product card (also the "You may also like" cards on a product page, any product that is not the page's
-  # own product) a piece whose sizes cost different amounts shows "From" and its lowest price. Single-price pieces
-  # and the product page's own price are unchanged.
+  # own product) every piece shows "From" and its lowest price, single-price pieces too (decided 2026-11-20; before,
+  # only pieces whose sizes cost different amounts). The product page's own price is unchanged.
   assign show_from = false
-  if product_resource.price_varies and has_volume_pricing != true and product_resource.handle != product.handle
+  if has_volume_pricing != true and product_resource.handle != product.handle
     assign show_from = true
     assign from_price = product_resource.price_min
   endif
