@@ -16118,6 +16118,17 @@
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
       },
       {
+        "type": "select",
+        "id": "drawer_desktop_mode",
+        "label": "Side panels on desktop",
+        "info": "Bag drawer, filters, store pickup and chat. Over the page: slides over the page with a dark background, the page does not move (phones always work this way). Push the page: the page moves left to make room.",
+        "options": [
+          { "value": "overlay", "label": "Over the page" },
+          { "value": "push", "label": "Push the page" }
+        ],
+        "default": "overlay"
+      },
+      {
         "type": "header",
         "content": "t:content.cart_features"
       },
