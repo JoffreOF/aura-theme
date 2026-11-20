@@ -269,8 +269,14 @@
     border: var(--panel-border, 0);
   }
 
+  /* Nothing to show (no weight, or the price does not cover gold + stone): no empty frame either */
   .pricing-panel:not(:has(.pricing-panel__header)) {
     padding: 0;
+    border: 0;
+  }
+
+  .pricing-panel:not(:has(.pricing-panel__header, .pricing-panel__hint)) {
+    display: none;
   }
 
   .pricing-panel__header {
