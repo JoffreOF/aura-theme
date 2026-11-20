@@ -643,7 +643,7 @@
                     "align_baseline": false,
                     "horizontal_alignment_flex_direction_column": "flex-start",
                     "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 4,
+                    "gap": 2,
                     "width": "fill",
                     "custom_width": 70,
                     "width_mobile": "fill",
@@ -744,7 +744,7 @@
                         "letter_spacing": "normal",
                         "case": "none",
                         "text_color": "",
-                        "padding-block-start": 0,
+                        "padding-block-start": 4,
                         "padding-block-end": 4,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
