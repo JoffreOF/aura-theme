@@ -444,7 +444,7 @@
                 "show_markup": true,
                 "show_portfolio_note": false,
                 "weight_decimals": "2",
-                "gold_basis": "fine",
+                "gold_basis": "18k",
                 "markup_style": "added",
                 "show_stone": true,
                 "show_stone_note": true,
