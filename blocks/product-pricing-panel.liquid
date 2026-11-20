@@ -58,9 +58,13 @@
       if stone_entry.included.value == true or stone_cents == 0
         assign stone_text = 'blocks.pricing_panel.stone_included' | t
       endif
-      capture stone_swatch
-        render 'stone-swatch-style', stone: stone_entry
-      endcapture
+      comment
+        The bar and the dot use the stone's flat colour (metaobject "color"), never its swatch image.
+      endcomment
+      assign stone_swatch = 'background: ' | append: stone_entry.color.value | append: ';'
+      if stone_entry.color.value == blank
+        assign stone_swatch = 'background: #e9ecf2;'
+      endif
       assign gram_price_text = gram_price | times: 100 | round | money
 
       comment

@@ -14,6 +14,18 @@
 
 {% render 'theme-drawer-styles' %}
 
+{%- comment -%}
+  Side panels on desktop (Theme settings > Cart): 'overlay' opens every drawer over the page with a backdrop at all
+  widths (like the older Horizon), 'push' keeps Horizon's squeeze on wide screens. The flag is read by
+  theme-drawer.js and the scripts below. Overlay drawers never reopen on the next page.
+{%- endcomment -%}
+{%- if settings.drawer_desktop_mode != 'push' -%}
+  <script>
+    document.documentElement.setAttribute('data-drawer-overlay', '');
+    try { sessionStorage.removeItem('theme-drawer-open'); } catch (e) {}
+  </script>
+{%- endif -%}
+
 <script
   type="module"
   src="{{ 'theme-drawer.js' | asset_url }}"
@@ -24,6 +36,7 @@
   /* Runs synchronously during HTML parsing — opens the correct drawer on first
      paint if navigation state was saved, so it renders with the rest of the page. */
   (function () {
+    if (document.documentElement.hasAttribute('data-drawer-overlay')) return;
     var drawerIds = (sessionStorage.getItem('theme-drawer-open') || '').split(',').filter(Boolean);
     if (!drawerIds.length) return;
 
@@ -84,11 +97,13 @@
 >
   const pageWrapper = document.querySelector('.page-wrapper');
   const squeezeQuery = window.matchMedia('(min-width: 990px)');
+  // Overlay mode (theme setting): drawers never push the page and are never restored on the next page.
+  const overlayMode = document.documentElement.hasAttribute('data-drawer-overlay');
 
   // ── Squeeze coordination ──
   // Listens to all drawers. Only squeezes on wide viewports.
   document.addEventListener('theme-drawer:open', () => {
-    if (squeezeQuery.matches) {
+    if (squeezeQuery.matches && !overlayMode) {
       pageWrapper?.classList.add('page-wrapper--drawer-open');
     }
   });
@@ -102,13 +117,14 @@
 
   squeezeQuery.addEventListener('change', () => {
     const openDrawer = document.querySelector('theme-drawer[open]');
-    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches);
+    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches && !overlayMode);
   });
 
   // ── State persistence ──
   // Store open drawer IDs sorted by their visual stack order so
   // the restore script can recreate the same z-index layering.
   function persistDrawerState() {
+    if (overlayMode) return;
     const openDrawers = Array.from(document.querySelectorAll('theme-drawer[open]:not([no-persist])'));
     if (!openDrawers.length) {
       sessionStorage.removeItem('theme-drawer-open');

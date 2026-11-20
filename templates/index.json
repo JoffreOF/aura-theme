@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_iyt6zg": {
       "type": "hero",
@@ -642,7 +643,7 @@
                     "align_baseline": false,
                     "horizontal_alignment_flex_direction_column": "flex-start",
                     "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 4,
+                    "gap": 2,
                     "width": "fill",
                     "custom_width": 70,
                     "width_mobile": "fill",
@@ -743,7 +744,7 @@
                         "letter_spacing": "normal",
                         "case": "none",
                         "text_color": "",
-                        "padding-block-start": 0,
+                        "padding-block-start": 4,
                         "padding-block-end": 4,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
@@ -760,7 +761,7 @@
                         "note_reduction": 2,
                         "main_preset": "custom",
                         "main_font": "var(--font-body--family)",
-                        "main_font_size": "0.8125rem",
+                        "main_font_size": "0.75rem",
                         "main_font_size_mobile": "0.75rem",
                         "main_weight": "",
                         "main_line_height": "normal",
@@ -771,8 +772,8 @@
                         "border_color": "#4a253d",
                         "border_width": 1,
                         "corner_radius": 12,
-                        "padding-block-start": 5,
-                        "padding-block-end": 5,
+                        "padding-block-start": 6,
+                        "padding-block-end": 6,
                         "padding-inline-start": 16,
                         "padding-inline-end": 16
                       },
@@ -1994,8 +1995,7 @@
             "tooltip_background": "",
             "tooltip_text": "",
             "padding-block-start": 0,
-            "padding-block-end": 0,
-            "fix_note": "Updated every day at 10:00 AM, except holidays"
+            "padding-block-end": 0
           },
           "blocks": {}
         }
@@ -3838,8 +3838,7 @@
         "line_color": "",
         "padding-block-start": 24,
         "padding-block-end": 64
-      },
-      "disabled": true
+      }
     },
     "aura_materials_people": {
       "type": "section",

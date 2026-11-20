@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "main": {
       "type": "product-information",
@@ -429,7 +428,7 @@
                 "line_color": "#4a253d",
                 "list_background": "#fffaf8",
                 "hover_background": "#f2eae6",
-                "list_radius": 22,
+                "list_radius": 12,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -1260,7 +1259,7 @@
                     "align_baseline": false,
                     "horizontal_alignment_flex_direction_column": "flex-start",
                     "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 4,
+                    "gap": 2,
                     "width": "fill",
                     "custom_width": 70,
                     "width_mobile": "fill",
@@ -1290,7 +1289,6 @@
                   "blocks": {
                     "product_eyebrow_a7Lq2p": {
                       "type": "product-eyebrow",
-                      "disabled": true,
                       "settings": {
                         "show_category": true,
                         "show_stone": true,
@@ -1301,7 +1299,7 @@
                         "type_preset": "custom",
                         "font": "var(--font-body--family)",
                         "font_size": "0.75rem",
-                        "font_size_mobile": "",
+                        "font_size_mobile": "0.6875rem",
                         "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "loose",
@@ -1326,9 +1324,9 @@
                         "max_width": "normal",
                         "alignment": "left",
                         "type_preset": "custom",
-                        "font": "var(--font-body--family)",
-                        "font_size": "0.9375rem",
-                        "font_size_mobile": "",
+                        "font": "var(--font-heading--family)",
+                        "font_size": "1.25rem",
+                        "font_size_mobile": "1.125rem",
                         "weight": "400",
                         "line_height": "normal",
                         "letter_spacing": "normal",
@@ -1356,14 +1354,14 @@
                         "alignment": "left",
                         "font": "var(--font-body--family)",
                         "font_size": "0.875rem",
-                        "font_size_mobile": "",
+                        "font_size_mobile": "0.8125rem",
                         "weight": "",
                         "line_height": "normal",
                         "letter_spacing": "normal",
                         "case": "none",
                         "text_color": "",
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
+                        "padding-block-start": 4,
+                        "padding-block-end": 4,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
                       },
@@ -1379,7 +1377,7 @@
                         "note_reduction": 2,
                         "main_preset": "custom",
                         "main_font": "var(--font-body--family)",
-                        "main_font_size": "0.8125rem",
+                        "main_font_size": "0.75rem",
                         "main_font_size_mobile": "0.75rem",
                         "main_weight": "",
                         "main_line_height": "normal",
@@ -1390,8 +1388,8 @@
                         "border_color": "#4a253d",
                         "border_width": 1,
                         "corner_radius": 12,
-                        "padding-block-start": 4,
-                        "padding-block-end": 4,
+                        "padding-block-start": 6,
+                        "padding-block-end": 6,
                         "padding-inline-start": 16,
                         "padding-inline-end": 16
                       },

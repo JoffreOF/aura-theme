@@ -84,7 +84,7 @@
     {%- else -%}
       <div
         class="cart-aura__installments-box"
-        style="background: {{ settings.cart_installments_background }}; border-color: {{ settings.cart_installments_border }}; color: {{ settings.cart_installments_text }};"
+        style="background: {{ settings.cart_installments_background }}; border-color: {{ settings.cart_installments_border }}; color: {{ settings.cart_installments_text }}; --cart-aura-box-radius: {{ settings.cart_box_radius | default: 12 }}px;"
       >
         <span class="cart-aura__icon" aria-hidden="true">
           <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
@@ -103,7 +103,7 @@
   {%- if portfolio_ok -%}
     <div
       class="cart-aura__portfolio{% if is_drawer %} cart-aura__portfolio--strip{% endif %}"
-      style="background: {{ settings.cart_portfolio_background }}; color: {{ settings.cart_portfolio_text }};"
+      style="background: {{ settings.cart_portfolio_background }}; color: {{ settings.cart_portfolio_text }}; --cart-aura-box-radius: {{ settings.cart_box_radius | default: 12 }}px;"
     >
       {%- if is_drawer -%}
         <span class="cart-aura__portfolio-text">
@@ -200,6 +200,7 @@
     gap: var(--gap-md);
     padding: var(--padding-md) var(--padding-lg);
     border: 1px solid;
+    border-radius: var(--cart-aura-box-radius, 12px);
     font-size: 15px;
   }
 
@@ -228,6 +229,7 @@
     padding: var(--padding-lg);
     background: var(--color-foreground);
     color: var(--color-background);
+    border-radius: var(--cart-aura-box-radius, 12px);
   }
 
   .cart-aura__portfolio .cart-aura__label {
