@@ -47,6 +47,18 @@
 
   capture pf_style
     render 'spacing-style', settings: section.settings
+    # The dark blocks use the homepage "Gold is the underlying" / "Marked to market daily" colours
+    # (only when the palette colour exists: an empty value would switch off the CSS fallbacks)
+    if settings.color_palette.background != blank
+      echo '--pf-dark-bg: ' | append: settings.color_palette.background | append: ';'
+    endif
+    if settings.color_palette.color2 != blank
+      echo '--pf-dark-text: ' | append: settings.color_palette.color2 | append: ';'
+      echo '--pf-dark-text-rgb: ' | append: settings.color_palette.color2.rgb | append: ';'
+    endif
+    if settings.color_palette.color7 != blank
+      echo '--pf-dark-muted: ' | append: settings.color_palette.color7 | append: ';'
+    endif
     if section.settings.accent_color != blank
       echo '--pf-accent: ' | append: section.settings.accent_color | append: ';'
     endif
@@ -180,37 +192,48 @@
       <p class="pf-status" data-empty hidden>{{ 'portfolio.empty' | t }}</p>
 
       <div class="pf-dashboard" data-dashboard hidden>
-        <div class="pf-cards">
-          <div class="pf-card">
-            <p class="pf-label">{{ 'portfolio.card_value' | t }}</p>
-            <p class="pf-card__value" data-card-value></p>
-            <p class="pf-card__sub" data-card-value-sub></p>
+        {%- comment -%} The homepage's dark "MY AURA" look: summary strip (value today, cost basis, change) and the chart {%- endcomment -%}
+        <section class="pf-dark">
+          <div class="pf-dark__bar">
+            <div class="pf-dark__sym">
+              <b>{{ 'portfolio.block_label' | t }}</b><span>{{ 'portfolio.block_sub' | t }}</span>
+            </div>
+            <div class="pf-dark__sym"><span>{{ 'portfolio.block_updated' | t }}</span></div>
           </div>
-          <div class="pf-card">
-            <p class="pf-label">{{ 'portfolio.card_cost' | t }}</p>
-            <p class="pf-card__value" data-card-cost></p>
-            <p class="pf-card__sub">{{ 'portfolio.card_cost_sub' | t }}</p>
+          <dl class="pf-sum">
+            <div>
+              <dt>{{ 'portfolio.card_value' | t }}</dt>
+              <dd class="pf-card__value" data-card-value></dd>
+              <dd class="pf-card__sub" data-card-value-sub></dd>
+            </div>
+            <div>
+              <dt>{{ 'portfolio.card_cost' | t }}</dt>
+              <dd class="pf-card__value" data-card-cost></dd>
+              <dd class="pf-card__sub">{{ 'portfolio.card_cost_sub' | t }}</dd>
+            </div>
+            <div>
+              <dt>{{ 'portfolio.card_change' | t }}</dt>
+              <dd class="pf-card__value" data-card-change></dd>
+              <dd class="pf-card__sub" data-card-change-sub></dd>
+            </div>
+          </dl>
+          <div class="pf-panel">
+            <div class="pf-panel__head">
+              <h2 class="pf-panel__title">{{ 'portfolio.chart_title' | t }}</h2>
+              {%- render 'portfolio-ranges' -%}
+            </div>
+            <div class="pf-chart" data-chart></div>
+            <div class="pf-axis" data-axis aria-hidden="true"></div>
+            <p class="pf-legend"><span class="pf-legend__dot" aria-hidden="true"></span>{{ 'portfolio.chart_legend' | t }}</p>
           </div>
-          <div class="pf-card">
-            <p class="pf-label">{{ 'portfolio.card_change' | t }}</p>
-            <p class="pf-card__value" data-card-change></p>
-            <p class="pf-card__sub" data-card-change-sub></p>
-          </div>
-        </div>
-
-        <section class="pf-panel">
-          <div class="pf-panel__head">
-            <h2 class="pf-panel__title">{{ 'portfolio.chart_title' | t }}</h2>
-            {%- render 'portfolio-ranges' -%}
-          </div>
-          <div class="pf-chart" data-chart></div>
-          <div class="pf-axis" data-axis aria-hidden="true"></div>
-          <p class="pf-legend"><span class="pf-legend__dot" aria-hidden="true"></span>{{ 'portfolio.chart_legend' | t }}</p>
         </section>
 
+        <section class="pf-dark">
+        <div class="pf-dark__bar pf-dark__bar--tabs">
         <div class="pf-tabs" role="tablist">
           <button type="button" role="tab" class="pf-tab" data-tab="pieces" aria-selected="true">{{ 'portfolio.tab_pieces' | t }}</button>
           <button type="button" role="tab" class="pf-tab" data-tab="history" aria-selected="false">{{ 'portfolio.tab_history' | t }}</button>
+        </div>
         </div>
 
         <div data-panel="pieces">
@@ -232,10 +255,12 @@
         <div data-panel="history" hidden>
           <ul class="pf-log" data-history></ul>
         </div>
+        </section>
 
         <div class="pf-footnotes">
           <p>{{ 'portfolio.footnote_values' | t }}</p>
           <p data-source></p>
+          <p class="pf-disclaimer">{{ 'portfolio.disclaimer' | t }}</p>
         </div>
       </div>
 
@@ -253,20 +278,31 @@
             <p class="pf-note">{{ 'portfolio.buyback_note' | t }}</p>
           </div>
           <div class="pf-piece__main">
-            <p class="pf-label">{{ 'portfolio.piece_value_label' | t }}</p>
-            <div class="pf-piece__value-row">
-              <div>
-                <p class="pf-piece__value" data-piece-value></p>
-                <p class="pf-piece__change" data-piece-change></p>
+            <section class="pf-dark">
+              <div class="pf-dark__bar">
+                <div class="pf-dark__sym">
+                  <b>{{ 'portfolio.block_label' | t }}</b><span>{{ 'portfolio.block_sub' | t }}</span>
+                </div>
+                <div class="pf-dark__sym"><span>{{ 'portfolio.block_updated' | t }}</span></div>
               </div>
-              {%- render 'portfolio-ranges' -%}
-            </div>
-            <section class="pf-panel pf-panel--chart">
-              <div class="pf-chart" data-chart></div>
-              <div class="pf-axis" data-axis aria-hidden="true"></div>
-              <p class="pf-legend pf-legend--cost" data-cost-legend></p>
+              <div class="pf-dark__quote">
+                <p class="pf-label">{{ 'portfolio.piece_value_label' | t }}</p>
+                <div class="pf-piece__value-row">
+                  <div>
+                    <p class="pf-piece__value" data-piece-value></p>
+                    <p class="pf-piece__change" data-piece-change></p>
+                  </div>
+                  {%- render 'portfolio-ranges' -%}
+                </div>
+              </div>
+              <div class="pf-panel pf-panel--chart">
+                <div class="pf-chart" data-chart></div>
+                <div class="pf-axis" data-axis aria-hidden="true"></div>
+                <p class="pf-legend pf-legend--cost" data-cost-legend></p>
+              </div>
             </section>
             <p class="pf-note">{{ 'portfolio.piece_footnote' | t }} <span data-source></span></p>
+            <p class="pf-note pf-disclaimer">{{ 'portfolio.disclaimer' | t }}</p>
           </div>
         </div>
       </div>
@@ -935,6 +971,334 @@
   .pf-piece__change {
     margin: 0;
     font-size: var(--font-size--sm);
+  }
+
+  /* ================================================================================================================
+     Homepage look (client feedback 2026-11-18): dark "MY AURA" blocks like "Gold is the underlying" and "Marked to
+     market daily": 16px corners, gold line fading into the block, pill buttons, the homepage table style.
+     Inside a dark block the theme's foreground / background variables are switched, so the chart, markers, read-out
+     card and table lines all follow without their own rules.
+     ================================================================================================================ */
+  .pf-grad-top {
+    stop-color: var(--pf-accent-color);
+    stop-opacity: 0.34;
+  }
+
+  .pf-grad-bottom {
+    stop-color: var(--pf-accent-color);
+    stop-opacity: 0;
+  }
+
+  .pf-dark {
+    --pf-gold: #d9c29a;
+    --pf-up: #a9cba2;
+    --pf-down: #eba3a3;
+    --pf-accent-color: var(--pf-gold);
+    --pf-border: rgb(var(--pf-dark-text-rgb, 242 234 230) / 0.14);
+    --color-foreground-rgb: var(--pf-dark-text-rgb, 242 234 230);
+    --color-background: var(--pf-dark-bg, #4a253d);
+    color: var(--pf-dark-text, #f2eae6);
+    background: var(--pf-dark-bg, #4a253d);
+    border-radius: 16px;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .pf-dark__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 14px 24px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--pf-dark-muted, #c2aebc);
+    border-block-end: 1px solid var(--pf-border);
+  }
+
+  .pf-dark__bar--tabs {
+    padding: 10px 16px;
+  }
+
+  .pf-dark__sym {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pf-dark__sym b {
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--pf-gold);
+  }
+
+  /* summary strip: value today, cost basis, change */
+  .pf-sum {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    border-block-end: 1px solid var(--pf-border);
+  }
+
+  .pf-sum > div {
+    padding: 20px 24px;
+    border-block-end: 1px solid var(--pf-border);
+  }
+
+  .pf-sum > div:last-child {
+    border-block-end: 0;
+  }
+
+  .pf-sum dt {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--pf-dark-muted, #c2aebc);
+  }
+
+  .pf-sum dd {
+    margin: 0;
+  }
+
+  .pf-dark .pf-card__value {
+    margin: 8px 0 4px;
+    font-family: var(--font-body--family);
+    font-size: 1.75rem;
+    line-height: 1.15;
+    white-space: nowrap;
+    color: var(--pf-dark-text, #f2eae6);
+  }
+
+  .pf-dark .pf-card__sub {
+    font-size: 12px;
+    color: var(--pf-dark-muted, #c2aebc);
+    opacity: 1;
+  }
+
+  .pf-dark [data-card-change],
+  .pf-dark [data-card-change-sub],
+  .pf-dark .pf-piece__change {
+    color: var(--pf-up);
+  }
+
+  .pf-dark .is-negative,
+  .pf-dark [data-card-change].is-negative,
+  .pf-dark .pf-piece__change.is-negative,
+  .pf-dark .pf-cell.is-negative {
+    color: var(--pf-down);
+  }
+
+  .pf-dark:has([data-card-change].is-negative) [data-card-change-sub] {
+    color: var(--pf-down);
+  }
+
+  @media screen and (min-width: 750px) {
+    .pf-sum {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .pf-sum > div {
+      border-block-end: 0;
+      border-inline-end: 1px solid var(--pf-border);
+    }
+
+    .pf-sum > div:last-child {
+      border-inline-end: 0;
+    }
+  }
+
+  /* chart */
+  .pf-dark .pf-panel {
+    padding: 24px;
+    border: 0;
+    background: transparent;
+  }
+
+  .pf-dark .pf-panel__title {
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pf-dark-muted, #c2aebc);
+  }
+
+  .pf-dark .pf-ranges {
+    gap: 4px;
+  }
+
+  .pf-dark .pf-range,
+  .pf-dark .pf-tab {
+    min-width: 0;
+    min-height: 0;
+    padding: 7px 14px;
+    font-family: var(--font-body--family);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pf-dark-muted, #c2aebc);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    opacity: 1;
+  }
+
+  .pf-dark .pf-range:hover,
+  .pf-dark .pf-tab:hover {
+    color: var(--pf-dark-text, #f2eae6);
+    border-color: var(--pf-border);
+  }
+
+  .pf-dark .pf-range[aria-pressed='true'],
+  .pf-dark .pf-tab[aria-selected='true'] {
+    color: var(--pf-dark-bg, #4a253d);
+    background: var(--pf-gold);
+    border-color: var(--pf-gold);
+  }
+
+  .pf-dark .pf-chart__line {
+    stroke-width: 1.6;
+  }
+
+  .pf-dark .pf-readout {
+    color: var(--pf-dark-bg, #4a253d);
+    background: var(--pf-dark-text, #f2eae6);
+    border-radius: 10px;
+  }
+
+  .pf-dark .pf-tip {
+    border-radius: 10px;
+  }
+
+  /* tabs and table: the homepage table */
+  .pf-dark .pf-tabs {
+    gap: 4px;
+    margin: 0;
+  }
+
+  .pf-dark .pf-table {
+    font-size: 14px;
+  }
+
+  .pf-dark .pf-table th {
+    padding: 14px 12px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--pf-dark-muted, #c2aebc);
+    border-bottom-color: var(--pf-border);
+  }
+
+  .pf-dark .pf-row {
+    border-bottom-color: rgb(var(--pf-dark-text-rgb, 242 234 230) / 0.08);
+  }
+
+  .pf-dark .pf-row:last-child {
+    border-bottom: 0;
+  }
+
+  .pf-dark .pf-cell {
+    padding: 14px 12px;
+  }
+
+  .pf-dark .pf-table th:first-child,
+  .pf-dark .pf-cell:first-child {
+    padding-inline-start: 24px;
+  }
+
+  .pf-dark .pf-table th:last-child,
+  .pf-dark .pf-cell:last-child {
+    padding-inline-end: 24px;
+  }
+
+  .pf-dark .pf-thumb {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  .pf-dark .pf-piece-title {
+    font-family: var(--font-body--family);
+    font-size: 15px;
+  }
+
+  .pf-dark .pf-cell small,
+  .pf-dark .pf-piece-name small {
+    color: var(--pf-dark-muted, #c2aebc);
+    opacity: 1;
+  }
+
+  /* View / Request buyback: the homepage's small outlined buttons (the " · " between them is hidden) */
+  .pf-dark .pf-cell--actions {
+    font-size: 0;
+  }
+
+  .pf-dark .pf-cell--actions .pf-link {
+    display: inline-block;
+    margin-inline-start: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--pf-dark-text, #f2eae6);
+    border: 1px solid rgb(var(--pf-dark-text-rgb, 242 234 230) / 0.35);
+    border-radius: 16px;
+  }
+
+  .pf-dark .pf-cell--actions .pf-link:hover {
+    color: var(--pf-dark-bg, #4a253d);
+    background: var(--pf-dark-text, #f2eae6);
+  }
+
+  .pf-dark .pf-log {
+    padding: 8px 24px 16px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pf-dark .pf-row {
+      padding-inline: 24px;
+    }
+
+    .pf-dark .pf-cell,
+    .pf-dark .pf-cell:first-child,
+    .pf-dark .pf-cell:last-child {
+      padding-inline: 0;
+    }
+
+    .pf-dark .pf-cell--actions .pf-link:first-child {
+      margin-inline-start: 0;
+    }
+  }
+
+  /* one piece: the chart side */
+  .pf-dark__quote {
+    padding: 24px 24px 0;
+  }
+
+  .pf-dark .pf-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--pf-dark-muted, #c2aebc);
+  }
+
+  .pf-dark .pf-piece__value {
+    color: var(--pf-dark-text, #f2eae6);
+  }
+
+  .pf-buyback {
+    border-radius: 16px;
+  }
+
+  .pf-disclaimer {
+    max-width: 70ch;
   }
 {% endstylesheet %}
 

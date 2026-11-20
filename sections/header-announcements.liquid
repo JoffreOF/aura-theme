@@ -40,6 +40,25 @@
   </announcement-bar-component>
 </aside>
 
+<script>
+  // Aura: keeps --announcement-bar-height up to date so that, when the header is set to "always sticky", the bar can
+  // stick above it and the header (and the product page's sticky column) can sit right under the bar.
+  (() => {
+    const section = document.currentScript && document.currentScript.closest('.shopify-section');
+    if (!section) return;
+    let last = -1;
+    const measure = () => {
+      const height = Math.round(section.getBoundingClientRect().height);
+      if (height === last) return;
+      last = height;
+      document.body.style.setProperty('--announcement-bar-height', `${height}px`);
+      window.dispatchEvent(new CustomEvent('aura:announcement-resize'));
+    };
+    measure();
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(section);
+  })();
+</script>
+
 {% stylesheet %}
   .announcement-bar {
     border-block-end: var(--border-bottom-width) solid var(--color-border);

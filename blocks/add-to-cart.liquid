@@ -12,6 +12,11 @@
   assign scoped_class = block.settings.style_class | append: '--' | append: block.id
   assign class = 'add-to-cart-button ' | append: block.settings.style_class | append: ' ' | append: scoped_class
   assign id = 'BuyButtons-ProductSubmitButton-' | append: block.id
+
+  # Own label (e.g. "Add to my portfolio") only while the variant can be bought; sold out keeps the theme text.
+  if can_add_to_cart and block.settings.button_label != blank
+    assign add_to_cart_text = block.settings.button_label
+  endif
 %}
 {% render 'button-custom-styles', block_settings: block.settings, block_id: block.id %}
 {% render 'add-to-cart-button-styles' %}
@@ -19,7 +24,7 @@
 
 <span
   {{ block.shopify_attributes }}
-  style="--add-to-cart-font-case: {{ settings.button_text_case }};"
+  style="--add-to-cart-font-case: {{ settings.button_text_case }};{% if block.settings.pill_shape %} --style-border-radius-buttons-primary: 999px; --style-border-radius-buttons-secondary: 999px;{% endif %}"
 >
   {% render 'add-to-cart-button',
     id: id,
@@ -57,6 +62,18 @@
       ],
       "default": "button-secondary",
       "info": "t:info.edit_button_style_in_theme_settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button text",
+      "info": "Leave empty for the theme text (Add to cart). Sold out and unavailable keep the theme text."
+    },
+    {
+      "type": "checkbox",
+      "id": "pill_shape",
+      "label": "Pill-shaped button",
+      "default": false
     },
     {
       "type": "header",

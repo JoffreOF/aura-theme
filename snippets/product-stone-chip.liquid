@@ -1,0 +1,33 @@
+{%- doc -%}
+  The stone chip for a product: the selected value of its "Stone" option when the product has one (the stone becomes
+  a customer choice), otherwise its stone metafield (specs.stone_type). Renders nothing for pieces without a stone.
+
+  @param {product} product - The product
+  @param {string} [class] - Extra classes for the chip
+  @param {string} [frame] - The gallery frame setting: the chip only shows with 'box' (omit outside the gallery)
+  @param {boolean} [enabled] - The gallery's "Show the stone chip" setting (omit outside the gallery)
+{%- enddoc -%}
+
+{%- liquid
+  assign chip_stone = ''
+  assign wanted = true
+  if frame != blank and frame != 'box'
+    assign wanted = false
+  endif
+  if enabled == false
+    assign wanted = false
+  endif
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name == 'stone' or option_name == 'piedra'
+      assign chip_stone = option.selected_value
+    endif
+  endfor
+  if chip_stone == blank
+    assign chip_stone = product.metafields.specs.stone_type.value
+  endif
+-%}
+
+{%- if wanted and chip_stone != blank -%}
+  {%- render 'stone-chip', name: chip_stone, class: class -%}
+{%- endif -%}

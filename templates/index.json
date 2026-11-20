@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "hero_iyt6zg": {
       "type": "hero",
@@ -1979,7 +1978,7 @@
             "hide_short_ranges": true,
             "example_weight": 4.1,
             "fix_from": "2026-10-24",
-            "corner_radius": 0,
+            "corner_radius": 16,
             "price_size": 56,
             "price_size_mobile": 40,
             "chart_height": 340,
@@ -1995,7 +1994,8 @@
             "tooltip_background": "",
             "tooltip_text": "",
             "padding-block-start": 0,
-            "padding-block-end": 0
+            "padding-block-end": 0,
+            "fix_note": "Updated every day at 10:00 AM, except holidays"
           },
           "blocks": {}
         }
@@ -2583,7 +2583,7 @@
             "sublabel": "Virtual portfolio",
             "tag_text": "Sample",
             "marked_text": "Marked to market · {date} · 10:00 AM",
-            "corner_radius": 0,
+            "corner_radius": 16,
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "{{ settings.color_palette.color2 }}",
             "muted_color": "{{ settings.color_palette.color7 }}",
@@ -2916,173 +2916,21 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "group_08": {
-                  "type": "group",
-                  "name": "Photo",
+                "photo_slider": {
+                  "type": "image-slider",
+                  "name": "Photo slider",
                   "settings": {
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "flex-start",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 0,
-                    "width": "custom",
-                    "custom_width": 49,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "background_media": "none",
-                    "background_color": "",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "placeholder": "",
-                    "visibility": "all",
-                    "mobile_first": false,
-                    "scroll_on_mobile": false,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "interval": 5,
+                    "aspect_ratio": "portrait",
+                    "corner_radius": 0,
+                    "show_dots": true,
+                    "label": "Aura pieces"
                   },
-                  "blocks": {
-                    "image_01": {
-                      "type": "image",
-                      "settings": {
-                        "link": "",
-                        "image_ratio": "portrait",
-                        "width": "fill",
-                        "custom_width": 100,
-                        "width_mobile": "fill",
-                        "custom_width_mobile": 100,
-                        "height": "fit",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "image_01"
-                  ]
-                },
-                "group_09": {
-                  "type": "group",
-                  "name": "Photos",
-                  "settings": {
-                    "content_direction": "column",
-                    "vertical_on_mobile": true,
-                    "horizontal_alignment": "flex-start",
-                    "vertical_alignment": "center",
-                    "align_baseline": false,
-                    "horizontal_alignment_flex_direction_column": "flex-start",
-                    "vertical_alignment_flex_direction_column": "flex-start",
-                    "gap": 14,
-                    "width": "custom",
-                    "custom_width": 46,
-                    "width_mobile": "fill",
-                    "custom_width_mobile": 100,
-                    "height": "fit",
-                    "custom_height": 100,
-                    "background_media": "none",
-                    "background_color": "",
-                    "video_position": "cover",
-                    "background_image_position": "cover",
-                    "toggle_overlay": false,
-                    "overlay_color": "#00000026",
-                    "overlay_style": "solid",
-                    "gradient_direction": "to top",
-                    "border": "none",
-                    "border_width": 1,
-                    "border_opacity": 100,
-                    "border_color": "",
-                    "border_radius": 0,
-                    "link": "",
-                    "open_in_new_tab": false,
-                    "placeholder": "",
-                    "visibility": "all",
-                    "mobile_first": false,
-                    "scroll_on_mobile": false,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {
-                    "image_02": {
-                      "type": "image",
-                      "settings": {
-                        "link": "",
-                        "image_ratio": "landscape",
-                        "width": "fill",
-                        "custom_width": 100,
-                        "width_mobile": "fill",
-                        "custom_width_mobile": 100,
-                        "height": "fit",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    },
-                    "image_03": {
-                      "type": "image",
-                      "settings": {
-                        "link": "",
-                        "image_ratio": "landscape",
-                        "width": "fill",
-                        "custom_width": 100,
-                        "width_mobile": "fill",
-                        "custom_width_mobile": 100,
-                        "height": "fit",
-                        "border": "none",
-                        "border_width": 1,
-                        "border_opacity": 100,
-                        "border_color": "",
-                        "border_radius": 0,
-                        "padding-block-start": 0,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "image_02",
-                    "image_03"
-                  ]
+                  "blocks": {}
                 }
               },
               "block_order": [
-                "group_08",
-                "group_09"
+                "photo_slider"
               ]
             }
           },
@@ -3989,7 +3837,8 @@
         "line_color": "",
         "padding-block-start": 24,
         "padding-block-end": 64
-      }
+      },
+      "disabled": true
     },
     "aura_materials_people": {
       "type": "section",
@@ -4102,33 +3951,6 @@
                   },
                   "blocks": {}
                 },
-                "text_m": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Precious and semi-precious gemstones, natural and laboratory-grown</p>",
-                    "width": "100%",
-                    "max_width": "narrow",
-                    "alignment": "center",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1.0625rem",
-                    "font_size_mobile": "0.9375rem",
-                    "weight": "",
-                    "line_height": "loose",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 8,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
                 "button_m": {
                   "type": "button",
                   "settings": {
@@ -4151,7 +3973,6 @@
               },
               "block_order": [
                 "image_m",
-                "text_m",
                 "button_m"
               ]
             },
@@ -4220,33 +4041,6 @@
                   },
                   "blocks": {}
                 },
-                "text_a": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Shaped by Peruvian jewelers who earn fair wages</p>",
-                    "width": "100%",
-                    "max_width": "narrow",
-                    "alignment": "center",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1.0625rem",
-                    "font_size_mobile": "0.9375rem",
-                    "weight": "",
-                    "line_height": "loose",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 8,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
                 "button_a": {
                   "type": "button",
                   "settings": {
@@ -4269,7 +4063,6 @@
               },
               "block_order": [
                 "image_a",
-                "text_a",
                 "button_a"
               ]
             },
@@ -4338,33 +4131,6 @@
                   },
                   "blocks": {}
                 },
-                "text_f": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Two best friends who talk about money more than anyone probably should</p>",
-                    "width": "100%",
-                    "max_width": "narrow",
-                    "alignment": "center",
-                    "type_preset": "custom",
-                    "font": "var(--font-body--family)",
-                    "font_size": "1.0625rem",
-                    "font_size_mobile": "0.9375rem",
-                    "weight": "",
-                    "line_height": "loose",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "pretty",
-                    "text_color": "{{ settings.color_palette.color1 }}",
-                    "background": false,
-                    "background_color": "#00000026",
-                    "corner_radius": 0,
-                    "padding-block-start": 8,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                },
                 "button_f": {
                   "type": "button",
                   "settings": {
@@ -4387,7 +4153,6 @@
               },
               "block_order": [
                 "image_f",
-                "text_f",
                 "button_f"
               ]
             }

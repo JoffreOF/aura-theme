@@ -11,16 +11,69 @@
   assign gram_price = shop.metafields.gold.price_18k_per_g.value
   assign markup = shop.metafields.gold.markup.value
 
+  comment
+    Stone pieces (a "Stone" option): the selected stone's entry in the Stone library (metaobjects "stone", by label).
+    Its premium is shown as its own part; craftsmanship = price - gold value - stone premium; the markup line reads
+    gold.markup_stones when it exists.
+  endcomment
+  assign stone_value = ''
+  assign stone_entry = nil
+  if block.settings.show_stone
+    for option in product.options_with_values
+      assign option_name = option.name | strip | downcase
+      if option_name == 'stone' or option_name == 'piedra'
+        assign stone_value = option.selected_value
+      endif
+    endfor
+    if stone_value != blank
+      assign wanted = stone_value | strip | downcase
+      for stone in metaobjects.stone.values
+        assign stone_label = stone.label.value | strip | downcase
+        if stone_label == wanted
+          assign stone_entry = stone
+          break
+        endif
+      endfor
+    endif
+  endif
+  assign stone_cents = 0
+  if stone_entry and stone_entry.included.value != true and stone_entry.premium.value > 0
+    assign stone_cents = stone_entry.premium.value | times: 100 | round
+  endif
+  if stone_entry and shop.metafields.gold.markup_stones.value != blank
+    assign markup = shop.metafields.gold.markup_stones.value
+  endif
+
   assign show = false
   if variant != blank and weight != blank and gram_price != blank and variant.price > 0
     assign gold_cents = weight | times: gram_price | times: 100 | round
-    assign craft_cents = variant.price | minus: gold_cents
+    assign craft_cents = variant.price | minus: gold_cents | minus: stone_cents
     if gold_cents > 0 and craft_cents >= 0
       assign show = true
       assign gold_share = gold_cents | times: 100.0 | divided_by: variant.price | round: 2
+      assign stone_share = stone_cents | times: 100.0 | divided_by: variant.price | round: 2
       assign gold_text = gold_cents | money
       assign craft_text = craft_cents | money
+      assign stone_text = stone_cents | money
+      if stone_entry.included.value == true or stone_cents == 0
+        assign stone_text = 'blocks.pricing_panel.stone_included' | t
+      endif
+      capture stone_swatch
+        render 'stone-swatch-style', stone: stone_entry
+      endcapture
       assign gram_price_text = gram_price | times: 100 | round | money
+
+      comment
+        Fine gold (artifact): the 18k weight x 0.75 at the 24k gram price (18k price / 0.75). Same amount.
+      endcomment
+      assign fine_scaled = weight | times: 75 | round
+      assign fine_fraction = fine_scaled | modulo: 100
+      assign fine_whole = fine_scaled | minus: fine_fraction | divided_by: 100
+      if fine_fraction < 10
+        assign fine_fraction = '0' | append: fine_fraction
+      endif
+      assign fine_grams = fine_whole | append: '.' | append: fine_fraction
+      assign fine_price_text = gram_price | divided_by: 0.75 | times: 100 | round | money
 
       comment
         Weight with a fixed number of decimals, built from integers (see the gold breakdown block).
@@ -59,6 +112,20 @@
           assign markup_text = markup_whole | append: '.' | append: cents_digits
         endif
       endif
+
+      comment
+        The part added on top (artifact "x 0.90 markup" for 1.90), always two decimals.
+      endcomment
+      assign markup_added_text = ''
+      if markup != blank and markup > 1
+        assign added = markup | times: 100 | round | minus: 100
+        assign added_cents = added | modulo: 100
+        assign added_whole = added | minus: added_cents | divided_by: 100
+        if added_cents < 10
+          assign added_cents = '0' | append: added_cents
+        endif
+        assign markup_added_text = added_whole | append: '.' | append: added_cents
+      endif
     endif
   endif
 -%}
@@ -90,7 +157,7 @@
 -%}
 
 <variant-live
-  class="pricing-panel spacing-style"
+  class="pricing-panel spacing-style pricing-panel--bar-{{ block.settings.bar_style | default: 'flat' }}{% if stone_entry %} pricing-panel--stone{% endif %}"
   data-block-id="{{ block.id }}"
   data-product-id="{{ product.id }}"
   style="
@@ -101,6 +168,7 @@
     --panel-detail-reduction: {{ block.settings.detail_reduction }}px;
     --panel-radius: {{ block.settings.corner_radius }}px;
     --panel-width: {{ block.settings.width }};
+    {% if block.settings.border_color != blank %}--panel-border: 1px solid {{ block.settings.border_color }};{% endif %}
     {% if block.settings.background_color != blank %}--panel-background: {{ block.settings.background_color }};{% endif %}
     {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
   "
@@ -118,6 +186,9 @@
 
     <div class="pricing-panel__bar" aria-hidden="true">
       <span class="pricing-panel__bar-gold" style="width: {{ gold_share }}%"></span>
+      {%- if stone_entry and stone_cents > 0 -%}
+        <span class="pricing-panel__bar-stone" style="width: {{ stone_share }}%; {{ stone_swatch }}"></span>
+      {%- endif -%}
       <span class="pricing-panel__bar-craft"></span>
     </div>
 
@@ -125,16 +196,48 @@
       <div class="pricing-panel__column">
         <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--gold"></i>{{ 'blocks.pricing_panel.gold_value' | t }}</span>
         <span class="pricing-panel__amount">{{ gold_text }}</span>
-        <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.gold_detail' | t: grams: grams, price: gram_price_text }}</span>
+        {%- if block.settings.gold_basis == 'fine' -%}
+          <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.gold_detail_fine' | t: grams: fine_grams, price: fine_price_text }}</span>
+        {%- else -%}
+          <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.gold_detail' | t: grams: grams, price: gram_price_text }}</span>
+        {%- endif -%}
       </div>
+      {%- if stone_entry -%}
+        <div class="pricing-panel__column">
+          <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--stone" style="{{ stone_swatch }}"></i>{{ 'blocks.pricing_panel.stone' | t }}</span>
+          <span class="pricing-panel__amount">{{ stone_text }}</span>
+          <span class="pricing-panel__detail">{{ stone_value }}</span>
+        </div>
+      {%- endif -%}
       <div class="pricing-panel__column">
         <span class="pricing-panel__label"><i class="pricing-panel__square pricing-panel__square--craft"></i>{{ 'blocks.pricing_panel.craftsmanship' | t }}</span>
         <span class="pricing-panel__amount">{{ craft_text }}</span>
-        {%- if block.settings.show_markup and markup_text != blank -%}
+        {%- if block.settings.show_markup and block.settings.markup_style == 'added' and markup_added_text != blank -%}
+          <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.markup_added' | t: markup: markup_added_text }}</span>
+        {%- elsif block.settings.show_markup and markup_text != blank -%}
           <span class="pricing-panel__detail">{{ 'blocks.pricing_panel.markup' | t: markup: markup_text }}</span>
         {%- endif -%}
       </div>
     </div>
+
+    {%- if stone_entry and block.settings.show_stone_note -%}
+      {%- liquid
+        assign note_parts = stone_entry.description.value | strip
+        assign certificate = stone_entry.certificate.value | strip
+        if certificate != blank
+          assign last_char = certificate | slice: -1
+          if last_char != '.'
+            assign certificate = certificate | append: '.'
+          endif
+          assign note_parts = note_parts | append: ' ' | append: certificate | strip
+        endif
+      -%}
+      {%- if note_parts != blank -%}
+        <p class="pricing-panel__note pricing-panel__stone-note {{ body_class }}"{% if body_style != blank %} style="{{ body_style }}"{% endif %}>
+          <strong>{{ stone_value }}.</strong> {{ note_parts }}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
 
     {%- if block.settings.show_portfolio_note -%}
       <p class="pricing-panel__note {{ body_class }}"{% if body_style != blank %} style="{{ body_style }}"{% endif %}>
@@ -159,6 +262,7 @@
     color: var(--color, var(--color-foreground));
     background: var(--panel-background, transparent);
     border-radius: var(--panel-radius, 0);
+    border: var(--panel-border, 0);
   }
 
   .pricing-panel:not(:has(.pricing-panel__header)) {
@@ -197,6 +301,44 @@
     background: var(--panel-craft);
   }
 
+  .pricing-panel__bar-gold,
+  .pricing-panel__bar-stone {
+    transition: width 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), background 0.5s;
+  }
+
+  .pricing-panel__bar-stone {
+    display: block;
+    height: 100%;
+    box-shadow: inset 0 0 0 1px rgb(var(--color-foreground-rgb) / 0.2);
+  }
+
+  /* Rounded bar (PDP artifact): separate pill segments with a small gap. */
+  .pricing-panel--bar-rounded .pricing-panel__bar {
+    gap: 2px;
+    background: none;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .pricing-panel--bar-rounded .pricing-panel__bar > span {
+    border-radius: 999px;
+  }
+
+  .pricing-panel--stone .pricing-panel__columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  @media screen and (max-width: 480px) {
+    .pricing-panel--stone .pricing-panel__columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .pricing-panel__column {
+    min-width: 0;
+  }
+
   .pricing-panel__columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -227,6 +369,15 @@
 
   .pricing-panel__square--craft {
     background: var(--panel-craft);
+  }
+
+  .pricing-panel--bar-rounded .pricing-panel__square,
+  .pricing-panel__square--stone {
+    border-radius: 50%;
+  }
+
+  .pricing-panel__square--stone {
+    box-shadow: inset 0 0 0 1px rgb(var(--color-foreground-rgb) / 0.2);
   }
 
   .pricing-panel__amount {
@@ -316,6 +467,44 @@
       "default": "1"
     },
     {
+      "type": "select",
+      "id": "gold_basis",
+      "label": "Gold value line",
+      "options": [
+        { "value": "18k", "label": "18k weight x 18k gram price (4.0 g x $96.69 / g)" },
+        { "value": "fine", "label": "Fine gold x 24k gram price (3.00 g x $128.92/g)" }
+      ],
+      "default": "18k",
+      "info": "Same amount either way: fine gold is 75% of the 18k weight, the 24k price is the 18k price / 0.75."
+    },
+    {
+      "type": "select",
+      "id": "markup_style",
+      "label": "Markup line",
+      "options": [
+        { "value": "multiplier", "label": "Full multiplier (Our markup on gold: x1.75)" },
+        { "value": "added", "label": "Part added on top (x 0.90 markup)" }
+      ],
+      "default": "multiplier"
+    },
+    {
+      "type": "header",
+      "content": "Stone pieces"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stone",
+      "label": "Show the stone as its own part",
+      "info": "Products with a Stone option: the premium from Content > Metaobjects > Stone. The markup line then reads gold.markup_stones when it exists.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stone_note",
+      "label": "Show the stone note (description and certificate)",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Bar"
     },
@@ -340,6 +529,16 @@
       "step": 1,
       "unit": "px",
       "default": 6
+    },
+    {
+      "type": "select",
+      "id": "bar_style",
+      "label": "Bar style",
+      "options": [
+        { "value": "flat", "label": "Flat" },
+        { "value": "rounded", "label": "Rounded segments" }
+      ],
+      "default": "flat"
     },
     {
       "type": "header",
@@ -1687,11 +1886,17 @@
       "placeholder": "t:settings.default"
     },
     {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "info": "Leave empty for no border."
+    },
+    {
       "type": "range",
       "id": "corner_radius",
       "label": "t:settings.border_radius",
       "min": 0,
-      "max": 24,
+      "max": 32,
       "step": 1,
       "unit": "px",
       "default": 0

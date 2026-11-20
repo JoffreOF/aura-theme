@@ -93,6 +93,9 @@ class HeaderComponent extends Component {
 
     const config = {
       threshold: alwaysSticky ? 1 : 0,
+      // Aura: when a sticky announcement bar sits above the header, the header sticks lower down; shrink the
+      // observed area by that much so "stuck" is still detected (no bar: 0px, exactly as before).
+      rootMargin: `${-this.#stickyOffset()}px 0px 0px 0px`,
       root: getIntersectionRoot(),
     };
 
@@ -178,7 +181,7 @@ class HeaderComponent extends Component {
     const scrollTop = getScrollTop();
     const headerTop = this.getBoundingClientRect().top;
     const isScrollingUp = scrollTop < this.#lastScrollTop;
-    const isAtTop = headerTop >= 0;
+    const isAtTop = headerTop >= this.#stickyOffset();
 
     if (this.#timeout) {
       clearTimeout(this.#timeout);
@@ -221,6 +224,16 @@ class HeaderComponent extends Component {
     this.#lastScrollTop = scrollTop;
   };
 
+  /**
+   * Aura: how far below the top of the screen the header sits when stuck (the sticky announcement bar's height),
+   * 0 when nothing is above it. The CSS sticks the header at that height minus 1px.
+   * @returns {number}
+   */
+  #stickyOffset() {
+    const top = parseFloat(getComputedStyle(this.parentElement || this).top);
+    return Number.isFinite(top) ? Math.max(top + 1, 0) : 0;
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.#resizeObserver.observe(this);
@@ -228,6 +241,8 @@ class HeaderComponent extends Component {
 
     const stickyMode = this.getAttribute('sticky');
     if (stickyMode) {
+      // The announcement bar's height can change (screen width, message length): re-measure the stuck position.
+      window.addEventListener('aura:announcement-resize', this.#handleBreakpointChange);
       this.#observeStickyPosition(stickyMode === 'always');
 
       if (stickyMode === 'scroll-up' || stickyMode === 'always') {
@@ -245,6 +260,7 @@ class HeaderComponent extends Component {
     this.#intersectionObserver?.disconnect();
     this.removeEventListener('overflowMinimum', this.#handleOverflowMinimum);
     scrollContainerMediaQuery.removeEventListener('change', this.#handleBreakpointChange);
+    window.removeEventListener('aura:announcement-resize', this.#handleBreakpointChange);
     this.#scrollContainer?.removeEventListener('scroll', this.#handleWindowScroll);
     this.#scrollContainer = null;
     if (this.#scrollRafId !== null) {

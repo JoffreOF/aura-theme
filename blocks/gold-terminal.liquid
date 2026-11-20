@@ -124,6 +124,8 @@
         "symbol": "$",
         "weight": {{ s.example_weight | json }},
         "fixFrom": {{ s.fix_from | json }},
+        "radius": {{ s.corner_radius | json }},
+        "gradient": true,
         "strings": {{ strings_json }}
       }
     </script>
@@ -135,7 +137,11 @@
       </div>
       <div class="gt__sym">
         {%- if s.pill_text != blank -%}<span class="gt__pill"><i></i>{{ s.pill_text }}</span>{%- endif -%}
-        <span data-next-fix></span>
+        {%- if s.fix_note != blank -%}
+          <span class="gt__note">{{ s.fix_note }}</span>
+        {%- else -%}
+          <span data-next-fix></span>
+        {%- endif -%}
       </div>
     </div>
 
@@ -373,12 +379,12 @@
     color: var(--gt-muted, #c2aebc);
   }
 
+  /* The drawing fills the plot box (it is positioned over it), so the inset from the rounded corners is a margin */
   gold-chart.gold-terminal .gold-chart__plot {
     position: relative;
-    width: 100%;
+    width: auto;
     height: var(--gt-height-mobile, 240px);
-    margin: 8px 0 12px;
-    padding-inline: 12px;
+    margin: 8px 12px 12px;
     box-sizing: border-box;
   }
 
@@ -412,6 +418,17 @@
     stroke: none;
   }
 
+  /* Area under the line: the gold of the line at the top, fading to the block's background at the bottom (like the artifact) */
+  .gold-terminal .gc-grad-top {
+    stop-color: var(--gt-accent, #d9c29a);
+    stop-opacity: 0.34;
+  }
+
+  .gold-terminal .gc-grad-bottom {
+    stop-color: var(--gt-accent, #d9c29a);
+    stop-opacity: 0;
+  }
+
   .gold-terminal .gc-dash {
     stroke: var(--gt-accent, #d9c29a);
     stroke-width: 1;
@@ -427,6 +444,12 @@
     fill: var(--gt-bg, #4a253d);
     font-size: 11px;
     font-weight: 600;
+  }
+
+  /* the hover line and dot stay hidden until the chart is touched or hovered */
+  .gc-cursor[hidden],
+  .gc-dot[hidden] {
+    display: none;
   }
 
   .gold-terminal .gc-cursor {
@@ -487,6 +510,7 @@
 
     gold-chart.gold-terminal .gold-chart__plot {
       height: var(--gt-height, 340px);
+      margin: 8px 24px 20px;
     }
   }
 {% endstylesheet %}
@@ -517,6 +541,12 @@
       "id": "pill_text",
       "label": "Daily fix tag",
       "default": "Daily fix · 10:00 AM"
+    },
+    {
+      "type": "text",
+      "id": "fix_note",
+      "label": "Line next to the tag",
+      "info": "Shown instead of the \"Next fix in ...\" countdown. Empty: the countdown is shown."
     },
     {
       "type": "header",

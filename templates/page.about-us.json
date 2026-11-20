@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "about_hero": {
       "type": "media-with-content",
@@ -91,7 +90,7 @@
             "text_03": {
               "type": "text",
               "settings": {
-                "text": "<p>The best accessory? Knowing exactly what it's worth. Every Aura piece works like an investment: it's backed by real gold and its value moves with the market, every day. So treating yourself and building your future finally go hand in hand. Being a woman who understands her money has never looked this good!</p>",
+                "text": "<p>The best accessory? Knowing exactly what it's worth. Every Aura piece works like an investment: it's backed by real gold and its value moves with the market, every day.</p>",
                 "width": "fit-content",
                 "max_width": "none",
                 "alignment": "left",
@@ -1059,7 +1058,7 @@
             "text_15": {
               "type": "text",
               "settings": {
-                "text": "<p>Our care goes beyond design and materials. It reaches the workshop and every person involved in the process, all of whom work under fair conditions and earn fair wages. The gold gives each piece its lasting value; the hands that shape it give it its soul. That's why we look after every link in the chain, from start to finish.</p>",
+                "text": "<p>Our care goes beyond design and materials. It reaches the workshop and every person involved in the process, all of whom work under fair conditions and earn fair wages. The gold gives each piece its lasting value; the hands that shape it give it its soul.</p>",
                 "width": "fit-content",
                 "max_width": "none",
                 "alignment": "left",

@@ -1,0 +1,51 @@
+{%- doc -%}
+  The stone chip: a round swatch and the stone's name in a small pill ("( ) Natural sapphire"), as on the product photo
+  of the PDP artifact. The swatch comes from the Stone library (metaobjects of type "stone", matched by their "label"
+  field, then by "name"): its "swatch_image", else its "color". Without a matching entry a neutral pearl-white swatch
+  is drawn, so the chip works before the library exists.
+
+  @param {string} name - The stone as the customer sees it (the variant's Stone option, or the product's stone metafield)
+  @param {string} [class] - Extra classes
+{%- enddoc -%}
+
+{%- liquid
+  assign match = nil
+  assign wanted = name | strip | downcase
+  for stone in metaobjects.stone.values
+    assign stone_label = stone.label.value | default: stone.name.value | strip | downcase
+    assign stone_name = stone.name.value | strip | downcase
+    if stone_label == wanted or stone_name == wanted
+      assign match = stone
+      break
+    endif
+  endfor
+-%}
+{%- capture swatch_style -%}{%- render 'stone-swatch-style', stone: match -%}{%- endcapture -%}
+
+<span class="stone-chip{% if class != blank %} {{ class }}{% endif %}" data-stone-chip>
+  <i class="stone-chip__swatch" style="{{ swatch_style }}" aria-hidden="true"></i>
+  <span class="stone-chip__name">{{ name }}</span>
+</span>
+
+{% stylesheet %}
+  .stone-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px 6px 6px;
+    font-size: 13px;
+    line-height: 1.2;
+    color: var(--stone-chip-text, rgb(var(--color-foreground-rgb)));
+    background: var(--stone-chip-bg, var(--color-background));
+    border: 1px solid var(--stone-chip-border, rgb(var(--color-foreground-rgb) / 0.32));
+    border-radius: 999px;
+  }
+
+  .stone-chip__swatch {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+  }
+{% endstylesheet %}

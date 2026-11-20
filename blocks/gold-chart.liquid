@@ -219,6 +219,12 @@
     stroke-width: 1;
   }
 
+  /* the hover line and dot stay hidden until the chart is touched or hovered */
+  .gc-cursor[hidden],
+  .gc-dot[hidden] {
+    display: none;
+  }
+
   .gc-dot {
     fill: var(--color-background, #fff);
     stroke: var(--gc-line, currentColor);

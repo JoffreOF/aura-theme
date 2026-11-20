@@ -57,7 +57,7 @@
       </span>
       <span class="gold-breakdown__amount">
         {{- gold_cents | money -}}
-        {%- if block.settings.show_weight %} · {{ 'blocks.gold_breakdown.weight' | t: grams: grams }}{% endif -%}
+        {%- if block.settings.show_weight %} {{ 'blocks.gold_breakdown.weight' | t: grams: grams }}{% endif -%}
       </span>
     </div>
     <div class="gold-breakdown__row">

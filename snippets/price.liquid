@@ -50,6 +50,15 @@
     endif
   endif
 
+  # Aura: on a product card (also the "You may also like" cards on a product page, any product that is not the page's
+  # own product) a piece whose sizes cost different amounts shows "From" and its lowest price. Single-price pieces
+  # and the product page's own price are unchanged.
+  assign show_from = false
+  if product_resource.price_varies and has_volume_pricing != true and product_resource.handle != product.handle
+    assign show_from = true
+    assign from_price = product_resource.price_min
+  endif
+
   # Determine if currency code should be shown
   assign use_currency = false
   if product.handle == product_resource.handle
@@ -66,16 +75,22 @@
     assign compare_at_price = compare_at_price | money_with_currency
     assign price_min = price_min | money_with_currency
     assign price_max = price_max | money_with_currency
+    assign from_price = from_price | money_with_currency
   else
     assign price = price | money
     assign compare_at_price = compare_at_price | money
     assign price_min = price_min | money
     assign price_max = price_max | money
+    assign from_price = from_price | money
   endif
 -%}
 
 <div ref="priceContainer">
-  {% if has_volume_pricing %}
+  {% if show_from %}
+    <span class="price price--from"
+      ><bdi>{{ 'content.price_from' | t: price: from_price }}</bdi></span
+    >
+  {% elsif has_volume_pricing %}
     {% comment %} Volume pricing display {% endcomment %}
     {% if show_compare_price %}
       <span class="price-item__group compare-at-price">
