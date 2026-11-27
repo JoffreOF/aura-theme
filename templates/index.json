@@ -2033,7 +2033,7 @@
             "hide_short_ranges": true,
             "example_weight": 4.1,
             "fix_from": "2026-10-24",
-            "corner_radius": 12,
+            "corner_radius": 24,
             "price_size": 56,
             "price_size_mobile": 40,
             "chart_height": 340,
