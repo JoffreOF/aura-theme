@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -33,7 +34,7 @@
             "zoom": true,
             "video_loop": false,
             "hide_variants": true,
-            "frame_style": "box",
+            "frame_style": "none",
             "frame_radius": 12,
             "frame_color": "#4a253d",
             "frame_image_size": 100,
