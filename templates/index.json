@@ -789,7 +789,7 @@
                         "title_case": "none",
                         "title_color": "",
                         "divider_color": "",
-                        "text_case": "none",
+                        "text_case": "lowercase",
                         "show_fine_line": true,
                         "show_weight": true,
                         "weight_decimals": "1",
