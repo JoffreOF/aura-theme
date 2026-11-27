@@ -223,6 +223,54 @@
       </textarea>
     </div>
 
+    {%- if s.show_reference_upload and s.reference_upload_url != blank -%}
+      {%- capture upload_messages -%}
+        {
+          "choose": {{ 'blocks.contact_form.upload_choose' | t | json }},
+          "uploading": {{ 'blocks.contact_form.upload_uploading' | t | json }},
+          "done": {{ 'blocks.contact_form.upload_done' | t | json }},
+          "wait": {{ 'blocks.contact_form.upload_wait' | t | json }},
+          "too_large": {{ 'blocks.contact_form.upload_too_large' | t | json }},
+          "not_image": {{ 'blocks.contact_form.upload_not_image' | t | json }},
+          "limit": {{ 'blocks.contact_form.upload_limit' | t | json }},
+          "failed": {{ 'blocks.contact_form.upload_failed' | t | json }}
+        }
+      {%- endcapture -%}
+      <div
+        class="contact-form__field contact-form__upload"
+        data-reference-upload
+        data-state="idle"
+        data-upload-url="{{ s.reference_upload_url | escape }}"
+        data-messages="{{ upload_messages | strip_newlines | escape }}"
+      >
+        <span class="contact-form__upload-label" id="ContactForm-reference-label-{{ block.id }}">
+          {{- s.reference_label | default: 'Have a reference in mind? Feel free to upload it' -}}
+        </span>
+        <div class="contact-form__upload-box">
+          <label class="contact-form__upload-pick">
+            <input
+              type="file"
+              class="visually-hidden"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+              aria-labelledby="ContactForm-reference-label-{{ block.id }}"
+            >
+            <svg class="contact-form__upload-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <rect x="2.5" y="3.5" width="15" height="13" rx="2" stroke="currentColor" stroke-width="1.2"/>
+              <circle cx="7.5" cy="8" r="1.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M3 14.5l4.5-4 3.5 3 2.5-2 3.5 3" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+            </svg>
+            <span class="contact-form__upload-name" data-upload-name>{{ 'blocks.contact_form.upload_choose' | t }}</span>
+          </label>
+          <button type="button" class="contact-form__upload-remove button-unstyled" data-upload-remove hidden>
+            {{- 'blocks.contact_form.upload_remove' | t -}}
+          </button>
+        </div>
+        <input type="hidden" name="contact[Reference image]" value="">
+        <p class="contact-form__upload-status" data-upload-status aria-live="polite"></p>
+      </div>
+      <script src="{{ 'contact-reference-upload.js' | asset_url }}" type="module" fetchpriority="low"></script>
+    {%- endif -%}
+
     {%- if s.show_topic and s.show_order_number and s.order_for_topic != blank -%}
       <script>
         // Order number only for the chosen topic. Without JavaScript the field simply stays visible.
@@ -298,6 +346,79 @@
     border-radius: var(--style-border-radius-inputs);
     border: var(--style-border-width-inputs) solid var(--color-input-border);
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Reference image (optional): a bordered box with a picker, the file name and a remove link */
+  .contact-form__upload {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs, 6px);
+  }
+
+  .contact-form__upload-label {
+    font-size: var(--cf-label-size, 13px);
+    color: var(--cf-label-color, inherit);
+  }
+
+  .contact-form__upload-box {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md, 12px);
+    padding: var(--padding-md) var(--padding-xl);
+    color: var(--color-input-text);
+    background-color: var(--color-input-background);
+    border: var(--style-border-width-inputs) dashed var(--color-input-border);
+    border-radius: var(--style-border-radius-inputs);
+  }
+
+  .contact-form__upload-pick {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: var(--gap-sm, 8px);
+    cursor: pointer;
+  }
+
+  .contact-form__upload-pick:focus-within {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .contact-form__upload-icon {
+    flex: none;
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  .contact-form__upload-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .contact-form__upload-remove[hidden] {
+    display: none;
+  }
+
+  .contact-form__upload-remove {
+    flex: none;
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .contact-form__upload-status {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: 0.8125rem;
+    opacity: 0.75;
+  }
+
+  .contact-form__upload[data-state='error'] .contact-form__upload-status {
+    opacity: 1;
+    color: var(--color-error, #9a3b3b);
   }
 
   /* "What is it about?" and "Order number" row: fields start at the top, the dropdown gets its own arrow */
@@ -425,6 +546,28 @@
       "id": "show_phone",
       "label": "Show the phone field",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reference_upload",
+      "label": "Reference image upload",
+      "info": "Optional image the customer can attach. It is stored by the Aura app for 90 days and arrives in the contact email as a link (Reference image).",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "reference_label",
+      "label": "Upload field words",
+      "default": "Have a reference in mind? Feel free to upload it",
+      "visible_if": "{{ block.settings.show_reference_upload }}"
+    },
+    {
+      "type": "url",
+      "id": "reference_upload_url",
+      "label": "Upload address (Aura app)",
+      "info": "Do not change unless the Aura app moves.",
+      "default": "https://aura-gold-price.helloauracapital.workers.dev/references",
+      "visible_if": "{{ block.settings.show_reference_upload }}"
     },
     {
       "type": "checkbox",
