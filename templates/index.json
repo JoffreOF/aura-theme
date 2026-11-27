@@ -4402,7 +4402,7 @@
                 "show_labels": true,
                 "stack_fields": true,
                 "show_phone": true,
-                "phone_required": false,
+                "phone_required": true,
                 "name_label": "Name",
                 "email_label": "Email",
                 "phone_label": "Phone",
