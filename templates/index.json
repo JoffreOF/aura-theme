@@ -783,7 +783,7 @@
                     "product_gold_breakdown_c5Tw1z": {
                       "type": "product-gold-breakdown",
                       "settings": {
-                        "title": "Price breakdown",
+                        "title": "price breakdown",
                         "show_divider": false,
                         "title_size": 12,
                         "title_case": "none",
