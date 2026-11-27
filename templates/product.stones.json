@@ -754,7 +754,7 @@
                     "text_aYL6n6": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>You can request a buyback of your Aura jewel at any time, referenced to the market value of its gold.</p>",
+                        "text": "<p>You can request a buyback of your Aura jewel at any time, referenced to the market value of its gold.*</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -772,6 +772,34 @@
                         "background_color": "#00000026",
                         "corner_radius": 0,
                         "padding-block-start": 12,
+                        "padding-block-end": 12,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    },
+                    "text_VLHzqX": {
+                      "type": "text",
+                      "name": "t:names.text",
+                      "settings": {
+                        "text": "<p>*Buyback terms</p>",
+                        "width": "fit-content",
+                        "max_width": "normal",
+                        "alignment": "left",
+                        "type_preset": "custom",
+                        "font": "var(--font-body--family)",
+                        "font_size": "0.625rem",
+                        "font_size_mobile": "",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "text_color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
@@ -780,7 +808,8 @@
                     }
                   },
                   "block_order": [
-                    "text_aYL6n6"
+                    "text_aYL6n6",
+                    "text_VLHzqX"
                   ]
                 }
               },
