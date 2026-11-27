@@ -270,6 +270,7 @@
   "blocks": {
     "installments_box": {
       "label": "{{ count }} interest-free payments of {{ amount }}",
+      "plain_html": "or <strong>{{ count }} interest-free payments of {{ amount }}</strong> with Mercado Pago",
       "note": "All cards via Mercado Pago"
     },
     "price_note": {
@@ -362,7 +363,8 @@
     "gold_breakdown": {
       "gold_value": "Gold value",
       "craftsmanship": "Craftsmanship",
-      "weight": "for {{ grams }} g"
+      "weight": "for {{ grams }} g",
+      "fine_detail": "{{ grams }} g fine gold × {{ price }}/g"
     },
     "installments": {
       "label": "or {{ count }} × {{ amount }} interest-free"

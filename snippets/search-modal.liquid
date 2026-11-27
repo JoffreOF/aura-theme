@@ -41,7 +41,7 @@
     </h2>
     <predictive-search-component
       class="predictive-search color-custom-popover{% if class != blank %} {{ class | strip }}{% endif %}"
-      style="--product-corner-radius: {{ settings.product_corner_radius | default: 8 | append: 'px' }}; --card-corner-radius: {{ settings.card_corner_radius | default: 8 | append: 'px' }};{% if settings.card_title_case == 'uppercase' %} --title-case: uppercase;{% endif %}"
+      style="--product-corner-radius: {{ settings.product_corner_radius | default: 8 | append: 'px' }}; --card-corner-radius: {{ settings.card_corner_radius | default: 8 | append: 'px' }};{% if settings.card_title_case == 'uppercase' or settings.card_title_case == 'lowercase' %} --title-case: {{ settings.card_title_case }};{% endif %}"
       data-section-id="predictive-search"
       data-testid="{{ 'search-component--modal' }}"
       role="search"

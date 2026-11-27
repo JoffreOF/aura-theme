@@ -11,7 +11,7 @@
 --style); --menu-top-level-font-weight: var(--font-
 {{- settings.type_font_primary_link -}}
 --weight); --menu-top-level-font-case:
-{%- if settings.type_case_primary_link == 'uppercase' %}uppercase{% else %}none{% endif -%}
+{%- if settings.type_case_primary_link == 'uppercase' or settings.type_case_primary_link == 'lowercase' %}{{ settings.type_case_primary_link }}{% else %}none{% endif -%}
 ;
 {% if menu_type == 'drawer' %}
   --menu-top-level-font-size: var(--menu-font-2xl--size); --menu-top-level-font-line-height:

@@ -32,6 +32,18 @@
         assign fraction = '0' | append: fraction
       endif
       assign grams = whole | append: '.' | append: fraction
+
+      comment
+        Fine gold line: 18k weight x 0.75 (two decimals) at the 24k gram price (18k price / 0.75).
+      endcomment
+      assign fine_scaled = weight | times: 75 | round
+      assign fine_fraction = fine_scaled | modulo: 100
+      assign fine_whole = fine_scaled | minus: fine_fraction | divided_by: 100
+      if fine_fraction < 10
+        assign fine_fraction = '0' | append: fine_fraction
+      endif
+      assign fine_grams = fine_whole | append: '.' | append: fine_fraction
+      assign fine_price = gram_price | divided_by: 0.75 | times: 100 | round | money
     endif
   endif
 -%}
@@ -45,11 +57,19 @@
       --gold-share: {{ share }}%;
       --gold-bar-height: {{ block.settings.bar_height }}px;
       --gold-row-gap: {{ block.settings.row_gap }}px;
+      --gold-title-size: {{ block.settings.title_size }}px;
+      --gold-text-case: {{ block.settings.text_case | default: 'none' }};
+      --gold-title-case: {{ block.settings.title_case | default: 'none' }};
+      {% if block.settings.title_color != blank %}--gold-title-color: {{ block.settings.title_color }};{% endif %}
+      {% if block.settings.divider_color != blank %}--gold-divider-color: {{ block.settings.divider_color }};{% endif %}
       {% if block.settings.track_color != blank %}--gold-track: {{ block.settings.track_color }};{% endif %}
       {% if block.settings.text_color != blank %}--color: {{ block.settings.text_color }};{% endif %}
     "
     {{ block.shopify_attributes }}
   >
+    {%- if block.settings.title != blank -%}
+      <p class="gold-breakdown__title{% if block.settings.show_divider %} gold-breakdown__title--divider{% endif %}">{{ block.settings.title }}</p>
+    {%- endif -%}
     <div class="gold-breakdown__bar" aria-hidden="true"><span></span></div>
     <div class="gold-breakdown__row">
       <span class="gold-breakdown__label">
@@ -57,9 +77,12 @@
       </span>
       <span class="gold-breakdown__amount">
         {{- gold_cents | money -}}
-        {%- if block.settings.show_weight %} {{ 'blocks.gold_breakdown.weight' | t: grams: grams }}{% endif -%}
+        {%- if block.settings.show_weight and block.settings.show_fine_line != true %} {{ 'blocks.gold_breakdown.weight' | t: grams: grams }}{% endif -%}
       </span>
     </div>
+    {%- if block.settings.show_fine_line -%}
+      <p class="gold-breakdown__detail">{{ 'blocks.gold_breakdown.fine_detail' | t: grams: fine_grams, price: fine_price }}</p>
+    {%- endif -%}
     <div class="gold-breakdown__row">
       <span class="gold-breakdown__label">
         <i class="gold-breakdown__dot gold-breakdown__dot--craft"></i>{{ 'blocks.gold_breakdown.craftsmanship' | t }}
@@ -80,6 +103,31 @@
     gap: var(--gold-row-gap, 6px);
     width: 100%;
     color: var(--color, var(--color-foreground));
+  }
+
+  .gold-breakdown__label {
+    text-transform: var(--gold-text-case, none);
+  }
+
+  .gold-breakdown__title {
+    margin: 0;
+    font-size: var(--gold-title-size, 13px);
+    text-transform: var(--gold-title-case, none);
+    color: var(--gold-title-color, rgb(var(--color-foreground-rgb) / 0.6));
+  }
+
+  .gold-breakdown__title--divider {
+    padding-block-start: var(--padding-md, 12px);
+    border-block-start: 1px solid var(--gold-divider-color, rgb(var(--color-foreground-rgb) / var(--opacity-15)));
+  }
+
+  /* Small line under "Gold value", lined up with the label text after the dot */
+  .gold-breakdown__detail {
+    margin: calc(-1 * var(--gold-row-gap, 6px) + 2px) 0 0;
+    padding-inline-start: calc(0.5em + var(--gap-xs));
+    font-size: max(10px, calc(1em - 2px));
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
   }
 
   .gold-breakdown__bar {
@@ -141,6 +189,70 @@
     {
       "type": "paragraph",
       "content": "Gold value = weight (gold.weight_g) x today's gram price (gold.price_18k_per_g). Craftsmanship = price minus gold value. Hidden when a product has no weight. Labels are in the theme language files (blocks.gold_breakdown)."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Shown above the bar. Leave empty for no title.",
+      "default": "Price breakdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Line above the title",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "title_case",
+      "label": "Title case",
+      "options": [
+        { "value": "none", "label": "As typed" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Line color",
+      "alpha": true
+    },
+    {
+      "type": "select",
+      "id": "text_case",
+      "label": "Labels case (Gold value, Craftsmanship)",
+      "options": [
+        { "value": "none", "label": "As written" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fine_line",
+      "label": "Show the fine gold line under Gold value",
+      "info": "4.20 g fine gold x $128.62/g: pure gold in the piece at the pure gold price (same amount). Replaces \"for 5.6 g\" after the amount.",
+      "default": true
     },
     {
       "type": "checkbox",

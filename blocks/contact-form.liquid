@@ -139,6 +139,7 @@
           for="ContactForm-phone"
         >
           {{- phone_text -}}
+          {%- if s.phone_required %}<span aria-hidden="true">*</span>{% endif -%}
         </label>
         <input
           type="tel"
@@ -148,7 +149,8 @@
           name="contact[phone]"
           pattern="[0-9\-]*"
           value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-          {% unless s.show_labels %}placeholder="{{ phone_text | escape }}"{% endunless %}
+          {% if s.phone_required %}required aria-required="true"{% endif %}
+          {% unless s.show_labels %}placeholder="{{ phone_text | escape }}{% if s.phone_required %} *{% endif %}"{% endunless %}
         >
       </div>
     {%- endif -%}
@@ -423,6 +425,14 @@
       "id": "show_phone",
       "label": "Show the phone field",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "phone_required",
+      "label": "Phone is required",
+      "info": "The form cannot be sent without a phone number.",
+      "default": false,
+      "visible_if": "{{ block.settings.show_phone }}"
     },
     {
       "type": "text",
