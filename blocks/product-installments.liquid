@@ -30,7 +30,7 @@
 -%}
 
 <variant-live
-  class="installments-box spacing-style"
+  class="installments-box spacing-style{% if block.settings.style == 'text' %} installments-box--text{% endif %}"
   data-block-id="{{ block.id }}"
   data-product-id="{{ product.id }}"
   style="
@@ -45,7 +45,11 @@
   "
   {{ block.shopify_attributes }}
 >
-  {%- if show -%}
+  {%- if show and block.settings.style == 'text' -%}
+    <p class="installments-box__plain {{ main_class }}"{% if main_style != blank %} style="{{ main_style }}"{% endif %}>
+      {{- 'blocks.installments_box.plain_html' | t: count: payments, amount: amount -}}
+    </p>
+  {%- elsif show -%}
     <div class="installments-box__inner">
       {%- if block.settings.show_icon -%}
         <span class="installments-box__icon" aria-hidden="true">
@@ -81,9 +85,26 @@
     border-radius: var(--box-radius, 0);
   }
 
-  .installments-box:not(:has(.installments-box__inner)) {
+  .installments-box:not(:has(.installments-box__inner, .installments-box__plain)) {
     padding: 0;
     border: 0;
+  }
+
+  /* Plain text style: one line under the price, no box */
+  .installments-box.installments-box--text {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .installments-box__plain {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .installments-box__plain strong {
+    font-weight: 600;
   }
 
   .installments-box__inner {
@@ -126,7 +147,7 @@
 
 {% schema %}
 {
-  "name": "Installments box",
+  "name": "Installments (card)",
   "tag": null,
   "settings": [
     {
@@ -148,6 +169,17 @@
         }
       ],
       "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "box", "label": "Box (amount and note line)" },
+        { "value": "text", "label": "Plain text (one line)" }
+      ],
+      "default": "box",
+      "info": "Plain text: or 6 interest-free payments of $171.06 with Mercado Pago."
     },
     {
       "type": "range",
@@ -838,6 +870,10 @@
         {
           "value": "uppercase",
           "label": "t:options.uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
         }
       ],
       "default": "none",
@@ -932,7 +968,7 @@
   ],
   "presets": [
     {
-      "name": "Installments box",
+      "name": "Installments (card)",
       "category": "t:categories.product"
     }
   ]

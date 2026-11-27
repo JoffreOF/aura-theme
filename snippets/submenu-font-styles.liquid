@@ -10,7 +10,7 @@ var(--font-
 --style); --menu-parent-font-weight: var(--font-
 {{- settings.type_font_primary_link -}}
 --weight); --menu-parent-font-case:
-{% if settings.type_case_primary_link == 'uppercase' %}uppercase{% else %}none{% endif %};
+{% if settings.type_case_primary_link == 'uppercase' or settings.type_case_primary_link == 'lowercase' %}{{ settings.type_case_primary_link }}{% else %}none{% endif %};
 {% case settings.menu_font_style %}
   {% when 'regular' %}
     --menu-parent-font-size: var(--menu-font-md--size); --menu-parent-font-line-height:
@@ -30,7 +30,7 @@ var(--font-
 --style); --menu-child-font-weight: var(--font-
 {{- settings.type_font_primary_link -}}
 --weight); --menu-child-font-case:
-{% if settings.type_case_primary_link == 'uppercase' %}uppercase{% else %}none{% endif %};
+{% if settings.type_case_primary_link == 'uppercase' or settings.type_case_primary_link == 'lowercase' %}{{ settings.type_case_primary_link }}{% else %}none{% endif %};
 {% case settings.menu_font_style %}
   {% when 'regular' %}
     --menu-child-font-size: var(--menu-font-sm--size); --menu-child-font-line-height: var(--menu-font-sm--line-height);

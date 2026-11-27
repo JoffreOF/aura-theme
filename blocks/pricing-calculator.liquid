@@ -72,6 +72,7 @@
     {% if s.price_background != blank %}--pc-price-bg: {{ s.price_background }};{% endif %}
     {% if s.price_text != blank %}--pc-price-text: {{ s.price_text }};{% endif %}
     --pc-price-radius: {{ s.price_radius | default: 0 }}px;
+    --pc-input-radius: {{ s.input_radius | default: 0 }}px;
     {% if s.caption_color != blank %}--pc-caption: {{ s.caption_color }};{% endif %}
     {% if s.card_border_color != blank %}--pc-card-border: {{ s.card_border_color }};{% endif %}
   "
@@ -223,7 +224,7 @@
     background-color: var(--pc-input-bg, transparent);
     border: 2px solid;
     border-color: var(--pc-input-border, currentColor);
-    border-radius: 0;
+    border-radius: var(--pc-input-radius, 0);
   }
 
   .pc__unit {
@@ -359,7 +360,7 @@
       color: inherit;
       background: transparent;
       border: 1px solid var(--pc-card-border, currentColor);
-      border-radius: 0;
+      border-radius: var(--pc-input-radius, 0);
       cursor: pointer;
     }
 
@@ -620,6 +621,17 @@
       "type": "range",
       "id": "price_radius",
       "label": "Price box corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "input_radius",
+      "label": "Grams box corner radius",
+      "info": "Also the - and + buttons on phones.",
       "min": 0,
       "max": 32,
       "step": 1,

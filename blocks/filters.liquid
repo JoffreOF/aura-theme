@@ -162,7 +162,7 @@
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
       class="facets facets--horizontal facets-controls-wrapper facets-controls-wrapper--aura spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
-      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}{{ facets_aura_style }}"
+      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' or block_settings.text_label_case == 'lowercase' %} --facet-label-transform: {{ block_settings.text_label_case }};{% endif %}{{ facets_aura_style }}"
     >
       {% if block_settings.enable_filtering and block_settings.show_filters_title %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
@@ -238,7 +238,7 @@
   >
     <div
       class="facets facets--{{ block_settings.filter_style }}{% if is_vertical %}{{ facets_modifiers }}{% endif %} spacing-style"
-      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}{{ facets_aura_style }}"
+      style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' or block_settings.text_label_case == 'lowercase' %} --facet-label-transform: {{ block_settings.text_label_case }};{% endif %}{{ facets_aura_style }}"
       aria-label="{{ 'accessibility.filters' | t }}"
     >
       <facets-form-component
@@ -327,8 +327,8 @@
                 {% if block_settings.filter_style == 'horizontal' %}
                   {% liquid
                     assign more_attributes = 'on:click="#filters-drawer/toggle"'
-                    if block_settings.text_label_case == 'uppercase'
-                      assign more_attributes = more_attributes | append: ' style="--text-transform: uppercase;"'
+                    if block_settings.text_label_case == 'uppercase' or block_settings.text_label_case == 'lowercase'
+                      assign more_attributes = more_attributes | append: ' style="--text-transform: ' | append: block_settings.text_label_case | append: ';"'
                     endif
                   %}
                   {% render 'overflow-list',
@@ -1619,6 +1619,10 @@
         {
           "value": "uppercase",
           "label": "t:options.uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
         }
       ],
       "default": "default",

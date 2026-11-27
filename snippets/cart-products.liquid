@@ -53,7 +53,7 @@
     data-cart-drawer-empty
   {% endif %}
   style="
-    {%- if settings.product_title_case == 'uppercase' -%}--product-title-case: uppercase;{%- endif -%}
+    {%- if settings.product_title_case == 'uppercase' or settings.product_title_case == 'lowercase' -%}--product-title-case: {{ settings.product_title_case }};{%- endif -%}
     {{- custom_style -}}
   "
 >
