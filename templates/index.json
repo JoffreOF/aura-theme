@@ -2232,7 +2232,7 @@
                 "text_03": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Nothing hidden. Answer two questions about your jewel and see exactly how its price is built.</p>",
+                    "text": "<p>Answer two questions about your jewel and see exactly how its price is built.</p>",
                     "width": "100%",
                     "max_width": "none",
                     "alignment": "left",
