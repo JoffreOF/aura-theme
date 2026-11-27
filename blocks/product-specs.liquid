@@ -60,7 +60,14 @@
     assign dim = specs[key].value
     if dim != blank
       assign dim_text = dim.value | append: ' ' | append: dim.unit | replace: ' MILLIMETERS', ' mm' | replace: ' CENTIMETERS', ' cm'
-      assign label = 'blocks.product_specs.' | append: key | t
+      case key
+        when 'length'
+          assign label = 'blocks.product_specs.length' | t
+        when 'width'
+          assign label = 'blocks.product_specs.width' | t
+        else
+          assign label = 'blocks.product_specs.diameter' | t
+      endcase
       assign items = items | append: label | append: ' ' | append: dim_text | append: sep
     endif
   endfor
